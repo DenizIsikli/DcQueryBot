@@ -38,7 +38,7 @@ class WikipediaQuery(commands.Cog):
                                            f"**Page URL**: {page_url}"
                                            )
                     else:
-                        await ctx.send("The last argument should not be a number!")
+                        return
 
         except aiohttp.ClientOSError as e:
             await ctx.send(f"An error occurred while querying Wikipedia: {e}")
@@ -53,6 +53,7 @@ class WikipediaQuery(commands.Cog):
                 limit = int(args[0])
                 search_query = " ".join(args[1:])
             elif args[-1].isdigit():
+                await ctx.send("The last argument should not be a number!")
                 pass
             else:
                 # Combine arguments into a single search query
