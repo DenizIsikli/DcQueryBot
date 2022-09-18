@@ -11,17 +11,27 @@ class Setup:
 
     @staticmethod
     async def setup_cog_instances(bot):
+        loaded_cogs = []
+
         try:
             for filename in os.listdir("Cogs"):
                 if filename.endswith(".py"):
                     cog_name = f"Cogs.{filename[:-3]}"  # Remove the last 3 characters (.py)
                     try:
                         await bot.load_extension(cog_name)
-                        print(f"Loaded Cog File: {cog_name}")
+                        loaded_cogs.append(cog_name)
                     except Exception as e:
                         print(f"Failed to load Cog file: {cog_name}: {e}")
         except Exception as e:
             print(f"Failed to load Cog files: {e}")
+
+        if loaded_cogs:
+            loaded_cogs_str = ", ".join(loaded_cogs)
+            print(f"Loaded Cog Files: {loaded_cogs_str}")
+
+    @staticmethod
+    async def setup_util_instances(bot):
+        loaded_utils = []
 
         try:
             for filename in os.listdir("Utility"):
@@ -29,11 +39,15 @@ class Setup:
                     util_name = f"Utility.{filename[:-3]}"  # Remove the last 3 characters (.py)
                     try:
                         await bot.load_extension(util_name)
-                        print(f"Loaded Util File: {util_name}")
+                        loaded_utils.append(util_name)
                     except Exception as e:
                         print(f"Failed to load Util file: {util_name}: {e}")
         except Exception as e:
             print(f"Failed to load Util files: {e}")
+
+        if loaded_utils:
+            loaded_utils_str = ", ".join(loaded_utils)
+            print(f"Loaded Util Files: {loaded_utils_str}")
 
 
 @dataclass
@@ -65,12 +79,13 @@ class Main:
         @bot.event
         async def on_ready():
             await bot.change_presence(activity=discord.Game('!help'))
-            print(f"Logged in as {bot.user}")
+            print(f"\nLogged in as {bot.user}")
             print("_____________________________")
 
         bot_token = "MTEzNjA3MTM5ODk5Mzk2MTEyMg.G3TDmh.cbps9v_FUpdQ6EScMrL7hSJllYuQNpOTeXGmHQ"
         setup_instance = self.setup
         await setup_instance.setup_cog_instances(bot)
+        await setup_instance.setup_util_instances(bot)
         await bot.start(bot_token)
 
 
