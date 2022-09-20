@@ -1,4 +1,3 @@
-import discord
 from discord.ext import commands
 import aiohttp
 
@@ -8,8 +7,8 @@ class WikipediaQuery(commands.Cog):
         self.bot = bot
         self.WIKIPEDIA_API = "https://en.wikipedia.org/w/api.php"
 
-    async def wikipedia_query(self, bot, message: discord.Message, limit: int = 1, search_query: str = None):
-        if message.author == bot.user:
+    async def wikipedia_query(self, ctx, limit: int = 1, search_query: str = None):
+        if ctx.author == ctx.bot.user:
             return
 
         try:
@@ -34,18 +33,18 @@ class WikipediaQuery(commands.Cog):
                             title = result["title"]
                             page_url = f"https://en.wikipedia.org/wiki/{title.replace(' ', '_')}"
 
-                            await message.channel.send(f""
-                                                       f"**Search Result {i + 1}/{query_limit}**: {title}\n"
-                                                       f"**Page URL**: {page_url}"
-                                                       )
+                            await ctx.send(f""
+                                           f"**Search Result {i + 1}/{query_limit}**: {title}\n"
+                                           f"**Page URL**: {page_url}"
+                                           )
                     else:
-                        await message.channel.send("No search results found for the query.")
+                        await ctx.send("The last argument should not be a number!")
 
         except aiohttp.ClientOSError as e:
-            await message.channel.send(f"An error occurred while querying Wikipedia: {e}")
+            await ctx.send(f"An error occurred while querying Wikipedia: {e}")
 
         except Exception as e:
-            await message.channel.send(f"An unexpected error occurred: {e}")
+            await ctx.send(f"An unexpected error occurred: {e}")
 
     @commands.command()
     async def wiki(self, ctx, *args, limit=1, search_query=""):
@@ -59,7 +58,7 @@ class WikipediaQuery(commands.Cog):
                 # Combine arguments into a single search query
                 search_query = " ".join(args)
 
-        await self.wikipedia_query(ctx.bot, ctx.message, limit, search_query)
+        await self.wikipedia_query(ctx, limit, search_query)
 
     @wiki.error
     async def wiki_error(self, ctx, error):
