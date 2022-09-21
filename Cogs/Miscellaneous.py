@@ -9,7 +9,9 @@ class Miscellaneous(commands.Cog):
 
     @staticmethod
     async def who_is(ctx, member: discord.Member = None):
-        print("im inside now")
+        if ctx.author == ctx.bot.user:
+            return
+
         member = member or ctx.author
 
         embed = discord.Embed(
@@ -34,10 +36,11 @@ class Miscellaneous(commands.Cog):
         embed.set_footer(text=f"Requested by {ctx.author.name}")
 
         await ctx.send(embed=embed)
+        print("embed sent")
 
     @commands.command()
     async def whois(self, ctx, member: discord.Member = None):
-        await self.who_is(ctx.bot, member)
+        await self.who_is(ctx, member)
 
     @whois.error
     async def whois_error(self, ctx, error):
