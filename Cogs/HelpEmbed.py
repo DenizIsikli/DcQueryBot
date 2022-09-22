@@ -8,8 +8,8 @@ class HelpEmbed(commands.Cog):
         self.bot = bot
 
     @staticmethod
-    async def help_embed(bot, message: discord.Message):
-        if message.author == bot.user:
+    async def help_embed(ctx):
+        if ctx.author == ctx.bot.user:
             return
 
         embed = discord.Embed(
@@ -17,38 +17,44 @@ class HelpEmbed(commands.Cog):
             color=discord.Color.purple()
         )
         embed.add_field(
-                        name="**!wiki**",
-                        value="!wiki {int: article amount} {str: search query}\n"
-                              "Example: *!wiki Github* || *!wiki 2 Github*",
-                        inline=False
+            name="**!wiki**",
+            value="Description: Sends a Wikipedia article based on the given search query\n"
+                  "!wiki {int: article amount} {str: search query}\n"
+                  "Example: *!wiki Github* || *!wiki 2 Github*",
+            inline=False
         )
         embed.add_field(
             name="**!urban**",
-            value="!urban {int: word amount} {str: search query}\n"
+            value="Description: Sends a Word from the Urban Dictionary based on the given search query\n"
+                  "!urban {int: word amount} {str: search query}\n"
                   "Example: *!urban Shookie* || *!urban 2 Shookie*",
             inline=False
         )
         embed.add_field(
             name="**!qrcode**",
-            value="!qrcode {link}\n"
+            value="Description: Creates a Qr-Code based on the given link\n"
+                  "!qrcode {link}\n"
                   "Example: *!qrcode GitHub.com*",
             inline=False
         )
         embed.add_field(
             name="**!imgur**",
-            value="!imgur {str: search query}\n"
+            value="Description: Sends a random GIF from Imgur based on the given category\n"
+                  "!imgur {str: search query}\n"
                   "Example: *!imgur cat*",
             inline=False
         )
         embed.add_field(
             name="**!ascii**",
-            value="!ascii {str: text}\n"
+            value="Description: Creates ASCII art based on the given text\n"
+                  "!ascii {str: text}\n"
                   "Example: *!ascii placeholder*",
             inline=False
         )
         embed.add_field(
             name="**!asciicm**",
-            value="!asciicm {str: text}\n"
+            value="Description: Creates ASCII art with CyberModule font based on the given text\n"
+                  "!asciicm {str: text}\n"
                   "Example: *!asciicm placeholder*\n"
                   "`asciicm does not take numbers as an argument, only text`"
         )
@@ -58,13 +64,13 @@ class HelpEmbed(commands.Cog):
         # Add & set footer with timestamp
         timestamp = datetime.datetime.utcnow()
         embed.timestamp = timestamp
-        embed.set_footer(text=f"Requested by {message.author.name}")
+        embed.set_footer(text=f"Requested by {ctx.author.name}")
 
-        await message.channel.send(embed=embed)
+        await ctx.send(embed=embed)
 
     @commands.command()
     async def help(self, ctx):
-        await self.help_embed(ctx.bot, ctx.message)
+        await self.help_embed(ctx)
 
     @help.error
     async def help_error(self, ctx, error):
