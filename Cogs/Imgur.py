@@ -1,4 +1,3 @@
-import discord
 from discord.ext import commands
 import aiohttp
 import random
@@ -9,8 +8,8 @@ class ImgurQuery(commands.Cog):
         self.bot = bot
         self.IMGUR_API = "https://api.imgur.com/3/gallery/search/top"
 
-    async def imgur_query(self, bot, message: discord.Message, search_query: str = None):
-        if message.author == bot.user:
+    async def imgur_query(self, ctx, search_query: str = None):
+        if ctx.author == ctx.bot.user:
             return
 
         try:
@@ -37,15 +36,15 @@ class ImgurQuery(commands.Cog):
                             title = result["title"]
                             gif_url = result["link"]
 
-                            await message.channel.send(f"Title: {title}\n{gif_url}")
+                            await ctx.send(f"Title: {title}\n{gif_url}")
                     else:
-                        await message.channel.send("No search results found for the query.")
+                        await ctx.send("No search results found for the query.")
 
         except aiohttp.ClientOSError as e:
-            await message.channel.send(f"An error occurred while querying Imgur: {e}")
+            await ctx.send(f"An error occurred while querying Imgur: {e}")
 
         except Exception as e:
-            await message.channel.send(f"An unexpected error occurred: {e}")
+            await ctx.send(f"An unexpected error occurred: {e}")
 
     @commands.command()
     async def imgur(self, ctx, *args, search_query=""):
@@ -53,7 +52,7 @@ class ImgurQuery(commands.Cog):
             # Combine arguments into a single search query
             search_query = " ".join(args)
 
-        await self.imgur_query(ctx.bot, ctx.message, search_query)
+        await self.imgur_query(ctx, search_query)
 
     @imgur.error
     async def imgur_error(self, ctx, error):
