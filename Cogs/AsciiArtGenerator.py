@@ -1,5 +1,4 @@
 from art import *
-import discord
 from discord.ext import commands
 
 
@@ -9,30 +8,34 @@ class AsciiArtGenerator(commands.Cog):
 
     # Standard ascii art
     @staticmethod
-    async def ascii_art_generator1(bot, message: discord.Message, text: str):
-        if message.author == bot.user:
+    async def ascii_art_generator1(ctx, text: str):
+        if ctx.author == ctx.bot.user:
             return
 
         # Wrap the ASCII art in a code block
         output = text2art(f"{text}", font="small")
-        await message.channel.send(f"```\n{output}\n```")
+        await ctx.send(f"```\n{output}\n```")
 
     @commands.command()
     async def ascii(self, ctx, *, text: str):
-        await self.ascii_art_generator1(ctx.bot, ctx.message, text)
+        await self.ascii_art_generator1(ctx, text)
 
     # Font: Cybermedium
     @staticmethod
-    async def ascii_art_generator2(bot, message: discord.Message, text: str):
-        if message.author == bot.user:
+    async def ascii_art_generator2(ctx, text: str):
+        if ctx.author == ctx.bot.user:
             return
 
         output = text2art(f"{text}", font="cybermedium")
-        await message.channel.send(f"```\n{output}\n```")
+        await ctx.send(f"```\n{output}\n```")
 
     @commands.command()
     async def asciicm(self, ctx, *, text: str):
-        await self.ascii_art_generator2(ctx.bot, ctx.message, text)
+        if any(char.isdigit() for char in text):
+            await ctx.send("This command does not take numbers as an argument!")
+            return
+        else:
+            await self.ascii_art_generator2(ctx, text)
 
 
 async def setup(bot):
