@@ -9,8 +9,8 @@ class UrbanDictionaryQuery(commands.Cog):
         self.bot = bot
         self.URBAN_DICTIONARY_API = "https://api.urbandictionary.com/v0/define"
 
-    async def urban_dictionary_query(self, bot, message: discord.Message, limit: int = 1, search_query: str = None):
-        if message.author == bot.user:
+    async def urban_dictionary_query(self, ctx, limit: int = 1, search_query: str = None):
+        if ctx.author == ctx.bot.user:
             return
 
         try:
@@ -42,17 +42,17 @@ class UrbanDictionaryQuery(commands.Cog):
                             # Add & set footer with timestamp
                             timestamp = datetime.datetime.utcnow()
                             embed.timestamp = timestamp
-                            embed.set_footer(text=f"Requested by {message.author.name}")
+                            embed.set_footer(text=f"Requested by {ctx.author.name}")
 
-                            await message.channel.send(embed=embed)
+                            await ctx.send(embed=embed)
                     else:
-                        await message.channel.send("No search results found for the query.")
+                        return
 
         except aiohttp.ClientOSError as e:
-            await message.channel.send(f"An error occurred while querying Urban Dictionary: {e}")
+            await ctx.send(f"An error occurred while querying Urban Dictionary: {e}")
 
         except Exception as e:
-            await message.channel.send(f"An unexpected error occurred: {e}")
+            await ctx.send(f"An unexpected error occurred: {e}")
 
     @commands.command()
     async def urban(self, ctx, *args, limit=1, search_query=""):
@@ -61,12 +61,13 @@ class UrbanDictionaryQuery(commands.Cog):
                 limit = int(args[0])
                 search_query = " ".join(args[1:])
             elif args[-1].isdigit():
+                await ctx.send("The last argument should not be a number!")
                 pass
             else:
                 # Combine arguments into a single search query
                 search_query = " ".join(args)
 
-        await self.urban_dictionary_query(ctx.bot, ctx.message, limit, search_query)
+        await self.urban_dictionary_query(ctx, limit, search_query)
 
     @urban.error
     async def urban_error(self, ctx, error):
