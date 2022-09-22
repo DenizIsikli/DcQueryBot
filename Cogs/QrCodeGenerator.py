@@ -1,5 +1,4 @@
 import io
-import discord
 from discord.ext import commands
 from discord import File
 import qrcode
@@ -13,12 +12,12 @@ class QrCodeGeneratorQuery(commands.Cog):
         self.QRCODE_API = "https://qrcode-monkey.p.rapidapi.com/qr/custom"
 
     @staticmethod
-    async def qr_code_generator_query(bot, message: discord.Message, link: str):
-        if message.author == bot.user:
+    async def qr_code_generator_query(ctx, link: str):
+        if ctx.author == ctx.bot.user:
             return
 
         if not validators.url(link):
-            await message.channel.send("Invalid URL. Please provide a valid link.")
+            await ctx.send("Invalid URL. Please provide a valid link.")
             return
 
         try:
@@ -42,16 +41,16 @@ class QrCodeGeneratorQuery(commands.Cog):
             img_io.seek(0)  # Move the cursor to the beginning of the BytesIO object
             qr_file = File(img_io, filename="qrcode.png")
 
-            await message.delete()
+            await ctx.message.delete()
             await asyncio.sleep(1)
-            await message.channel.send(file=qr_file)
+            await ctx.send(file=qr_file)
 
         except Exception as e:
-            await message.channel.send(f"An unexpected error occurred: {e}")
+            await ctx.send(f"An unexpected error occurred: {e}")
 
     @commands.command()
     async def qrcode(self, ctx, link: str):
-        await self.qr_code_generator_query(ctx.bot, ctx.message, link)
+        await self.qr_code_generator_query(ctx, link)
 
     @qrcode.error
     async def qrcode_error(self, ctx, error):
