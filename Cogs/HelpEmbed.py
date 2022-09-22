@@ -15,13 +15,32 @@ class HelpEmbed(commands.Cog):
         )
         embed.add_field(
                         name="**!wiki**",
-                        value="!wiki {int: article amount} {search query}\nExample: *!wiki Github* || *!wiki 2 Github*",
+                        value="!wiki {int: article amount} {str: search query}\nExample: *!wiki Github* || *!wiki 2 Github*",
                         inline=False
         )
         embed.add_field(
             name="**!urban**",
-            value="!urban {int: word amount} {search query}\nExample: *!urban Shookie* || *!urban 2 Shookie*",
+            value="!urban {int: word amount} {str: search query}\nExample: *!urban Shookie* || *!urban 2 Shookie*",
             inline=False
+        )
+        embed.add_field(
+            name="**!qrcode**",
+            value="!qrcode {link}\nExample: *!qrcode GitHub.com*",
+            inline=False
+        )
+        embed.add_field(
+            name="**!imgur**",
+            value="!imgur {str: search query}\nExample: *!imgur cat*",
+            inline=False
+        )
+        embed.add_field(
+            name="**!ascii**",
+            value="!ascii {str: text}\nExample: *!ascii placeholder*",
+            inline=False
+        )
+        embed.add_field(
+            name="**!asciicm**",
+            value="!asciicm {str: text}\nExample: *!asciicm placeholder*\n__asciicm does not take numbers as an argument, only text__"
         )
 
         # ** ADD NEW COMMANDS TO EMBED **
