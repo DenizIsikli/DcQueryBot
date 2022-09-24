@@ -9,7 +9,8 @@ class Setup:
     def __init__(self):
         pass
 
-    async def setup_cog_instances(self, bot):
+    @staticmethod
+    async def setup_cog_instances(bot):
         for filename in os.listdir("Cogs"):
             if filename.endswith(".py"):
                 cog_name = f"Cogs.{filename[:-3]}"  # Remove the last 3 characters (.py)
@@ -49,7 +50,8 @@ class Main:
     def __init__(self):
         self.setup_instance = Setup()
 
-    async def main(self):
+    @staticmethod
+    async def main():
         bot = commands.Bot(command_prefix="!", owner_id=538816980845854720, intents=intents_instance)
         bot.remove_command('help')
 
