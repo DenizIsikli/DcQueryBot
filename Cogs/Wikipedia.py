@@ -48,7 +48,7 @@ class WikipediaQuery(commands.Cog):
             await message.channel.send(f"An unexpected error occurred: {e}")
 
     @commands.command()
-    async def wiki(self, ctx, *args, limit = 1, search_query = ""):
+    async def wiki(self, ctx, *args, limit=1, search_query=""):
         if args:
             if args[0].isdigit():
                 limit = int(args[0])
