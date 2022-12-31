@@ -32,14 +32,19 @@ class Setup:
 
 @dataclass
 class Intents:
-    intents = discord.Intents.default()
-    intents.message_content = True
-    intents.guild_messages = True
-    intents.dm_messages = True
+    message_content : bool= True
+    guild_messages: bool = True
+    dm_messages: bool = True
 
+    def create_instance(self):
+        intents = discord.Intents.default()
+        intents.message_content = self.message_content
+        intents.guild_messages = self.guild_messages
+        intents.dm_messages = self.dm_messages
+        return intents
 
 # Instance of intents
-intents_instance = Intents
+intents_instance = Intents().create_instance()
 
 
 class Main:
