@@ -30,6 +30,7 @@ class Main:
         async def on_ready():
             await bot.change_presence(activity=discord.Game('!help'))
             print(f"Logged in as {bot.user}")
+            print("_____________________________")
 
         bot_token = "MTEzNjA3MTM5ODk5Mzk2MTEyMg.G3TDmh.cbps9v_FUpdQ6EScMrL7hSJllYuQNpOTeXGmHQ"
         await self.setup_all_instances(bot)
