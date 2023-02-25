@@ -1,5 +1,8 @@
+import dataclasses
+
 import discord
 from discord.ext import commands
+from dataclasses import dataclass
 import DcQuery
 import asyncio
 import os
@@ -8,7 +11,6 @@ import os
 class Setup:
     def __init__(self):
         pass
-
 
     async def setup_cog_instances(self, bot):
         for filename in os.listdir("Cogs"):
@@ -28,12 +30,23 @@ class Setup:
             print(f"Failed to load DcQuery: {e}")
 
 
+@dataclass
+class Intents:
+    intents = discord.Intents.default()
+    intents.message_content = True
+    intents.guild_messages = True
+    intents.dm_messages = True
+
+
+# Instance of intents
+intents_instance = Intents
+
+
 class Main:
     def __init__(self):
         self.setup_instance = Setup()
 
-    async def main(self):
-        intents_instance = DcQuery.intents_instance
+    async def main(self, intents_instance):
         bot = commands.Bot(command_prefix="!", owner_id=538816980845854720, intents=intents_instance)
         bot.remove_command('help')
 
@@ -51,4 +64,4 @@ class Main:
 
 if __name__ == "__main__":
     main_instance = Main()
-    asyncio.run(main_instance.main())
+    asyncio.run(main_instance.main(intents_instance))
