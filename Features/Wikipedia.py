@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-import requests
+import aiohttp
 import DcQuery
 
 
@@ -25,10 +25,10 @@ class WikipediaQuery(commands.Cog):
                 "utf8": 1
             }
 
-            response = requests.get(self.WIKIPEDIA_API, params=params)
-            response.raise_for_status()  # Raise an exception if the request was not successful
-
-            response_data = response.json()
+            async with aiohttp.ClientSession() as session:
+                async with session.get(self.WIKIPEDIA_API, params=params) as response:
+                    response.raise_for_status()  # Raise an exception if the request was not successful
+                    response_data = await response.json()
 
             if "query" in response_data and "search" in response_data["query"]:
                 search_results = response_data["query"]["search"]
@@ -45,7 +45,7 @@ class WikipediaQuery(commands.Cog):
             else:
                 await message.channel.send("No search results found for the query.")
 
-        except requests.RequestException as e:
+        except aiohttp.ClientOSError as e:
             await message.channel.send(f"An error occurred while querying Wikipedia: {e}")
 
         except Exception as e:
@@ -64,6 +64,7 @@ class WikipediaQuery(commands.Cog):
                 search_query = " ".join(args)
 
         await self.wikipedia_query(ctx.message, limit, search_query)
+
 
 class Setup(commands.Cog):
     def __init__(self):
