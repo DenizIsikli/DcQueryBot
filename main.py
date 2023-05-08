@@ -56,10 +56,9 @@ intents_instance = Intents().create_instance()
 
 class Main:
     def __init__(self):
-        self.setup_instance = Setup()
+        self.setup = Setup()
 
-    @staticmethod
-    async def main():
+    async def main(self):
         bot = commands.Bot(command_prefix="!", owner_id=538816980845854720, intents=intents_instance)
         bot.remove_command('help')
 
@@ -70,7 +69,7 @@ class Main:
             print("_____________________________")
 
         bot_token = "MTEzNjA3MTM5ODk5Mzk2MTEyMg.G3TDmh.cbps9v_FUpdQ6EScMrL7hSJllYuQNpOTeXGmHQ"
-        setup_instance = Setup()
+        setup_instance = self.setup
         await setup_instance.setup_cog_instances(bot)
         await bot.start(bot_token)
 
