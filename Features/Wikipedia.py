@@ -39,8 +39,8 @@ class WikipediaQuery(commands.Cog):
                     page_url = f"https://en.wikipedia.org/wiki/{title.replace(' ', '_')}"
 
                     await message.channel.send(f""
-                                               f"Search Result {i + 1}/{query_limit}: {title}\n"
-                                               f"Page URL: {page_url}\n\n"
+                                               f"**Search Result {i + 1}/{query_limit}**: {title}\n"
+                                               f"**Page URL**: {page_url}"
                                                )
             else:
                 await message.channel.send("No search results found for the query.")
