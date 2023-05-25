@@ -125,6 +125,7 @@ class Reload(commands.Cog):
                         except Exception as e:
                             print(f"Failed to reload cog files: Cogs.{cog_name}: {e}")
                 try:
+                    # Loading util file
                     await self.bot.unload_extension("DcQuery")
                     await self.bot.load_extension("DcQuery")
                     reloaded_util.append("DcQuery")
@@ -136,6 +137,7 @@ class Reload(commands.Cog):
                         name="Reloaded Cogs Files",
                         value="\n".join(reloaded_cogs)
                     )
+                if reloaded_util:
                     embed.add_field(
                         name="Reloaded Util File",
                         value="\n".join(reloaded_util)
