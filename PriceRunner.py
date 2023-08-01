@@ -1,12 +1,24 @@
+import os
 import discord
 import requests
 from urllib.parse import quote
+from dotenv import load_dotenv
 
+class LoadEnvironmentVariables:
+    @staticmethod
+    def load_environment_variables():
+        load_dotenv()
+        return {
+            "BOT_TOKEN": os.getenv("BOT_TOKEN")
+        }
 
 class BaseClass:
     def __init__(self):
+        # Load config settings - mail and password
+        env_vars = LoadEnvironmentVariables.load_environment_variables()
+
         # Discord bot token (replace 'YOUR_BOT_TOKEN' with your actual bot token)
-        self.BOT_TOKEN = ""
+        self.BOT_TOKEN = env_vars["BOT_TOKEN"]
         # Pricerunner base URL
         self.PRICERUNNER_URL = "https://www.pricerunner.dk"
         # Initialize the Discord bot
