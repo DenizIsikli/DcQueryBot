@@ -1,18 +1,14 @@
-import asyncio
-import PriceRunner
 import discord
+import PriceRunner
 
 
 class Main:
     @staticmethod
-    async def main():
-        event_handler = PriceRunner.EventHandler()
-        bot = event_handler.bot
+    def main():
+        event_handler = PriceRunner
 
-        try:
-            await bot.start(event_handler.BOT_TOKEN)
-        except KeyboardInterrupt:
-            await bot.logout()
+        bot = event_handler.bot
+        bot.run(event_handler.BOT_TOKEN)
 
 if __name__ == "__main__":
-    asyncio.run(Main.main())
+    Main.main()
