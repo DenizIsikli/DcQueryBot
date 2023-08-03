@@ -1,61 +1,89 @@
 import discord
+from discord.ext import commands
 import requests
 from urllib.parse import quote
+from bs4 import BeautifulSoup
+
+# Discord bot token (replace 'YOUR_BOT_TOKEN' with your actual bot token)
+BOT_TOKEN = "MTEzNjA3MTM5ODk5Mzk2MTEyMg.G3TDmh.cbps9v_FUpdQ6EScMrL7hSJllYuQNpOTeXGmHQ"
+# Pricerunner base URL
+PRICERUNNER_URL = "https://www.proshop.dk/"
+
+# Intents for the bot to receive events (specify intents according to your needs)
+intents = discord.Intents.default()
+intents.message_content = True
+intents.guild_messages = True
+intents.dm_messages = True
+
+# Initialize the Discord bot as a commands.Bot instance
+bot = commands.Bot(command_prefix="!", intents=intents)
 
 
-class BaseClass:
-    def __init__(self):
-        # Load config settings - mail and password
-        # env_vars = LoadEnvironmentVariables.load_environment_variables()
-
-        # Discord bot token (replace 'YOUR_BOT_TOKEN' with your actual bot token)
-        self.BOT_TOKEN = "MTEzNjA3MTM5ODk5Mzk2MTEyMg.G3TDmh.cbps9v_FUpdQ6EScMrL7hSJllYuQNpOTeXGmHQ"
-        # Pricerunner base URL
-        self.PRICERUNNER_URL = "https://www.pricerunner.dk"
-
-        # Intents for the bot to receive events (specify intents according to your needs)
-        self.intents = discord.Intents.default()
-        self.intents.message_content = True
-
-        # Initialize the Discord bot
-        self.bot = discord.Client(intents=self.intents)
+@bot.event
+async def on_ready():
+    print(f"Logged in as {bot.user}")
 
 
-class EventHandler(BaseClass):
-    def __init__(self):
-        # Call the BaseClass constructor
-        super().__init__()
+@bot.event
+async def on_message(message: discord.Message):
+    print("Received a message:", message.content)
+    if message.author == bot.user:
+        return
 
-        @self.bot.event
-        async def on_ready(self):
-            print(f"Logged in as {self.bot.user}")
+    if message.content.startswith("!search"):
+        search_query = message.content[len("!search"):].strip()
+        if not search_query:
+            await message.channel.send("Please provide a search term after '!search'.")
+            return
 
-        @self.bot.event
-        async def on_message(self, message):
-            if message.author == self.bot.user:
+        # Encode the search query for safe URL usage
+        encoded_search_query = quote(search_query)
+
+        # Make a GET request to PriceRunner
+        search_url = f"https://www.proshop.dk/?Search={encoded_search_query}"
+        response = requests.get(search_url)
+
+        # Parse the HTML content using BeautifulSoup
+        soup = BeautifulSoup(response.content, "html.parser")
+        product_list = soup.find_all("div", class_="site__product")
+
+        if product_list:
+            # Extract product information
+            product_info = []
+            for product in product_list:
+                # name = product.find("a", class_="site-header-link").text.strip()
+                current_price = product.find("span", class_="site-currency-lg").text.strip()
+                old_price = product.find("div", class_="site-currency-pre").text.strip()
+                specs = product.find("div", class_="site-product-link").text.strip()
+
+                # Append the information
+                product_info.append(f"Product Name: \n"
+                                    f"Current price: {current_price}\n"
+                                    f"Old price: {old_price}\n"
+                                    f"Specs: {specs}\n")
+
+            # Send the product information back to the user on Discord
+            await message.channel.send("\n\n".join(product_info))
+            print("made it")
+        else:
+            await message.channel.send("No products found for the search term.")
+            print("Didn't make it")
+
+
+@bot.command()
+async def delete(ctx, message: discord.Message, amount=1):
+
+    if message.author.name == "Denzo":
+        try:
+            amount = int(amount)
+            if amount <= 0:
+                await message.channel.send("Please specify a positive number of messages to delete.")
                 return
 
-            if message.content.startswith("!search"):
-                search_query = message.content[len("!search"):].strip()
-                if not search_query:
-                    await message.channel.send("Please provide a search term after '!search'.")
-                    return
+            # Delete the requested number of messages, including the command message
+            await message.channel.purge(limit=amount + 1)
 
-                # Encode the search query for safe URL usage
-                encoded_search_query = quote(search_query)
-
-                # Make a GET request to PriceRunner
-                response = requests.get(f"{self.PRICERUNNER_URL}/s?search={encoded_search_query}")
-
-                if response.status_code == 200:
-                    # Parse the response and get the relevant data
-                    # (you'll need to inspect the HTML of the Pricerunner page to extract the data)
-                    # Here, we are just returning the HTML content as a .txt file.
-                    file_content = response.text
-                    with open(f"{search_query}_results.txt", "w") as file:
-                        file.write(file_content)
-
-                    # Send the .txt file back to the user on Discord
-                    await message.channel.send(file=discord.File(f"{search_query}_results.txt"))
-                else:
-                    await message.channel.send("Error fetching data from Pricerunner.")
+        except ValueError:
+            await message.channel.send("Please specify a valid number of messages to delete.")
+    else:
+        await message.channel.send("You don't have permission to delete messages in this channel.")
