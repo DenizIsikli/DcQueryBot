@@ -12,7 +12,7 @@ class UrbanDictionaryQuery(commands.Cog):
         self.URBAN_DICTIONARY_API = "https://mashape-community-urban-dictionary.p.rapidapi.com/define"
         self.bot = commands.Bot(command_prefix="!", intents=intents_instance)
 
-    async def urban_dictionary_query(self, term, message: discord.Message, limit: int = 1, search_query: str = None):
+    async def urban_dictionary_query(self, message: discord.Message, limit: int = 1, search_query: str = None):
         if message.author == self.bot.user:
             return
 
@@ -23,11 +23,11 @@ class UrbanDictionaryQuery(commands.Cog):
             }
 
             params = {
-                "term": term
+                "term": search_query
             }
 
             response = requests.get(self.URBAN_DICTIONARY_API, headers=headers, params=params)
-            response.raise_for_status() # Raise an exception if the request was not successful
+            response.raise_for_status()  # Raise an exception if the request was not successful
 
             response_data = response.json()
 
@@ -38,7 +38,7 @@ class UrbanDictionaryQuery(commands.Cog):
                 for i, definition in enumerate(definitions):
                     title = definition["word"]
                     meaning = definition["definition"]
-                    example =  definition["example"]
+                    example = definition["example"]
 
                     await message.channel.send(f""
                                                f"Term {i + 1}/{query_limit}: {title}\n"
@@ -53,6 +53,22 @@ class UrbanDictionaryQuery(commands.Cog):
 
         except Exception as e:
             await message.channel.send(f"An unexpected error occurred: {e}")
+
+    @commands.command(intents=intents_instance)
+    async def urban(self, ctx, *args):
+        limit = 1
+        search_query = ""
+
+        if args:
+            if args[0].isdigit():
+                limit = int(args[0])
+                search_query = " ".join(args[1:])
+            else:
+                search_query = " ".join(args)
+
+        await self.urban_dictionary_query(ctx.message, limit, search_query)
+
+
 class Setup(commands.Cog):
     def __init__(self):
         pass
