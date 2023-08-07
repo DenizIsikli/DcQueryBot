@@ -1,9 +1,6 @@
-import dataclasses
-
 import discord
 from discord.ext import commands
 from dataclasses import dataclass
-import DcQuery
 import asyncio
 import os
 
@@ -32,7 +29,7 @@ class Setup:
 
 @dataclass
 class Intents:
-    message_content : bool= True
+    message_content: bool = True
     guild_messages: bool = True
     dm_messages: bool = True
 
@@ -43,6 +40,7 @@ class Intents:
         intents.dm_messages = self.dm_messages
         return intents
 
+
 # Instance of intents
 intents_instance = Intents().create_instance()
 
@@ -51,7 +49,7 @@ class Main:
     def __init__(self):
         self.setup_instance = Setup()
 
-    async def main(self, intents_instance):
+    async def main(self):
         bot = commands.Bot(command_prefix="!", owner_id=538816980845854720, intents=intents_instance)
         bot.remove_command('help')
 
@@ -69,4 +67,4 @@ class Main:
 
 if __name__ == "__main__":
     main_instance = Main()
-    asyncio.run(main_instance.main(intents_instance))
+    asyncio.run(main_instance.main())
