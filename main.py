@@ -1,27 +1,46 @@
 import discord
 from discord.ext import commands
 import DcQuery
+import Features.Wikipedia
+import Features.UrbanDictionary
 import asyncio
 
 
 class Main:
-    @staticmethod
-    async def main():
+    def __init__(self):
+        self.setup_instance_misc = DcQuery.Setup()
+        self.setup_instance_wikipedia = Features.Wikipedia.Setup()
+        self.setup_instance_urban_dictionary = Features.UrbanDictionary.Setup()
+
+        # Instance of Main()
+        self.main_instance = Main()
+
+    async def setup_all_instances(self, bot):
+        setup_instances = [
+            self.setup_instance_misc,
+            self.setup_instance_wikipedia,
+            self.setup_instance_urban_dictionary
+        ]
+
+        for instance in setup_instances:
+            await instance.setup(bot)
+
+    async def main(self):
         intents_instance = DcQuery.intents_instance
         bot = commands.Bot(command_prefix="!", intents=intents_instance)
 
-        setup_instance = DcQuery.Setup()
-        await setup_instance.setup(bot)
+        instance_of_main = self.main_instance
+        await instance_of_main.setup_all_instances(bot)
 
         @bot.event
         async def on_ready():
             await bot.change_presence(activity=discord.Game('!help'))
             print(f"Logged in as {bot.user}")
 
-        return bot  # Return the bot instance
+        bot_token = "MTEzNjA3MTM5ODk5Mzk2MTEyMg.G3TDmh.cbps9v_FUpdQ6EScMrL7hSJllYuQNpOTeXGmHQ"
+        await bot.start(bot_token)
 
 
 if __name__ == "__main__":
-    bot = asyncio.run(Main.main())
-    bot_token = "MTEzNjA3MTM5ODk5Mzk2MTEyMg.G3TDmh.cbps9v_FUpdQ6EScMrL7hSJllYuQNpOTeXGmHQ"
-    bot.run(bot_token)
+    main_instance = Main()
+    asyncio.run(main_instance.main())
