@@ -1,6 +1,7 @@
+import datetime
 import discord
 from discord.ext import commands
-import requests
+import aiohttp
 import DcQuery
 
 
@@ -9,7 +10,7 @@ intents_instance = DcQuery.intents_instance
 
 class UrbanDictionaryQuery(commands.Cog):
     def __init__(self):
-        self.URBAN_DICTIONARY_API = "https://mashape-community-urban-dictionary.p.rapidapi.com/define"
+        self.URBAN_DICTIONARY_API = "https://api.urbandictionary.com/v0/define"
         self.bot = commands.Bot(command_prefix="!", intents=intents_instance)
 
     async def urban_dictionary_query(self, message: discord.Message, limit: int = 1, search_query: str = None):
@@ -17,38 +18,38 @@ class UrbanDictionaryQuery(commands.Cog):
             return
 
         try:
-            headers = {
-                "X-RapidAPI-Host": "mashape-community-urban-dictionary.p.rapidapi.com",
-                "X-RapidAPI-Key": "YOUR_RAPIDAPI_KEY_HERE"  # Replace with your actual RapidAPI key
-            }
-
             params = {
                 "term": search_query
             }
 
-            response = requests.get(self.URBAN_DICTIONARY_API, headers=headers, params=params)
-            response.raise_for_status()  # Raise an exception if the request was not successful
-
-            response_data = response.json()
+            async with aiohttp.ClientSession() as session:
+                async with session.get(self.URBAN_DICTIONARY_API, params=params) as response:
+                    response.raise_for_status()  # Raise an exception if the request was not successful
+                    response_data = await response.json()
 
             if "list" in response_data:
-                definitions = response_data["list"]
+                search_results = response_data["list"]
                 query_limit = limit
 
-                for i, definition in enumerate(definitions):
-                    title = definition["word"]
-                    meaning = definition["definition"]
-                    example = definition["example"]
+                for i, result in enumerate(search_results[:query_limit]):
+                    title = result["word"]
+                    meaning = result["definition"]
+                    example = result["example"]
 
-                    await message.channel.send(f""
-                                               f"Term {i + 1}/{query_limit}: {title}\n"
-                                               f"Meaning: {meaning}\n"
-                                               f"Example: {example}\n\n"
-                                               )
+                    embed = discord.Embed(title=f"**Term {i + 1}/{query_limit}**: {title}", color=discord.Color.blue())
+                    embed.add_field(name="**Meaning**: ", value=meaning, inline=False)
+                    embed.add_field(name="**Example**: ", value=example, inline=False)
+
+                    # Add & set footer with timestamp
+                    timestamp = datetime.datetime.utcnow()
+                    embed.timestamp = timestamp
+                    embed.set_footer(text=f"Requested by {message.author.name}")
+
+                    await message.channel.send(embed=embed)
             else:
                 await message.channel.send("No search results found for the query.")
 
-        except requests.RequestException as e:
+        except aiohttp.ClientOSError as e:
             await message.channel.send(f"An error occurred while querying Urban Dictionary: {e}")
 
         except Exception as e:
