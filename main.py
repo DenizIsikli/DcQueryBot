@@ -23,7 +23,7 @@ class Main:
         try:
             # Load DcQuery directly
             bot.load_extension("DcQuery")
-            print("Loaded DcQuery")
+            print("Loaded cog: Cogs.DcQuery.py")
         except Exception as e:
             print(f"Failed to load DcQuery: {e}")
 
