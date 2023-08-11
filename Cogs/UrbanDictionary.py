@@ -4,7 +4,6 @@ from discord.ext import commands
 import aiohttp
 import DcQuery
 
-
 intents_instance = DcQuery.intents_instance
 
 
@@ -64,6 +63,8 @@ class UrbanDictionaryQuery(commands.Cog):
             if args[0].isdigit():
                 limit = int(args[0])
                 search_query = " ".join(args[1:])
+            elif args[-1].isdigit():
+                pass
             else:
                 search_query = " ".join(args)
 
