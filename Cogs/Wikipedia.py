@@ -3,7 +3,6 @@ from discord.ext import commands
 import aiohttp
 import DcQuery
 
-
 intents_instance = DcQuery.intents_instance
 
 
