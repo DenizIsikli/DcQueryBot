@@ -133,5 +133,13 @@ class Setup(commands.Cog):
 
     @staticmethod
     async def setup(bot):
-        await bot.add_cog(AdminDelete())
+        # Util commands
         await bot.add_cog(Reload())
+
+        # Admin commands
+        await bot.add_cog(AdminDelete())
+        await bot.add_cog(Kick())
+
+        # Embed commands
+        await bot.add_cog(HelpEmbed())
+        await bot.add_cog(AdminEmbed())
