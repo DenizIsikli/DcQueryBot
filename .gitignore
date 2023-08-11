@@ -1,1 +1,3 @@
-/config.env.py
+/config/
+/config/config.env.py
+/venv/
