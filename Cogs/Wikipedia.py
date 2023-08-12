@@ -1,18 +1,21 @@
 import discord
 from discord.ext import commands
 import aiohttp
-import DcQuery
+from dataclasses import dataclass
+import main
 
-intents_instance = DcQuery.intents_instance
+
+@dataclass
+class Baseclass:
+    intents_instance = main.Intents
 
 
 class WikipediaQuery(commands.Cog):
     def __init__(self):
         self.WIKIPEDIA_API = "https://en.wikipedia.org/w/api.php"
-        self.bot = commands.Bot(command_prefix="!", intents=intents_instance)
 
-    async def wikipedia_query(self, message: discord.Message, limit: int = 1, search_query: str = None):
-        if message.author == self.bot.user:
+    async def wikipedia_query(self, bot, message: discord.Message, limit: int = 1, search_query: str = None):
+        if message.author == bot.user:
             return
 
         try:
@@ -50,8 +53,8 @@ class WikipediaQuery(commands.Cog):
         except Exception as e:
             await message.channel.send(f"An unexpected error occurred: {e}")
 
-    @commands.command(intents=intents_instance)
-    async def wiki(self, ctx, *args):
+    @commands.command(intents=Baseclass.intents_instance)
+    async def wiki(self, bot, ctx, *args):
         limit = 1
         search_query = ""
 
@@ -64,7 +67,7 @@ class WikipediaQuery(commands.Cog):
             else:
                 search_query = " ".join(args)
 
-        await self.wikipedia_query(ctx.message, limit, search_query)
+        await self.wikipedia_query(bot, ctx.message, limit, search_query)
 
 
 async def setup(bot):
