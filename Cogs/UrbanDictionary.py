@@ -71,10 +71,5 @@ class UrbanDictionaryQuery(commands.Cog):
         await self.urban_dictionary_query(ctx.message, limit, search_query)
 
 
-class Setup(commands.Cog):
-    def __init__(self):
-        pass
-
-    @staticmethod
-    async def setup(bot):
-        await bot.add_cog(UrbanDictionaryQuery())
+async def setup(bot):
+    await bot.add_cog(UrbanDictionaryQuery())
