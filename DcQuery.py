@@ -127,19 +127,14 @@ class Reload(commands.Cog):
             await ctx.send(embed=embed)
 
 
-class Setup(commands.Cog):
-    def __init__(self):
-        pass
+async def setup(bot):
+    # Util commands
+    await bot.add_cog(Reload())
 
-    @staticmethod
-    async def setup(bot):
-        # Util commands
-        await bot.add_cog(Reload())
+    # Admin commands
+    await bot.add_cog(AdminDelete())
+    await bot.add_cog(Kick())
 
-        # Admin commands
-        await bot.add_cog(AdminDelete())
-        await bot.add_cog(Kick())
-
-        # Embed commands
-        await bot.add_cog(HelpEmbed())
-        await bot.add_cog(AdminEmbed())
+    # Embed commands
+    await bot.add_cog(HelpEmbed())
+    await bot.add_cog(AdminEmbed())
