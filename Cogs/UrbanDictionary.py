@@ -2,17 +2,11 @@ import datetime
 import discord
 from discord.ext import commands
 import aiohttp
-import main
-from dataclasses import dataclass
-
-
-@dataclass
-class Baseclass:
-    intents_instance = main.Intents
 
 
 class UrbanDictionaryQuery(commands.Cog):
-    def __init__(self):
+    def __init__(self, bot):
+        self.bot = bot
         self.URBAN_DICTIONARY_API = "https://api.urbandictionary.com/v0/define"
 
     async def urban_dictionary_query(self, bot, message: discord.Message, limit: int = 1, search_query: str = None):
@@ -57,8 +51,8 @@ class UrbanDictionaryQuery(commands.Cog):
         except Exception as e:
             await message.channel.send(f"An unexpected error occurred: {e}")
 
-    @commands.command(intents=Baseclass.intents_instance)
-    async def urban(self, bot, ctx, *args):
+    @commands.command()
+    async def urban(self, ctx, *args):
         limit = 1
         search_query = ""
 
@@ -68,11 +62,11 @@ class UrbanDictionaryQuery(commands.Cog):
                 search_query = " ".join(args[1:])
             elif args[-1].isdigit():
                 pass
-        else:
-            search_query = " ".join(args)
+            else:
+                search_query = " ".join(args)
 
-        await self.urban_dictionary_query(bot, ctx.message, limit, search_query)
+        await self.urban_dictionary_query(ctx.bot, ctx.message, limit, search_query)
 
 
 async def setup(bot):
-    await bot.add_cog(UrbanDictionaryQuery())
+    await bot.add_cog(UrbanDictionaryQuery(bot))
