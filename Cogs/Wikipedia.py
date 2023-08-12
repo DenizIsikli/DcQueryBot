@@ -67,10 +67,5 @@ class WikipediaQuery(commands.Cog):
         await self.wikipedia_query(ctx.message, limit, search_query)
 
 
-class Setup(commands.Cog):
-    def __init__(self):
-        pass
-
-    @staticmethod
-    async def setup(bot):
-        await bot.add_cog(WikipediaQuery())
+async def setup(bot):
+    await bot.add_cog(WikipediaQuery())
