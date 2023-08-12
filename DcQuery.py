@@ -2,23 +2,17 @@ import os
 import discord
 import datetime
 from discord.ext import commands
+import main
+from dataclasses import dataclass
 
 
-class Intents:
-    @staticmethod
-    def create_intents():
-        intents = discord.Intents.default()
-        intents.message_content = True
-        intents.guild_messages = True
-        intents.dm_messages = True
-        return intents
-
-
-intents_instance = Intents.create_intents()
+@dataclass
+class Baseclass:
+    intents_instance = main.Intents
 
 
 class HelpEmbed(commands.Cog):
-    @commands.command(intents=intents_instance)
+    @commands.command(intents=Baseclass.intents_instance)
     async def help(self, ctx, message: discord.Message):
         embed = discord.Embed(
             title="Command List",
@@ -42,7 +36,7 @@ class HelpEmbed(commands.Cog):
 
 
 class AdminEmbed(commands.Cog):
-    @commands.command(intents=intents_instance)
+    @commands.command(intents=Baseclass.intents_instance)
     @commands.is_owner()
     async def admin(self, ctx, message: discord.Message):
         embed = discord.Embed(
@@ -62,7 +56,7 @@ class AdminEmbed(commands.Cog):
 
 
 class AdminDelete(commands.Cog):
-    @commands.command(intents=intents_instance)
+    @commands.command(intents=Baseclass.intents_instance)
     @commands.is_owner()
     async def delete(self, ctx, amount=1):
         await ctx.channel.purge(limit=amount+1)
@@ -77,7 +71,7 @@ class AdminDelete(commands.Cog):
 
 
 class Kick(commands.Cog):
-    @commands.command(intents=intents_instance)
+    @commands.command(intents=Baseclass.intents_instance)
     @commands.is_owner()
     async def kick(self, member, *, reason=None):
         await member.kick(reason=reason)
@@ -95,7 +89,7 @@ class Reload(commands.Cog):
     def __init__(self):
         self.bot = commands.Bot
 
-    @commands.command(intents=intents_instance)
+    @commands.command(intents=Baseclass.intents_instance)
     @commands.is_owner()
     async def reload(self, ctx, bot, message: discord.Message):
         async with ctx.typing():
