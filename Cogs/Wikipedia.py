@@ -26,20 +26,20 @@ class WikipediaQuery(commands.Cog):
                     response.raise_for_status()  # Raise an exception if the request was not successful
                     response_data = await response.json()
 
-            if "query" in response_data and "search" in response_data["query"]:
-                search_results = response_data["query"]["search"]
-                query_limit = limit  # Limit the number of search results to display
+                    if "query" in response_data and "search" in response_data["query"]:
+                        search_results = response_data["query"]["search"]
+                        query_limit = limit  # Limit the number of search results to display
 
-                for i, result in enumerate(search_results[:query_limit]):
-                    title = result["title"]
-                    page_url = f"https://en.wikipedia.org/wiki/{title.replace(' ', '_')}"
+                        for i, result in enumerate(search_results[:query_limit]):
+                            title = result["title"]
+                            page_url = f"https://en.wikipedia.org/wiki/{title.replace(' ', '_')}"
 
-                    await message.channel.send(f""
-                                               f"**Search Result {i + 1}/{query_limit}**: {title}\n"
-                                               f"**Page URL**: {page_url}"
-                                               )
-            else:
-                await message.channel.send("No search results found for the query.")
+                            await message.channel.send(f""
+                                                       f"**Search Result {i + 1}/{query_limit}**: {title}\n"
+                                                       f"**Page URL**: {page_url}"
+                                                       )
+                    else:
+                        await message.channel.send("No search results found for the query.")
 
         except aiohttp.ClientOSError as e:
             await message.channel.send(f"An error occurred while querying Wikipedia: {e}")
@@ -59,6 +59,7 @@ class WikipediaQuery(commands.Cog):
             elif args[-1].isdigit():
                 pass
             else:
+                # Combine arguments into a single search query
                 search_query = " ".join(args)
 
         await self.wikipedia_query(ctx.bot, ctx.message, limit, search_query)
