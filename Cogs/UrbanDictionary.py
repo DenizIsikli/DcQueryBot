@@ -23,27 +23,30 @@ class UrbanDictionaryQuery(commands.Cog):
                     response.raise_for_status()  # Raise an exception if the request was not successful
                     response_data = await response.json()
 
-            if "list" in response_data:
-                search_results = response_data["list"]
-                query_limit = limit
+                    if "list" in response_data:
+                        search_results = response_data["list"]
+                        query_limit = limit
 
-                for i, result in enumerate(search_results[:query_limit]):
-                    title = result["word"]
-                    meaning = result["definition"]
-                    example = result["example"]
+                        for i, result in enumerate(search_results[:query_limit]):
+                            title = result["word"]
+                            meaning = result["definition"]
+                            example = result["example"]
 
-                    embed = discord.Embed(title=f"**Term {i + 1}/{query_limit}**: {title}", color=discord.Color.blue())
-                    embed.add_field(name="**Meaning**: ", value=meaning, inline=False)
-                    embed.add_field(name="**Example**: ", value=example, inline=False)
+                            embed = discord.Embed(
+                                title=f"**Term {i + 1}/{query_limit}**: {title}",
+                                color=discord.Color.blue()
+                            )
+                            embed.add_field(name="**Meaning**: ", value=meaning, inline=False)
+                            embed.add_field(name="**Example(s)**: ", value=example, inline=False)
 
-                    # Add & set footer with timestamp
-                    timestamp = datetime.datetime.utcnow()
-                    embed.timestamp = timestamp
-                    embed.set_footer(text=f"Requested by {message.author.name}")
+                            # Add & set footer with timestamp
+                            timestamp = datetime.datetime.utcnow()
+                            embed.timestamp = timestamp
+                            embed.set_footer(text=f"Requested by {message.author.name}")
 
-                    await message.channel.send(embed=embed)
-            else:
-                await message.channel.send("No search results found for the query.")
+                            await message.channel.send(embed=embed)
+                    else:
+                        await message.channel.send("No search results found for the query.")
 
         except aiohttp.ClientOSError as e:
             await message.channel.send(f"An error occurred while querying Urban Dictionary: {e}")
@@ -63,6 +66,7 @@ class UrbanDictionaryQuery(commands.Cog):
             elif args[-1].isdigit():
                 pass
             else:
+                # Combine arguments into a single search query
                 search_query = " ".join(args)
 
         await self.urban_dictionary_query(ctx.bot, ctx.message, limit, search_query)
