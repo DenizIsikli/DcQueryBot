@@ -22,7 +22,7 @@ class Setup:
         try:
             # Load DcQuery directly
             await bot.load_extension("DcQuery")
-            print("Loaded Util File: DcQuery")
+            print("Loaded Util File: DcQuery\n")
         except Exception as e:
             print(f"Failed to load DcQuery: {e}")
 
