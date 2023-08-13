@@ -131,8 +131,6 @@ class Reload(commands.Cog):
                 except Exception as e:
                     print(f"Failed to reload util file: DcQuery: {e}")
 
-
-
                 if reloaded_cogs:
                     embed.add_field(
                         name="Reloaded Cogs Files",
