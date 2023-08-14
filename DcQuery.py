@@ -66,7 +66,7 @@ class AdminDelete(commands.Cog):
         await ctx.channel.purge(limit=amount+1)
 
     @delete.error
-    async def delete_error(self, error, ctx):
+    async def delete_error(self, ctx, error):
         if isinstance(error, commands.MissingPermissions):
             command_owner = ctx.bot.get_user(ctx.bot.owner_id)
             await ctx.send(f"Missing permission! - Permission assigned to {command_owner}")
@@ -84,7 +84,7 @@ class Kick(commands.Cog):
         await member.kick(reason=reason)
 
     @kick.error
-    async def kick_error(self, error, ctx):
+    async def kick_error(self, ctx, error):
         if isinstance(error, commands.MissingPermissions):
             command_owner = ctx.bot.get_user(ctx.bot.owner_id)
             await ctx.send(f"Missing permission! - Permission assigned to {command_owner}")
