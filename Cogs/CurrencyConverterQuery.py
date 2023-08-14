@@ -1,16 +1,18 @@
 import datetime
 import discord
-import mal
 from discord.ext import commands
 import aiohttp
 
 
-class CurrencyConverter(commands.Cog):
+class CurrencyConverterQuery(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.JIKAN_API = "https://api.apilayer.com/exchangerates_data/latest"
 
-    async def convert_currency(self, bot, message: discord.Message, base_currency: str, target_currency: str, amount: float):
+    async def convert_currency(self,
+                               bot, message: discord.Message,
+                               base_currency: str,
+                               target_currency: str, amount: float):
         if message.author == bot.user:
             return
 
@@ -50,8 +52,8 @@ class CurrencyConverter(commands.Cog):
 
     @commands.command()
     async def convert(self, ctx, base_currency: str, target_currency: str, amount: float):
-        await self.convert_currency(ctx.message, base_currency, target_currency, amount)
+        await self.convert_currency(ctx.bot, ctx.message, base_currency, target_currency, amount)
 
 
 async def setup(bot):
-    await bot.add_cog(CurrencyConverter(bot))
+    await bot.add_cog(CurrencyConverterQuery(bot))
