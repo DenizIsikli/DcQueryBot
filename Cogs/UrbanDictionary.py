@@ -55,10 +55,7 @@ class UrbanDictionaryQuery(commands.Cog):
             await message.channel.send(f"An unexpected error occurred: {e}")
 
     @commands.command()
-    async def urban(self, ctx, *args):
-        limit = 1
-        search_query = ""
-
+    async def urban(self, ctx, *args, limit = 1, search_query = ""):
         if args:
             if args[0].isdigit():
                 limit = int(args[0])
