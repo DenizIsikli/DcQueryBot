@@ -68,6 +68,11 @@ class UrbanDictionaryQuery(commands.Cog):
 
         await self.urban_dictionary_query(ctx.bot, ctx.message, limit, search_query)
 
+    @urban.error
+    async def urban_error(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send("Bad argument")
+
 
 async def setup(bot):
     await bot.add_cog(UrbanDictionaryQuery(bot))
