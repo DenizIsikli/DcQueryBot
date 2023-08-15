@@ -54,6 +54,10 @@ class CurrencyConverterQuery(commands.Cog):
     async def convert(self, ctx, base_currency: str, target_currency: str, amount: float):
         await self.convert_currency(ctx.bot, ctx.message, base_currency, target_currency, amount)
 
+    @convert.error
+    async def convert_error(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send("Bad argument")
 
 async def setup(bot):
     await bot.add_cog(CurrencyConverterQuery(bot))
