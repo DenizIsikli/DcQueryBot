@@ -59,5 +59,6 @@ class CurrencyConverterQuery(commands.Cog):
         if isinstance(error, commands.BadArgument):
             await ctx.send("Bad argument")
 
+
 async def setup(bot):
     await bot.add_cog(CurrencyConverterQuery(bot))
