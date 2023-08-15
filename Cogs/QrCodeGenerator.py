@@ -13,7 +13,7 @@ class QrCodeGeneratorQuery(commands.Cog):
         self.QRCODE_API = "https://qrcode-monkey.p.rapidapi.com/qr/custom"
 
     @staticmethod
-    async def generate_qrcode(bot, message: discord.Message, link: str):
+    async def qr_code_generator_query(bot, message: discord.Message, link: str):
         if message.author == bot.user:
             return
 
@@ -51,7 +51,7 @@ class QrCodeGeneratorQuery(commands.Cog):
 
     @commands.command()
     async def qrcode(self, ctx, link: str):
-        await self.generate_qrcode(ctx.bot, ctx.message, link)
+        await self.qr_code_generator_query(ctx.bot, ctx.message, link)
 
     @qrcode.error
     async def qrcode_error(self, ctx, error):
