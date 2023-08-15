@@ -61,6 +61,11 @@ class WikipediaQuery(commands.Cog):
 
         await self.wikipedia_query(ctx.bot, ctx.message, limit, search_query)
 
+    @wiki.error
+    async def wiki_error(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send("Bad argument")
+
 
 async def setup(bot):
     await bot.add_cog(WikipediaQuery(bot))
