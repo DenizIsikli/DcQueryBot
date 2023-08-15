@@ -2,6 +2,7 @@ import datetime
 import discord
 from discord.ext import commands
 import aiohttp
+import random
 
 
 class ImgurQuery(commands.Cog):
@@ -9,19 +10,18 @@ class ImgurQuery(commands.Cog):
         self.bot = bot
         self.IMGUR_API = "https://api.imgur.com/3/gallery/search/top"
 
-    async def imgur_query(self, bot, message: discord.Message, limit: int = 1, search_query: str = None):
+    async def imgur_query(self, bot, message: discord.Message, search_query: str = None):
         if message.author == bot.user:
             return
 
         try:
             headers = {
-                "Authorization": "cd4b84872a053b7"
+                "Authorization": "Client-ID cd4b84872a053b7"
             }
 
             params = {
                 "q": search_query,
                 "q-type": "gif",
-                "limit": limit
             }
 
             async with aiohttp.ClientSession() as session:
@@ -32,22 +32,13 @@ class ImgurQuery(commands.Cog):
                     if "data" in response_data:
                         search_results = response_data["data"]
 
-                        for i, result in enumerate(search_results):
+                        if search_results:
+                            random_gif = random.randint(0, len(search_results)//2)
+                            result = search_results[random_gif]
                             title = result["title"]
                             gif_url = result["link"]
 
-                            embed = discord.Embed(
-                                title=f"**GIF {i + 1}/{limit}**: {title}",
-                                color=discord.Color.red()
-                            )
-                            embed.set_image(url=gif_url)
-
-                            # Add & set footer with timestamp
-                            timestamp = datetime.datetime.utcnow()
-                            embed.timestamp = timestamp
-                            embed.set_footer(text=f"Requested by {message.author.name}")
-
-                            await message.channel.send(embed=embed)
+                            await message.channel.send(f"Title: {title}\n{gif_url}")
                     else:
                         await message.channel.send("No search results found for the query.")
 
@@ -58,18 +49,12 @@ class ImgurQuery(commands.Cog):
             await message.channel.send(f"An unexpected error occurred: {e}")
 
     @commands.command()
-    async def imgur(self, ctx, *args, limit=1, search_query=""):
+    async def imgur(self, ctx, *args, search_query=""):
         if args:
-            if args[0].isdigit():
-                limit = int(args[0])
-                search_query = " ".join(args[1:])
-            elif args[-1].isdigit():
-                pass
-            else:
-                # Combine arguments into a single search query
-                search_query = " ".join(args)
+            # Combine arguments into a single search query
+            search_query = " ".join(args)
 
-        await self.imgur_query(ctx.bot, ctx.message, limit, search_query)
+        await self.imgur_query(ctx.bot, ctx.message, search_query)
 
     @imgur.error
     async def imgur_error(self, ctx, error):
