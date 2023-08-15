@@ -14,13 +14,12 @@ class AsciiArtGenerator(commands.Cog):
             return
 
         # Wrap the ASCII art in a code block
-        art = text2art(f"{text}", font="small")
-        await message.channel.send(f"```\n{art}\n```")
+        output = text2art(f"{text}", font="small")
+        await message.channel.send(f"```\n{output}\n```")
 
     @commands.command()
     async def ascii(self, ctx, *, text: str):
         await self.ascii_art_generator1(ctx.bot, ctx.message, text)
-
 
     # Font: Cybermedium
     @staticmethod
@@ -28,8 +27,8 @@ class AsciiArtGenerator(commands.Cog):
         if message.author == bot.user:
             return
 
-        art = text2art(f"{text}", font="cybermedium")
-        await message.channel.send(f"```\n{art}\n```")
+        output = text2art(f"{text}", font="cybermedium")
+        await message.channel.send(f"```\n{output}\n```")
 
     @commands.command()
     async def asciicm(self, ctx, *, text: str):
