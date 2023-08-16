@@ -86,35 +86,44 @@ class Reload(commands.Cog):
             reloaded_util = []
 
             try:
-                for filename in os.listdir("Cogs"):
-                    if filename.endswith(".py"):
-                        cog_name = f"Cogs.{filename[:-3]}"  # Remove the last 3 characters (.py)
-                        try:
-                            await self.bot.unload_extension(cog_name)
-                            await self.bot.load_extension(cog_name)
-                            reloaded_cogs.append(cog_name)  # Add file to list
-                        except Exception as e:
-                            print(f"Failed to reload cog files: Cogs.{cog_name}: {e}")
-                try:
-                    # Loading util file
-                    await self.bot.unload_extension("DcQuery")
-                    await self.bot.load_extension("DcQuery")
-                    reloaded_util.append("DcQuery")
+                try
+                    for filename in os.listdir("../Cogs"):
+                        if filename.endswith(".py"):
+                            cog_name = f"Cogs.{filename[:-3]}"  # Remove the last 3 characters (.py)
+                            try:
+                                await self.bot.unload_extension(cog_name)
+                                await self.bot.load_extension(cog_name)
+                                reloaded_cogs.append(cog_name)  # Add file to list
+                            except Exception as e:
+                                print(f"Failed to reload Cog file: {cog_name}: {e}")
                 except Exception as e:
-                    print(f"Failed to reload util file: DcQuery: {e}")
+                    print(f"Failed to reload any Cog files: {e}")
+
+                try:
+                    for filename in os.listdir("../Utility"):
+                        if filename.endswith(".py"):
+                            util_name = f"Utility.{filename[:-3]}"  # Remove the last 3 characters (.py)
+                            try:
+                                await self.bot.unload_extension(util_name)
+                                await self.bot.load_extension(util_name)
+                                reloaded_util.append(util_name)
+                            except Exception as e:
+                                print(f"Failed to reload Util file: {util_name}: {e}")
+                except Exception as e:
+                    print(f"Failed to reload any Utility files: {e}")
 
                 if reloaded_cogs:
                     embed.add_field(
-                        name="Reloaded Cogs Files",
+                        name="Reloaded Cog Files",
                         value="\n".join(reloaded_cogs)
                     )
                 if reloaded_util:
                     embed.add_field(
-                        name="Reloaded Util File",
+                        name="Reloaded Util Files",
                         value="\n".join(reloaded_util)
                     )
             except Exception as e:
-                print(f"Failed to find the cog files: {e}")
+                print(f"Failed to find any files: {e}")
 
         await ctx.send(embed=embed)
 
