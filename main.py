@@ -11,21 +11,29 @@ class Setup:
 
     @staticmethod
     async def setup_cog_instances(bot):
-        for filename in os.listdir("Cogs"):
-            if filename.endswith(".py"):
-                cog_name = f"Cogs.{filename[:-3]}"  # Remove the last 3 characters (.py)
-                try:
-                    await bot.load_extension(cog_name)
-                    print(f"Loaded Cog File: {cog_name}")
-                except Exception as e:
-                    print(f"Failed to load cog: {cog_name}: {e}")
+        try:
+            for filename in os.listdir("Cogs"):
+                if filename.endswith(".py"):
+                    cog_name = f"Cogs.{filename[:-3]}"  # Remove the last 3 characters (.py)
+                    try:
+                        await bot.load_extension(cog_name)
+                        print(f"Loaded Cog File: {cog_name}")
+                    except Exception as e:
+                        print(f"Failed to load Cog file: {cog_name}: {e}")
+        except Exception as e:
+            print(f"Failed to load Cog files: {e}")
 
         try:
-            # Load DcQuery directly
-            await bot.load_extension("DcQuery")
-            print("Loaded Util File: DcQuery\n")
+            for filename in os.listdir("Utility"):
+                if filename.endswith(".py"):
+                    util_name = f"Utility.{filename[:-3]}"  # Remove the last 3 characters (.py)
+                    try:
+                        await bot.load_extension(util_name)
+                        print(f"Loaded Util File: {util_name}")
+                    except Exception as e:
+                        print(f"Failed to load Util file: {util_name}: {e}")
         except Exception as e:
-            print(f"Failed to load DcQuery: {e}")
+            print(f"Failed to load Util files: {e}")
 
 
 @dataclass
