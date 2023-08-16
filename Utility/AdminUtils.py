@@ -86,7 +86,7 @@ class Reload(commands.Cog):
             reloaded_util = []
 
             try:
-                try
+                try:
                     for filename in os.listdir("../Cogs"):
                         if filename.endswith(".py"):
                             cog_name = f"Cogs.{filename[:-3]}"  # Remove the last 3 characters (.py)
