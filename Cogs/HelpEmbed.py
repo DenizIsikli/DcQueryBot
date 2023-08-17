@@ -7,8 +7,11 @@ class HelpEmbed(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
-    async def help(self, ctx):
+    @staticmethod
+    async def help_embed(bot, message: discord.Message):
+        if message.author == bot.user:
+            return
+
         embed = discord.Embed(
             title="Command List",
             color=discord.Color.purple()
@@ -55,9 +58,18 @@ class HelpEmbed(commands.Cog):
         # Add & set footer with timestamp
         timestamp = datetime.datetime.utcnow()
         embed.timestamp = timestamp
-        embed.set_footer(text=f"Requested by {ctx.author.name}")
+        embed.set_footer(text=f"Requested by {message.author.name}")
 
-        await ctx.send(embed=embed)
+        await message.channel.send(embed=embed)
+
+    @commands.command()
+    async def help(self, ctx):
+        await self.help_embed(ctx.bot, ctx.message)
+
+    @help.error
+    async def help_error(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send("Bad argument")
 
 
 async def setup(bot):
