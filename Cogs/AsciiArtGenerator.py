@@ -32,7 +32,7 @@ class AsciiArtGenerator(commands.Cog):
     @commands.command()
     async def asciicm(self, ctx, *, text: str):
         if any(char.isdigit() for char in text):
-            await ctx.send("This command does not take numbers as an argument!")
+            await ctx.send("This command does not take numbers as an argument.")
             return
         else:
             await self.ascii_art_generator2(ctx, text)
