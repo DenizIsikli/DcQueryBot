@@ -56,6 +56,8 @@ class QrCodeGeneratorQuery(commands.Cog):
     async def qrcode_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send("Usage: `!qrcode <link>`")
+        elif isinstance(error, commands.BadArgument):
+            await ctx.send("Invalid argument. Please provide a valid link.")
         else:
             await ctx.send(f"An error occurred: {error}")
 
