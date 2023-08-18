@@ -56,8 +56,10 @@ class ImgurQuery(commands.Cog):
 
     @imgur.error
     async def imgur_error(self, ctx, error):
-        if isinstance(error, commands.BadArgument):
-            await ctx.send("Bad argument")
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send("Please provide a search query.")
+        else:
+            await ctx.send("An error occurred while processing your request.")
 
 
 async def setup(bot):
