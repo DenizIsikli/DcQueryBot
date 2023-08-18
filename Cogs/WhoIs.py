@@ -1,9 +1,12 @@
+import os
 import discord
 from discord.ext import commands
 import datetime
+from gtts import gTTS
+from mutagen.mp3 import MP3
 
 
-class Miscellaneous(commands.Cog):
+class WhoIs(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -46,5 +49,43 @@ class Miscellaneous(commands.Cog):
             await ctx.send("Bad argument")
 
 
+class TextToSpeech(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    async def text_to_speech(self, ctx, *, text: str = None):
+        try:
+            if ctx.author.voice and ctx.author.voice.channel:
+                speech = gTTS(text = text, lang = "en", slow=False, lang_check=True)
+                speech.save("speech.mp3")
+                audio = MP3("speech.mp3")
+                audio_length = audio.info.length
+
+                if audio_length > 0:
+                    voice_channel = ctx.author.voice.channel
+                    vc = await voice_channel.connect()
+                    vc.play(discord.FFmpegPCMAudio("speech.mp3"))
+                    await vc.disconnect()
+                    os.remove("speech.mp3")
+                else:
+                    await ctx.send("Failed to generate audio!")
+            else:
+                await ctx.send("You need to be inside a voice channel to use this command!")
+        except Exception as e:
+            await ctx.send("Failed to save the text to audio")
+            os.remove("speech.mp3")
+
+    @commands.command()
+    async def tts(self, ctx, text: str = None):
+        await self.text_to_speech(ctx, text=text)
+
+
+
+
+
+
+
+
 async def setup(bot):
-    await bot.add_cog(Miscellaneous(bot))
+    await bot.add_cog(WhoIs(bot))
+    await bot.add_cog(TextToSpeech(bot))
