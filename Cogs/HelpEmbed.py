@@ -73,9 +73,8 @@ class HelpEmbed(commands.Cog):
         await self.help_embed(ctx)
 
     @help.error
-    async def help_error(self, ctx, error):
-        if isinstance(error, commands.BadArgument):
-            await ctx.send("Bad argument")
+    async def help_error(self, ctx):
+        await ctx.send("An error occurred while processing your request.")
 
 
 async def setup(bot):
