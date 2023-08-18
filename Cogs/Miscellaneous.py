@@ -140,3 +140,4 @@ class ChangeNickname(commands.Cog):
 async def setup(bot):
     await bot.add_cog(WhoIs(bot))
     await bot.add_cog(TextToSpeech(bot))
+    await bot.add_cog(ChangeNickname(bot))
