@@ -53,10 +53,11 @@ class TextToSpeech(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    async def text_to_speech(self, ctx, *, text: str = None):
+    @staticmethod
+    async def text_to_speech(ctx, *, text: str = None):
         try:
             if ctx.author.voice and ctx.author.voice.channel:
-                speech = gTTS(text = text, lang = "en", slow=False, lang_check=True)
+                speech = gTTS(text=text, lang="en", slow=False, lang_check=True)
                 speech.save("speech.mp3")
                 audio = MP3("speech.mp3")
                 audio_length = audio.info.length
@@ -72,18 +73,21 @@ class TextToSpeech(commands.Cog):
             else:
                 await ctx.send("You need to be inside a voice channel to use this command!")
         except Exception as e:
-            await ctx.send("Failed to save the text to audio")
+            await ctx.send(f"Failed to save the text to audio: {e}")
             os.remove("speech.mp3")
 
     @commands.command()
     async def tts(self, ctx, text: str = None):
         await self.text_to_speech(ctx, text=text)
 
-
-
-
-
-
+    @tts.error
+    async def tts_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send("Please provide the text you want to convert to speech.")
+        elif isinstance(error, commands.CommandInvokeError):
+            await ctx.send("An error occurred while processing your request.")
+        else:
+            await ctx.send("An error occurred.")
 
 
 async def setup(bot):
