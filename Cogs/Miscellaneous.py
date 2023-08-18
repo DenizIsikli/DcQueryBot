@@ -45,9 +45,7 @@ class WhoIs(commands.Cog):
 
     @whois.error
     async def whois_error(self, ctx, error):
-        if isinstance(error, commands.MemberNotFound):
-            await ctx.send("Member not found. Please provide a valid user mention or ID.")
-        elif isinstance(error, commands.UserNotFound):
+        if isinstance(error, commands.UserNotFound):
             await ctx.send("User not found. Please provide a valid user mention or ID.")
         elif isinstance(error, commands.BadArgument):
             await ctx.send("Bad argument. Please provide a valid user mention or ID.")
