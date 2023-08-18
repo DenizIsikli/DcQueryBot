@@ -63,8 +63,12 @@ class WikipediaQuery(commands.Cog):
 
     @wiki.error
     async def wiki_error(self, ctx, error):
-        if isinstance(error, commands.BadArgument):
-            await ctx.send("Bad argument")
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send("Usage: `!wiki [<limit>] <search_query>`")
+        elif isinstance(error, commands.BadArgument):
+            await ctx.send("Invalid argument. Please provide a valid limit (integer) and search query.")
+        else:
+            await ctx.send(f"An error occurred: {error}")
 
 
 async def setup(bot):
