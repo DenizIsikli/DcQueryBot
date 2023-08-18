@@ -71,8 +71,12 @@ class UrbanDictionaryQuery(commands.Cog):
 
     @urban.error
     async def urban_error(self, ctx, error):
-        if isinstance(error, commands.BadArgument):
-            await ctx.send("Bad argument")
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send("Usage: `!urban [<limit>] <search_query>`")
+        elif isinstance(error, commands.BadArgument):
+            await ctx.send("Bad argument. Please provide a valid limit (integer) and search query.")
+        else:
+            await ctx.send(f"An error occurred: {error}")
 
 
 async def setup(bot):
