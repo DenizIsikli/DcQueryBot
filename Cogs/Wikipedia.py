@@ -1,5 +1,10 @@
-from discord.ext import commands
+import asyncio
+
 import aiohttp
+from discord.ext import commands
+from textblob import TextBlob
+from newspaper import Article
+import nltk
 
 
 class WikipediaQuery(commands.Cog):
@@ -71,5 +76,43 @@ class WikipediaQuery(commands.Cog):
             await ctx.send(f"An error occurred: {error}")
 
 
+class SentimentAnalysis(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+        nltk.download('punkt')
+
+    @staticmethod
+    async def sentiment_analysis(ctx, link: str = None):
+        article = Article(link)
+
+        article.download()
+        article.parse()
+        article.nlp()
+
+        text = article.summary
+
+        blob = TextBlob(text)
+
+        sentiment = blob.sentiment.polarity
+
+        await ctx.message.delete()
+        await asyncio.sleep(0.2)
+        await ctx.send(f"Sentiment value: {sentiment}```{link}```")
+
+    @commands.command()
+    async def senti(self, ctx, link: str = None):
+        await self.sentiment_analysis(ctx, link=link)
+
+    @senti.error
+    async def senti_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send("Usage: `!senti <link>`")
+        elif isinstance(error, commands.BadArgument):
+            await ctx.send("Invalid argument. Please provide a valid link.")
+        else:
+            await ctx.send(f"An error occurred: {error}")
+
+
 async def setup(bot):
     await bot.add_cog(WikipediaQuery(bot))
+    await bot.add_cog(SentimentAnalysis(bot))
