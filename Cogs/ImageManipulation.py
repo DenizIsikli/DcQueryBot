@@ -72,7 +72,8 @@ class ImageManipulation(commands.Cog):
             sharpness_switch = {
                 "mild": lambda: image.filter(ImageFilter.UnsharpMask(radius=2, percent=50)),
                 "medium": lambda: image.filter(ImageFilter.UnsharpMask(radius=2, percent=100)),
-                "strong": lambda: image.filter(ImageFilter.UnsharpMask(radius=2, percent=150))
+                "strong": lambda: image.filter(ImageFilter.UnsharpMask(radius=2, percent=150)),
+                "extreme": lambda: image.filter(ImageFilter.UnsharpMask(radius=4, percent=250))
             }
 
             filtered_image = None  # Initialize with a default value
@@ -80,7 +81,7 @@ class ImageManipulation(commands.Cog):
             if filtered_image_function:
                 filtered_image = filtered_image_function()
             else:
-                await ctx.send("Invalid sharpening range. Choose 'mild', 'medium', or 'strong'.")
+                await ctx.send("Invalid sharpening range - Choose: 'mild', 'medium', 'strong', or 'extreme'.")
 
             # Convert the PIL Image to bytes since discord.File doesn't take "Image"
             img_byte_array = io.BytesIO()
