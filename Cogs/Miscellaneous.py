@@ -44,6 +44,7 @@ class WhoIs(commands.Cog):
             embed.set_footer(text=f"Requested by {ctx.author.name}")
 
             await ctx.send(embed=embed)
+
         except Exception as e:
             await ctx.send(f"An error occurred: {e}")
 
@@ -99,6 +100,7 @@ class TextToSpeech(commands.Cog):
                     await ctx.send("Please provide the text you want to convert to speech.")
             else:
                 await ctx.send("You need to be inside a voice channel to use this command!")
+
         except Exception as e:
             await ctx.send(f"Failed to save the text to audio: {e}")
             await self.cleanup(vc)
@@ -130,6 +132,7 @@ class ChangeNickname(commands.Cog):
             old_name = ctx.author.display_name
             await ctx.author.edit(nick=new_name)
             await ctx.send(f"Nickname changed from {old_name} to {new_name}")
+
         except discord.Forbidden:
             await ctx.send("I don't have permission to change nicknames.")
 
