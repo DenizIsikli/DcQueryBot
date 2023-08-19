@@ -70,8 +70,13 @@ class TextToSpeech(commands.Cog):
         self.client = TextToSpeechV1(authenticator=authenticator)
         self.client.set_service_url('YOUR_SERVICE_URL')  # Replace with your service URL
 
-    async def text_to_speech(self, ctx, *, text: str = None):
-        global vc
+    @staticmethod
+    async def cleanup(vc):
+        if vc.is_connected():
+            await vc.disconnect()
+        os.remove("speech.mp3")
+
+    async def text_to_speech(self, ctx, vc, *, text: str = None):
         try:
             if ctx.author.voice and ctx.author.voice.channel:
                 if text is not None and text.strip() != "":
@@ -84,25 +89,24 @@ class TextToSpeech(commands.Cog):
                     voice_channel = ctx.author.voice.channel
                     vc = await voice_channel.connect()
 
-                    vc.play(discord.FFmpegPCMAudio("speech.mp3"), after=lambda e: os.remove("speech.mp3"))
+                    vc.play(discord.FFmpegPCMAudio("speech.mp3"), after=lambda error: self.cleanup(vc))
 
                     while vc.is_playing():
                         await asyncio.sleep(1)
 
-                    await vc.disconnect()
+                    await self.cleanup(vc)
                 else:
                     await ctx.send("Please provide the text you want to convert to speech.")
             else:
                 await ctx.send("You need to be inside a voice channel to use this command!")
         except Exception as e:
             await ctx.send(f"Failed to save the text to audio: {e}")
-            await asyncio.sleep(1)
-            await vc.disconnect()
-            os.remove("speech.mp3")
+            await self.cleanup(vc)
 
     @commands.command()
     async def tts(self, ctx, *, text: str = None):
-        await self.text_to_speech(ctx, text=text)
+        voice_client = ctx.voice_client
+        await self.text_to_speech(ctx, voice_client, text=text)
 
     @tts.error
     async def tts_error(self, ctx, error):
