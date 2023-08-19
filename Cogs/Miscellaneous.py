@@ -1,10 +1,11 @@
 import os
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 import datetime
 import aiohttp
 import asyncio
 from ibm_watson import TextToSpeechV1
+from datetime import datetime, timedelta
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
 
@@ -137,7 +138,38 @@ class ChangeNickname(commands.Cog):
             await ctx.send("An error occurred.")
 
 
+class Reminder(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+        self.reminders = []
+
+    async def reminder(self, ctx, duration: int = 0, *, reminder: str = None):
+        if duration <= 0:
+            await ctx.send("Please provide a valid duration (in minutes) for the reminder.")
+            return
+
+        reminder_time = datetime.utcnow() + timedelta(minutes=duration)
+        self.reminders.append({"User_ID:": ctx.author.id, "Time:": reminder_time, "Reminder:": reminder})
+
+        await ctx.send(f"Reminder set for {duration} minutes from now: {reminder}")
+
+    @tasks.loop(seconds=30)
+    async def check_reminder(self):
+        now = datetime.utcnow()
+        for reminder in self.reminders:
+            if reminder["Time"] <= now:
+                user = self.bot.get_user(reminder["User_ID"])
+                if user:
+                    await user.send(f"Reminder: {reminder['reminder']}\n{user.mention}")
+                self.reminders.remove(reminder)
+
+    @check_reminder.before_loop
+    async def before_check_reminders(self):
+        await self.bot.wait_until_ready()
+
+
 async def setup(bot):
     await bot.add_cog(WhoIs(bot))
     await bot.add_cog(TextToSpeech(bot))
     await bot.add_cog(ChangeNickname(bot))
+    await bot.add_cog(Reminder(bot))
