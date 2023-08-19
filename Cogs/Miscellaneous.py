@@ -15,36 +15,41 @@ class WhoIs(commands.Cog):
 
     @staticmethod
     async def who_is(ctx, member: discord.Member = None):
-        if ctx.author == ctx.bot.user:
-            return
+        try:
+            if ctx.author == ctx.bot.user:
+                return
 
-        member = member or ctx.author
+            # If the member is not specified, the variable is then set to the author
+            member = member or ctx.author
 
-        embed = discord.Embed(
-            title=f"Who is {member.display_name}",
-            color=discord.Color.dark_theme()
-        )
-        embed.set_thumbnail(url=member.avatar_url)
+            embed = discord.Embed(
+                title=f"Who is {member.display_name}",
+                color=discord.Color.dark_theme()
+            )
 
-        embed.add_field(name="**ID:**", value=member.id)
-        embed.add_field(name="**Name:**", value=member.display_name)
+            embed.add_field(name="**ID:**", value=member.id)
+            embed.add_field(name="**Name:**", value=member.display_name)
 
-        embed.add_field(name="**Created Account On:**", value=member.created_at)
-        embed.add_field(name="**Joined Server On:**", value=member.joined_at)
+            embed.add_field(name="**Created Account On:**", value=member.created_at)
+            embed.add_field(name="**Joined Server On:**", value=member.joined_at)
 
-        embed.add_field(name="**Roles:**", value=member.roles)
-        embed.add_field(name="**Highest Role:", value=member.top_role)
+            roles = ', '.join(role.name for role in member.roles)
+            embed.add_field(name="**Roles:**", value=roles)
 
-        # Add & set footer with timestamp
-        timestamp = datetime.datetime.utcnow()
-        embed.timestamp = timestamp
-        embed.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar_url)
+            embed.add_field(name="**Highest Role:**", value=member.top_role)
 
-        await ctx.send(embed=embed)
+            # Add & set footer with timestamp
+            timestamp = datetime.utcnow()
+            embed.timestamp = timestamp
+            embed.set_footer(text=f"Requested by {ctx.author.name}")
+
+            await ctx.send(embed=embed)
+        except Exception as e:
+            await ctx.send(f"An error occurred: {e}")
 
     @commands.command()
     async def whois(self, ctx, member: discord.Member = None):
-        await self.who_is(ctx, member)
+        await self.who_is(ctx, member=member)
 
     @whois.error
     async def whois_error(self, ctx, error):
@@ -149,19 +154,35 @@ class Reminder(commands.Cog):
             return
 
         reminder_time = datetime.utcnow() + timedelta(minutes=duration)
-        self.reminders.append({"User_ID:": ctx.author.id, "Time:": reminder_time, "Reminder:": reminder})
+        self.reminders.append({"User_ID": ctx.author.id, "Time": reminder_time, "Reminder": reminder})
 
         await ctx.send(f"Reminder set for {duration} minutes from now: {reminder}")
+
+    @commands.command()
+    async def remindme(self, ctx, duration: int = 0, *, reminder: str = None):
+        await self.reminder(ctx, duration, reminder=reminder)
+
+    @remindme.error
+    async def reminder_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send("Usage: !remindme <duration in minutes> <reminder>")
+        else:
+            await ctx.send(f"An error occurred: {error}")
 
     @tasks.loop(seconds=30)
     async def check_reminder(self):
         now = datetime.utcnow()
+        reminders_to_remove = []
+
         for reminder in self.reminders:
             if reminder["Time"] <= now:
                 user = self.bot.get_user(reminder["User_ID"])
                 if user:
                     await user.send(f"Reminder: {reminder['reminder']}\n{user.mention}")
-                self.reminders.remove(reminder)
+                reminders_to_remove.append(reminder)
+
+        for reminder in reminders_to_remove:
+            self.reminders.remove(reminder)
 
     @check_reminder.before_loop
     async def before_check_reminders(self):
