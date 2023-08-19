@@ -2,7 +2,7 @@ import io
 import asyncio
 import discord
 from discord.ext import commands
-from PIL import Image, ImageFilter
+from PIL import Image, ImageFilter, ImageOps, ImageChops
 
 
 class ImageManipulation(commands.Cog):
@@ -27,11 +27,11 @@ class ImageManipulation(commands.Cog):
                 await ctx.send("Please provide a range from 0.1 to 5.0.")
                 return
 
-            filtered_image = image.filter(ImageFilter.GaussianBlur(radius=blur_range))
+            blur_image = image.filter(ImageFilter.GaussianBlur(radius=blur_range))
 
             # Convert the PIL Image to bytes since discord.File doesn't take "Image"
             img_byte_array = io.BytesIO()
-            filtered_image.save(img_byte_array, format="PNG")
+            blur_image.save(img_byte_array, format="PNG")
 
             # Seek back to the beginning of the buffer
             img_byte_array.seek(0)
@@ -42,9 +42,6 @@ class ImageManipulation(commands.Cog):
 
         except IndexError:
             await ctx.send("Please provide an image as an attachment.")
-
-        except Exception as e:
-            await ctx.send(f"An error occurred: {e}")
 
     @commands.command()
     async def blur(self, ctx, blur_range: float = 1.0):
@@ -76,16 +73,16 @@ class ImageManipulation(commands.Cog):
                 "extreme": lambda: image.filter(ImageFilter.UnsharpMask(radius=4, percent=250))
             }
 
-            filtered_image = None  # Initialize with a default value
+            sharp_image = None  # Initialize with a default value
             filtered_image_function = sharpness_switch.get(sharpen_range)
             if filtered_image_function:
-                filtered_image = filtered_image_function()
+                sharp_image = filtered_image_function()
             else:
                 await ctx.send("Invalid sharpening range - Choose: 'mild', 'medium', 'strong', or 'extreme'.")
 
             # Convert the PIL Image to bytes since discord.File doesn't take "Image"
             img_byte_array = io.BytesIO()
-            filtered_image.save(img_byte_array, format="PNG")
+            sharp_image.save(img_byte_array, format="PNG")
 
             # Seek back to the beginning of the buffer
             img_byte_array.seek(0)
@@ -105,6 +102,131 @@ class ImageManipulation(commands.Cog):
     async def sharpen_error(self, ctx, error):
         if isinstance(error, commands.BadArgument):
             await ctx.send("Invalid argument. Please provide a valid blur range.")
+
+    @staticmethod
+    async def apply_sepia(ctx):
+        try:
+            image_attachment = ctx.message.attachments[0]
+
+            # Read the attachment as bytes
+            image_bytes = await image_attachment.read()
+
+            # Open the image using PIL
+            image = Image.open(io.BytesIO(image_bytes))
+
+            # Apply sepia filter
+            sepia_image = ImageOps.colorize(image.convert("L"), "#704214", "#FFC085")
+
+            # Convert the PIL Image to bytes
+            img_byte_array = io.BytesIO()
+            sepia_image.save(img_byte_array, format="PNG")
+
+            # Seek back to the beginning of the buffer
+            img_byte_array.seek(0)
+
+            await ctx.message.delete()
+            await asyncio.sleep(0.2)
+            await ctx.send(file=discord.File(img_byte_array, "SepiaFilter_image.png"))
+
+        except IndexError:
+            await ctx.send("Please provide an image as an attachment.")
+
+    @commands.command()
+    async def sepia(self, ctx):
+        await self.apply_sepia(ctx)
+
+    @sepia.error
+    async def sepia_error(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send("Invalid argument. Please provide a valid image.")
+
+    @staticmethod
+    async def apply_watercolor(ctx):
+        try:
+            image_attachment = ctx.message.attachments[0]
+
+            # Read the attachment as bytes
+            image_bytes = await image_attachment.read()
+
+            # Open the image using PIL
+            image = Image.open(io.BytesIO(image_bytes))
+
+            # Convert to grayscale
+            grayscale_image = ImageOps.grayscale(image)
+
+            # Apply edge-enhancing filter
+            edges_image = grayscale_image.filter(ImageFilter.FIND_EDGES)
+
+            # Combine the original image with the edges using difference
+            watercolor_image = ImageChops.difference(image, edges_image)
+
+            # Convert back to RGB mode
+            watercolor_image = watercolor_image.convert("RGB")
+
+            # Convert the PIL Image to bytes
+            img_byte_array = io.BytesIO()
+            watercolor_image.save(img_byte_array, format="PNG")
+
+            # Seek back to the beginning of the buffer
+            img_byte_array.seek(0)
+
+            await ctx.message.delete()
+            await asyncio.sleep(0.2)
+            await ctx.send(file=discord.File(img_byte_array, "WatercolorFilter_image.png"))
+
+        except IndexError:
+            await ctx.send("Please provide an image as an attachment.")
+
+    @commands.command()
+    async def watercolor(self, ctx):
+        await self.apply_watercolor(ctx)
+
+    @watercolor.error
+    async def watercolor_error(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send("Invalid argument. Please provide a valid image.")
+
+    @staticmethod
+    async def apply_grayscale(ctx):
+        try:
+            image_attachment = ctx.message.attachments[0]
+
+            # Read the attachment as bytes
+            image_bytes = await image_attachment.read()
+
+            # Open the image using PIL
+            image = Image.open(io.BytesIO(image_bytes))
+
+            # Convert the image to grayscale
+            grayscale_image = image.convert("L")
+
+            # Convert the PIL Image to bytes since discord.File doesn't take "Image"
+            img_byte_array = io.BytesIO()
+            grayscale_image.save(img_byte_array, format="PNG")
+
+            # Seek back to the beginning of the buffer
+            img_byte_array.seek(0)
+
+            await ctx.message.delete()
+            await asyncio.sleep(0.2)
+            await ctx.send(file=discord.File(img_byte_array, "Grayscale_image.png"))
+
+        except IndexError:
+            await ctx.send("Please provide an image as an attachment.")
+
+        except Exception as e:
+            await ctx.send(f"An error occurred: {e}")
+
+    @commands.command()
+    async def grayscale(self, ctx):
+        await self.apply_grayscale(ctx)
+
+    @grayscale.error
+    async def grayscale_error(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send("Invalid argument.")
+        else:
+            await ctx.send(f"An error occurred: {error}")
 
 
 async def setup(bot):
