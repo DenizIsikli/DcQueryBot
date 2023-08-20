@@ -1,10 +1,8 @@
 import asyncio
-
 import aiohttp
 from discord.ext import commands
 from textblob import TextBlob
 from newspaper import Article
-import nltk
 
 
 class WikipediaQuery(commands.Cog):
@@ -79,7 +77,6 @@ class WikipediaQuery(commands.Cog):
 class SentimentAnalysis(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        nltk.download('punkt')
 
     @staticmethod
     async def sentiment_analysis(ctx, link: str = None):
