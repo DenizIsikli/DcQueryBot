@@ -2,7 +2,7 @@ from art import *
 from discord.ext import commands
 
 
-class AsciiArtGenerator(commands.Cog):
+class AsciiArtGenerator1(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -19,6 +19,10 @@ class AsciiArtGenerator(commands.Cog):
     @commands.command()
     async def ascii(self, ctx, *, text: str):
         await self.ascii_art_generator1(ctx, text)
+
+class AsciiArtGenerator2(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
 
     # Font: Cybermedium
     @staticmethod
@@ -39,4 +43,5 @@ class AsciiArtGenerator(commands.Cog):
 
 
 async def setup(bot):
-    await bot.add_cog(AsciiArtGenerator(bot))
+    await bot.add_cog(AsciiArtGenerator1(bot))
+    await bot.add_cog(AsciiArtGenerator2(bot))
