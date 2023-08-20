@@ -79,6 +79,9 @@ class TextToSpeech(commands.Cog):
 
     async def text_to_speech(self, ctx, vc, *, text: str = None):
         try:
+            if ctx.author == ctx.bot.user:
+                return
+
             if ctx.author.voice and ctx.author.voice.channel:
                 if text is not None and text.strip() != "":
                     response = self.client.synthesize(text, accept='audio/mp3')
@@ -129,6 +132,9 @@ class ChangeNickname(commands.Cog):
     @staticmethod
     async def change_nickname(ctx, *, new_name: str = None):
         try:
+            if ctx.author == ctx.bot.user:
+                return
+
             old_name = ctx.author.display_name
             await ctx.author.edit(nick=new_name)
             await ctx.send(f"Nickname changed from {old_name} to {new_name}")
@@ -156,6 +162,9 @@ class Reminder(commands.Cog):
         self.reminders = []
 
     async def reminder(self, ctx, duration: int = 0, *, reminder: str = None):
+        if ctx.author == ctx.bot.user:
+            return
+
         if duration <= 0:
             await ctx.send("Please provide a valid duration (in minutes) for the reminder.")
             return

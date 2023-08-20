@@ -12,6 +12,9 @@ class ImageManipulation(commands.Cog):
     @staticmethod
     async def apply_blur(ctx, blur_range: float = 1.0):
         try:
+            if ctx.author == ctx.bot.user:
+                return
+
             # Get the user's uploaded image
             image_attachment = ctx.message.attachments[0]
 
@@ -57,6 +60,9 @@ class ImageManipulation(commands.Cog):
     @staticmethod
     async def apply_sharpen(ctx, sharpen_range: str = None):
         try:
+            if ctx.author == ctx.bot.user:
+                return
+
             image_attachment = ctx.message.attachments[0]
 
             # Read the attachment as bytes
@@ -106,6 +112,9 @@ class ImageManipulation(commands.Cog):
     @staticmethod
     async def apply_sepia(ctx):
         try:
+            if ctx.author == ctx.bot.user:
+                return
+
             image_attachment = ctx.message.attachments[0]
 
             # Read the attachment as bytes
@@ -143,6 +152,9 @@ class ImageManipulation(commands.Cog):
     @staticmethod
     async def apply_watercolor(ctx):
         try:
+            if ctx.author == ctx.bot.user:
+                return
+
             image_attachment = ctx.message.attachments[0]
 
             # Read the attachment as bytes
@@ -189,6 +201,9 @@ class ImageManipulation(commands.Cog):
     @staticmethod
     async def apply_grayscale(ctx):
         try:
+            if ctx.author == ctx.bot.user:
+                return
+
             image_attachment = ctx.message.attachments[0]
 
             # Read the attachment as bytes
