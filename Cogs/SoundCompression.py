@@ -1,9 +1,9 @@
 import os
 import asyncio
 import discord
-from discord.ext import commands
+from io import BytesIO
 from pytube import YouTube
-from moviepy.video.io.VideoFileClip import VideoFileClip
+from discord.ext import commands
 
 
 class SoundCompressionMP3(commands.Cog):
@@ -16,27 +16,20 @@ class SoundCompressionMP3(commands.Cog):
             return
 
         yt = YouTube(link)
-
-        video_stream = yt.streams.get_highest_resolution()
         yt_title = yt.title
-        video_path = video_stream.download()
 
-        # Convert the video to MP3
-        video_clip = VideoFileClip(video_path)
-        audio_clip = video_clip.audio
-        mp3_filename = f'{yt_title}.mp3'
-        audio_clip.write_audiofile(mp3_filename)
+        audio_stream = yt.streams.filter(only_audio=True).first()
+        audio_buffer = BytesIO()
+        audio_stream.stream_to_buffer(audio_buffer)
+        audio_buffer.seek(0)
 
-        # Clean up temporary video file
-        video_clip.close()
-        audio_clip.close()
+        mp3_filename = f"{yt_title}.mp3"
 
         await ctx.message.delete()
         await asyncio.sleep(0.2)
-        await ctx.send(file=discord.File(mp3_filename))
+        await ctx.send(file=discord.File(audio_buffer, filename=mp3_filename))
 
-        os.remove(video_path)
-        os.remove(mp3_filename)
+        audio_buffer.close()  # Clear the buffer
 
     @commands.command()
     async def mp3(self, ctx, link: str = None):
@@ -45,7 +38,7 @@ class SoundCompressionMP3(commands.Cog):
     @mp3.error
     async def mp3_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send("Usage: `!qrcode <link>`")
+            await ctx.send("Usage: `!mp3 <link>`")
         elif isinstance(error, commands.BadArgument):
             await ctx.send("Invalid argument. Please provide a valid link.")
         else:
@@ -68,7 +61,13 @@ class SoundCompressionMP4(commands.Cog):
 
         await ctx.message.delete()
         await asyncio.sleep(0.2)
-        await ctx.send(file=discord.File(video_path))
+
+        # Check if the video file size is within Discord limits
+        file_size = os.path.getsize(video_path) / (1024 * 1024)  # Convert to MB
+        if file_size <= 8:
+            await ctx.send(file=discord.File(video_path))
+        else:
+            await ctx.send("The video file is too large to send.")
 
         os.remove(video_path)
 
