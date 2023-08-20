@@ -55,21 +55,26 @@ class SoundCompressionMP4(commands.Cog):
             return
 
         yt = YouTube(link)
+        yt_title = yt.title
 
         video_stream = yt.streams.filter(file_extension='mp4', progressive=True).order_by('resolution').desc().first()
-        video_path = video_stream.download()
+        video_buffer = BytesIO()
+        video_stream.stream_to_buffer(video_buffer)
+        video_buffer.seek(0)
+
+        mp4_filename = f"{yt_title}.mp4"
 
         await ctx.message.delete()
         await asyncio.sleep(0.2)
 
         # Check if the video file size is within Discord limits
-        file_size = os.path.getsize(video_path) / (1024 * 1024)  # Convert to MB
+        file_size = len(video_buffer.getvalue()) / (1024 * 1024)  # Convert to MB
         if file_size <= 8:
-            await ctx.send(file=discord.File(video_path))
+            await ctx.send(file=discord.File(video_buffer, filename=mp4_filename))
         else:
             await ctx.send("The video file is too large to send.")
 
-        os.remove(video_path)
+        video_buffer.close()  # Clear the buffer
 
     @commands.command()
     async def mp4(self, ctx, link: str = None):
