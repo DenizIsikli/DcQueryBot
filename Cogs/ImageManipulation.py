@@ -5,7 +5,7 @@ from discord.ext import commands
 from PIL import Image, ImageFilter, ImageOps, ImageChops
 
 
-class ImageManipulation(commands.Cog):
+class ApplyBlur(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -56,6 +56,11 @@ class ImageManipulation(commands.Cog):
             await ctx.send("Invalid argument. Please provide a valid blur range.")
         else:
             await ctx.send(f"An error occurred: {error}")
+
+
+class ApplySharpen(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
 
     @staticmethod
     async def apply_sharpen(ctx, sharpen_range: str = None):
@@ -109,6 +114,11 @@ class ImageManipulation(commands.Cog):
         if isinstance(error, commands.BadArgument):
             await ctx.send("Invalid argument. Please provide a valid blur range.")
 
+
+class ApplySepia(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
     @staticmethod
     async def apply_sepia(ctx):
         try:
@@ -148,6 +158,11 @@ class ImageManipulation(commands.Cog):
     async def sepia_error(self, ctx, error):
         if isinstance(error, commands.BadArgument):
             await ctx.send("Invalid argument. Please provide a valid image.")
+
+
+class ApplyWatercolor(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
 
     @staticmethod
     async def apply_watercolor(ctx):
@@ -198,6 +213,11 @@ class ImageManipulation(commands.Cog):
         if isinstance(error, commands.BadArgument):
             await ctx.send("Invalid argument. Please provide a valid image.")
 
+
+class ApplyGrayscale(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
     @staticmethod
     async def apply_grayscale(ctx):
         try:
@@ -245,4 +265,8 @@ class ImageManipulation(commands.Cog):
 
 
 async def setup(bot):
-    await bot.add_cog(ImageManipulation(bot))
+    await bot.add_cog(ApplyBlur(bot))
+    await bot.add_cog(ApplySharpen(bot))
+    await bot.add_cog(ApplySepia(bot))
+    await bot.add_cog(ApplyWatercolor(bot))
+    await bot.add_cog(ApplyGrayscale(bot))
