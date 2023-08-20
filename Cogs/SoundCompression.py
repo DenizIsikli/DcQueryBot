@@ -10,7 +10,6 @@ class SoundCompressionMP3(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-
     @staticmethod
     async def sound_compression_mp3(ctx, link: str = None):
         if ctx.author == ctx.bot.user:
@@ -85,3 +84,8 @@ class SoundCompressionMP4(commands.Cog):
             await ctx.send("Invalid argument. Please provide a valid link.")
         else:
             await ctx.send(f"An error occurred: {error}")
+
+
+async def setup(bot):
+    await bot.add_cog(SoundCompressionMP3(bot))
+    await bot.add_cog(SoundCompressionMP4(bot))
