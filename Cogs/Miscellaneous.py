@@ -135,8 +135,9 @@ class ChangeNickname(commands.Cog):
             if ctx.author == ctx.bot.user:
                 return
 
+            new_name_without_space = new_name.replace(" ", "_")
             old_name = ctx.author.display_name
-            await ctx.author.edit(nick=new_name)
+            await ctx.author.edit(nick=new_name_without_space)
             await ctx.send(f"Nickname changed from {old_name} to {new_name}")
 
         except discord.Forbidden:
