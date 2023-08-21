@@ -1,4 +1,4 @@
-<h1 align="center">Useless</h1>					
+<h1 align="center">UselessBot</h1>					
 <h3 align="center">A Discord bot made for no reason at all</h3>           
 
 <div align="center">
@@ -8,9 +8,9 @@
 
 ---
 
-Introducing Useless: Your Go-To Discord Bot for an Array of Random Features and Useful Utilities!
+Introducing UselessBot: Your Go-To Discord Bot for an Array of Random Features and Useful Utilities!
 
-Useless is a versatile bot packed with a variety of random features, ranging from querying various APIs and utilizing random commands, to offering a set of utilities designed to make tasks a bit more seamless!
+UselessBot is a versatile bot packed with a variety of random features, ranging from querying various APIs and utilizing random commands, to offering a set of utilities designed to make tasks a bit more seamless!
 
 <div align="center">
 <h3>Invite the bot to your server</h3>
