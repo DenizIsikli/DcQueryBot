@@ -55,17 +55,10 @@ class UrbanDictionaryQuery(commands.Cog):
             await ctx.send(f"An unexpected error occurred: {e}")
 
     @commands.command()
-    async def urban(self, ctx, *args, limit=1, search_query=""):
-        if args:
-            if args[0].isdigit():
-                limit = int(args[0])
-                search_query = " ".join(args[1:])
-            elif args[-1].isdigit():
-                await ctx.send("The last argument should not be a number!")
-                pass
-            else:
-                # Combine arguments into a single search query
-                search_query = " ".join(args)
+    async def urban(self, ctx, limit=1, *, search_query=""):
+        if limit < 1 or limit > 5:
+            await ctx.send("Limit must be between 1 and 5.")
+            return
 
         await self.urban_dictionary_query(ctx, limit, search_query)
 
