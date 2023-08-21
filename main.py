@@ -86,7 +86,6 @@ class Main:
             print("_____________________________")
 
         load_dotenv(dotenv_path=self.base_dir, verbose=True)
-        print(os.getenv("BOT_TOKEN"))
         bot_token = os.getenv("BOT_TOKEN")
         setup_instance = self.setup
         await setup_instance.setup_cog_instances(bot)
