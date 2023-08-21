@@ -14,6 +14,13 @@ class WikipediaQuery(commands.Cog):
         if ctx.author == ctx.bot.user:
             return
 
+        if limit < 0:
+            raise commands.BadArgument("Limit cannot be a negative value.")
+        elif limit < 1:
+            raise commands.BadArgument("Limit must be greater than or equal to 1.")
+        elif limit > 5:
+            raise commands.BadArgument("Limit must be less than or equal to 5.")
+
         try:
             params = {
                 "action": "query",
@@ -30,14 +37,13 @@ class WikipediaQuery(commands.Cog):
 
                     if "query" in response_data and "search" in response_data["query"]:
                         search_results = response_data["query"]["search"]
-                        query_limit = limit  # Limit the number of search results to display
 
-                        for i, result in enumerate(search_results[:query_limit]):
+                        for i, result in enumerate(search_results[:limit]):
                             title = result["title"]
                             page_url = f"https://en.wikipedia.org/wiki/{title.replace(' ', '_')}"
 
                             await ctx.send(f""
-                                           f"**Search Result {i + 1}/{query_limit}**: {title}\n"
+                                           f"**Search Result {i + 1}/{limit}**: {title}\n"
                                            f"**Page URL**: {page_url}"
                                            )
                     else:
@@ -50,17 +56,10 @@ class WikipediaQuery(commands.Cog):
             await ctx.send(f"An unexpected error occurred: {e}")
 
     @commands.command()
-    async def wiki(self, ctx, *args, limit=1, search_query=""):
-        if args:
-            if args[0].isdigit():
-                limit = int(args[0])
-                search_query = " ".join(args[1:])
-            elif args[-1].isdigit():
-                await ctx.send("The last argument should not be a number!")
-                pass
-            else:
-                # Combine arguments into a single search query
-                search_query = " ".join(args)
+    async def wiki(self, ctx, limit=1, *, search_query=""):
+        if limit < 1 or limit > 5:
+            await ctx.send("Limit must be between 1 and 5.")
+            return
 
         await self.wikipedia_query(ctx, limit, search_query)
 
