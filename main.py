@@ -26,8 +26,10 @@ class Setup:
             print(f"Failed to load Cog files: {e}")
 
         if loaded_cogs:
-            loaded_cogs_str = ", ".join(loaded_cogs)
-            print(f"Loaded Cog Files: {loaded_cogs_str}")
+            for cog in loaded_cogs:
+                print(f"Loaded Cog Files: {cog}")
+
+
 
     @staticmethod
     async def setup_util_instances(bot):
@@ -46,8 +48,8 @@ class Setup:
             print(f"Failed to load Util files: {e}")
 
         if loaded_utils:
-            loaded_utils_str = ", ".join(loaded_utils)
-            print(f"Loaded Util Files: {loaded_utils_str}")
+            for util in loaded_utils:
+                print(f"Loaded Util Files: {util}")
 
 
 @dataclass
