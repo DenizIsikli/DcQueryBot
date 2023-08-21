@@ -3,6 +3,7 @@ from discord.ext import commands
 from dataclasses import dataclass
 import asyncio
 import os
+from dotenv import load_dotenv
 
 
 class Setup:
@@ -28,8 +29,6 @@ class Setup:
         if loaded_cogs:
             for cog in loaded_cogs:
                 print(f"Loaded Cog Files: {cog}")
-
-
 
     @staticmethod
     async def setup_util_instances(bot):
@@ -73,9 +72,11 @@ intents_instance = Intents().create_instance()
 class Main:
     def __init__(self):
         self.setup = Setup()
+        self.base_dir = "C:/Users/deniz/PycharmProjects/DcQueryBot/config/config.env"
+        self.owner_id = 538816980845854720
 
     async def main(self):
-        bot = commands.Bot(command_prefix="!", owner_id=538816980845854720, intents=intents_instance)
+        bot = commands.Bot(command_prefix="!", owner_id=self.owner_id, intents=intents_instance)
         bot.remove_command('help')
 
         @bot.event
@@ -84,7 +85,9 @@ class Main:
             print(f"\nLogged in as {bot.user}")
             print("_____________________________")
 
-        bot_token = "MTEzNjA3MTM5ODk5Mzk2MTEyMg.G3TDmh.cbps9v_FUpdQ6EScMrL7hSJllYuQNpOTeXGmHQ"
+        load_dotenv(dotenv_path=self.base_dir, verbose=True)
+        print(os.getenv("BOT_TOKEN"))
+        bot_token = os.getenv("BOT_TOKEN")
         setup_instance = self.setup
         await setup_instance.setup_cog_instances(bot)
         await setup_instance.setup_util_instances(bot)
