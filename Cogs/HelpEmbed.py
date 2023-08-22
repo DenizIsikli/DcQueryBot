@@ -221,8 +221,72 @@ class HelpEmbed3(commands.Cog):
         await ctx.send("An error occurred while processing your request.")
 
 
+class HelpEmbed4(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    @staticmethod
+    async def help_embed_4(ctx):
+        embed = discord.Embed(
+            title="__4th Command List__",
+            color=discord.Color.purple()
+        )
+        embed.add_field(
+            name="**!blur**",
+            value="Description: Applies a blur filter in the range of 1-5 to the given image\n"
+                  "!blur {attachment: image} {float: blur_range}\n"
+                  "Example: *!blur {image} {blur_range}*\n",
+            inline=False
+        )
+        embed.add_field(
+            name="**!sharpen**",
+            value="Description: Applies a sharpen filter to the given image - "
+                  "Choices: 'mild', 'medium', 'strong', 'extreme'\n"
+                  "!sharpen {attachment: image} {str: sharpen_range}\n"
+                  "Example: *!sharpen {image} {sharpen_range}*\n",
+            inline=False
+        )
+        embed.add_field(
+            name="**!sepia**",
+            value="Description: Applies a vintage filter to the given image\n"
+                  "!sepia {attachment: image}\n"
+                  "Example: *!sepia {image}*\n",
+            inline=False
+        )
+        embed.add_field(
+            name="**!watercolor**",
+            value="Description: Applies a watercolor filter to the given image\n"
+                  "!watercolor {attachment: image}\n"
+                  "Example: *!watercolor {image}*\n",
+            inline=False
+        )
+        embed.add_field(
+            name="**!grayscale**",
+            value="Description: Applies a grayscale filter to the given image\n"
+                  "!grayscale {attachment: image}\n"
+                  "Example: *!grayscale {image}*\n",
+            inline=False
+        )
+
+        # Add & set footer with timestamp
+        timestamp = datetime.datetime.utcnow()
+        embed.timestamp = timestamp
+        embed.set_footer(text=f"Requested by {ctx.author.name}")
+
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    async def help4(self, ctx):
+        await self.help_embed_4(ctx)
+
+    @help4.error
+    async def help4_error(self, ctx):
+        await ctx.send("An error occurred while processing your request.")
+
+
 async def setup(bot):
     await bot.add_cog(HelpEmbedMain(bot))
     await bot.add_cog(HelpEmbed1(bot))
     await bot.add_cog(HelpEmbed2(bot))
     await bot.add_cog(HelpEmbed3(bot))
+    await bot.add_cog(HelpEmbed4(bot))
