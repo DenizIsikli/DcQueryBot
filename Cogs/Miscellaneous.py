@@ -1,11 +1,11 @@
 import os
 import discord
-from discord.ext import commands, tasks
+from discord.ext import commands
 import datetime
 import aiohttp
 import asyncio
 from ibm_watson import TextToSpeechV1
-from datetime import datetime, timedelta
+from datetime import datetime
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
 
@@ -162,7 +162,8 @@ class Reminder(commands.Cog):
         self.bot = bot
         self.reminders = []
 
-    async def reminder(self, ctx, duration: int = 0, *, reminder: str = None):
+    @staticmethod
+    async def reminder(ctx, duration: float = 0, *, reminder: str = None):
         if ctx.author == ctx.bot.user:
             return
 
@@ -170,40 +171,32 @@ class Reminder(commands.Cog):
             await ctx.send("Please provide a valid duration (in minutes) for the reminder.")
             return
 
-        reminder_time = datetime.utcnow() + timedelta(minutes=duration)
-        self.reminders.append({"User_ID": ctx.author.id, "Time": reminder_time, "Reminder": reminder})
+        await asyncio.sleep(5)
+        await ctx.message.delete()
+        await asyncio.sleep(duration * 60)
 
-        await ctx.send(f"Reminder set for {duration} minutes from now: {reminder}")
+        user_id = ctx.author
+        await user_id.send(f"**Reminder**: {reminder}")
 
     @commands.command()
-    async def remindme(self, ctx, duration: int = 0, *, reminder: str = None):
+    async def remindme(self, ctx, duration: float = 0, *, reminder: str = None):
+        if duration <= 0:
+            await ctx.send("Please provide a valid duration (in minutes) for the reminder.")
+            return
+
+        if reminder is None:
+            reminder = "Default reminder"
+
         await self.reminder(ctx, duration, reminder=reminder)
 
     @remindme.error
     async def reminder_error(self, ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send("Invalid argument. Please provide a valid duration.")
+        elif isinstance(error, commands.MissingRequiredArgument):
             await ctx.send("Usage: !remindme <duration in minutes> <reminder>")
         else:
             await ctx.send(f"An error occurred: {error}")
-
-    @tasks.loop(seconds=30)
-    async def check_reminder(self):
-        now = datetime.utcnow()
-        reminders_to_remove = []
-
-        for reminder in self.reminders:
-            if reminder["Time"] <= now:
-                user = self.bot.get_user(reminder["User_ID"])
-                if user:
-                    await user.send(f"Reminder: {reminder['reminder']}\n{user.mention}")
-                reminders_to_remove.append(reminder)
-
-        for reminder in reminders_to_remove:
-            self.reminders.remove(reminder)
-
-    @check_reminder.before_loop
-    async def before_check_reminders(self):
-        await self.bot.wait_until_ready()
 
 
 class GitHub(commands.Cog):
@@ -225,6 +218,14 @@ class GitHub(commands.Cog):
     @commands.command()
     async def botpic(self, ctx):
         await self.bot_picture(ctx)
+
+    @staticmethod
+    async def bot_repository(ctx):
+        await ctx.send("https://github.com/DenizIsikli/DcQueryBot")
+
+    @commands.command()
+    async def repo(self, ctx):
+        await self.bot_repository(ctx)
 
 
 async def setup(bot):
