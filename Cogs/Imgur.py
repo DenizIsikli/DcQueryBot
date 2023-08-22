@@ -1,20 +1,26 @@
 from discord.ext import commands
 import aiohttp
 import random
+import os
+from dotenv import load_dotenv
 
 
 class ImgurQuery(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.IMGUR_API = "https://api.imgur.com/3/gallery/search/top"
+        self.base_dir = "C:/Users/deniz/PycharmProjects/DcQueryBot/config/config.env"
 
     async def imgur_query(self, ctx, search_query: str = None):
         if ctx.author == ctx.bot.user:
             return
 
         try:
+            load_dotenv(dotenv_path=self.base_dir, verbose=True)
+            client_id = os.getenv("CLIENT_ID")
+
             headers = {
-                "Authorization": "Client-ID cd4b84872a053b7"
+                "Authorization": client_id
             }
 
             params = {
