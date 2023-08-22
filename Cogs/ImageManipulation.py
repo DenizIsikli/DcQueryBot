@@ -174,7 +174,7 @@ class ApplyWatercolor(commands.Cog):
         self.bot = bot
 
     @staticmethod
-    async def apply_watercolor(ctx, image_bytes):
+    async def apply_watercolor(ctx):
         try:
             if ctx.author == ctx.bot.user:
                 return
@@ -212,13 +212,7 @@ class ApplyWatercolor(commands.Cog):
 
     @commands.command()
     async def watercolor(self, ctx):
-        try:
-            image_attachment = ctx.message.attachments[0]
-            image_bytes = await image_attachment.read()
-            await self.apply_watercolor(ctx, image_bytes)
-
-        except IndexError:
-            await ctx.send("Please provide an image as an attachment.")
+        await self.apply_watercolor(ctx)
 
     @watercolor.error
     async def watercolor_error(self, ctx, error):
