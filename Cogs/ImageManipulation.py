@@ -134,7 +134,7 @@ class ApplySepia(commands.Cog):
             image = Image.open(io.BytesIO(image_bytes))
 
             # Apply sepia filter
-            sepia_image = ImageOps.colorize(image.convert("L"), "#704214", "#FFC085")
+            sepia_image = ImageOps.colorize(image.convert("L"), "#704214", "#FFDAA4")
 
             # Convert the PIL Image to bytes
             img_byte_array = io.BytesIO()
@@ -196,7 +196,7 @@ class ApplyWatercolor(commands.Cog):
 
             # Seek back to the beginning of the buffer
             img_byte_array.seek(0)
-
+            print("im here now")
             await ctx.message.delete()
             await asyncio.sleep(0.2)
             await ctx.send(file=discord.File(img_byte_array, "WatercolorFilter_image.png"))
