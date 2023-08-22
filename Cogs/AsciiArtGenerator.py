@@ -20,6 +20,7 @@ class AsciiArtGenerator1(commands.Cog):
     async def ascii(self, ctx, *, text: str):
         await self.ascii_art_generator1(ctx, text)
 
+
 class AsciiArtGenerator2(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
