@@ -46,6 +46,9 @@ class ApplyBlur(commands.Cog):
         except IndexError:
             await ctx.send("Please provide an image as an attachment.")
 
+        except Exception as e:
+            await ctx.send(f"An error occurred: {e}")
+
     @commands.command()
     async def blur(self, ctx, blur_range: float = 1.0):
         await self.apply_blur(ctx, blur_range)
@@ -105,6 +108,9 @@ class ApplySharpen(commands.Cog):
         except IndexError:
             await ctx.send("Please provide an image as an attachment.")
 
+        except Exception as e:
+            await ctx.send(f"An error occurred: {e}")
+
     @commands.command()
     async def sharpen(self, ctx, sharpen_range: str = None):
         await self.apply_sharpen(ctx, sharpen_range)
@@ -150,6 +156,9 @@ class ApplySepia(commands.Cog):
         except IndexError:
             await ctx.send("Please provide an image as an attachment.")
 
+        except Exception as e:
+            await ctx.send(f"An error occurred: {e}")
+
     @commands.command()
     async def sepia(self, ctx):
         await self.apply_sepia(ctx)
@@ -165,7 +174,7 @@ class ApplyWatercolor(commands.Cog):
         self.bot = bot
 
     @staticmethod
-    async def apply_watercolor(ctx):
+    async def apply_watercolor(ctx, image_bytes):
         try:
             if ctx.author == ctx.bot.user:
                 return
@@ -178,17 +187,11 @@ class ApplyWatercolor(commands.Cog):
             # Open the image using PIL
             image = Image.open(io.BytesIO(image_bytes))
 
-            # Convert to grayscale
-            grayscale_image = ImageOps.grayscale(image)
+            # Apply a Gaussian blur for softening
+            blurred_image = image.filter(ImageFilter.GaussianBlur(radius=10))
 
-            # Apply edge-enhancing filter
-            edges_image = grayscale_image.filter(ImageFilter.FIND_EDGES)
-
-            # Combine the original image with the edges using difference
-            watercolor_image = ImageChops.difference(image, edges_image)
-
-            # Convert back to RGB mode
-            watercolor_image = watercolor_image.convert("RGB")
+            # Blend the original image and the blurred version using "lighter"
+            watercolor_image = ImageChops.lighter(image, blurred_image)
 
             # Convert the PIL Image to bytes
             img_byte_array = io.BytesIO()
@@ -196,7 +199,7 @@ class ApplyWatercolor(commands.Cog):
 
             # Seek back to the beginning of the buffer
             img_byte_array.seek(0)
-            print("im here now")
+
             await ctx.message.delete()
             await asyncio.sleep(0.2)
             await ctx.send(file=discord.File(img_byte_array, "WatercolorFilter_image.png"))
@@ -204,9 +207,18 @@ class ApplyWatercolor(commands.Cog):
         except IndexError:
             await ctx.send("Please provide an image as an attachment.")
 
+        except Exception as e:
+            await ctx.send(f"An error occurred: {e}")
+
     @commands.command()
     async def watercolor(self, ctx):
-        await self.apply_watercolor(ctx)
+        try:
+            image_attachment = ctx.message.attachments[0]
+            image_bytes = await image_attachment.read()
+            await self.apply_watercolor(ctx, image_bytes)
+
+        except IndexError:
+            await ctx.send("Please provide an image as an attachment.")
 
     @watercolor.error
     async def watercolor_error(self, ctx, error):
