@@ -9,7 +9,6 @@ import asyncio
 class QrCodeGeneratorQuery(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.QRCODE_API = "https://qrcode-monkey.p.rapidapi.com/qr/custom"
 
     @staticmethod
     async def qr_code_generator_query(ctx, link: str):
