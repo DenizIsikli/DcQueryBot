@@ -9,7 +9,7 @@ class ImgurQuery(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.IMGUR_API = "https://api.imgur.com/3/gallery/search/top"
-        self.base_dir = "C:/Users/deniz/PycharmProjects/DcQueryBot/config/config.env"
+        self.base_dir = "/config/config.env"
 
     async def imgur_query(self, ctx, search_query: str = None):
         if ctx.author == ctx.bot.user:
