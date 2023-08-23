@@ -1,12 +1,8 @@
-import os
 import discord
 from discord.ext import commands
 import datetime
-import aiohttp
 import asyncio
-from ibm_watson import TextToSpeechV1
 from datetime import datetime
-from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
 
 class WhoIs(commands.Cog):
@@ -60,69 +56,6 @@ class WhoIs(commands.Cog):
             await ctx.send("Bad argument. Please provide a valid user mention or ID.")
         else:
             await ctx.send("An error occurred while processing your request.")
-
-
-class TextToSpeech(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
-
-        # Initialize the IBM Watson Text to Speech client
-        authenticator = IAMAuthenticator('YOUR_API_KEY')  # Replace with your API key
-        self.client = TextToSpeechV1(authenticator=authenticator)
-        self.client.set_service_url('YOUR_SERVICE_URL')  # Replace with your service URL
-
-    @staticmethod
-    async def cleanup(vc):
-        if vc.is_connected():
-            await vc.disconnect()
-        os.remove("speech.mp3")
-
-    async def text_to_speech(self, ctx, vc, *, text: str = None):
-        try:
-            if ctx.author == ctx.bot.user:
-                return
-
-            if ctx.author.voice and ctx.author.voice.channel:
-                if text is not None and text.strip() != "":
-                    response = self.client.synthesize(text, accept='audio/mp3')
-
-                    # Save the audio to a file
-                    with open("speech.mp3", "wb") as out_file:
-                        out_file.write(response.get_result().content)
-
-                    voice_channel = ctx.author.voice.channel
-                    vc = await voice_channel.connect()
-
-                    vc.play(discord.FFmpegPCMAudio("speech.mp3"), after=lambda error: self.cleanup(vc))
-
-                    while vc.is_playing():
-                        await asyncio.sleep(1)
-
-                    await self.cleanup(vc)
-                else:
-                    await ctx.send("Please provide the text you want to convert to speech.")
-            else:
-                await ctx.send("You need to be inside a voice channel to use this command!")
-
-        except Exception as e:
-            await ctx.send(f"Failed to save the text to audio: {e}")
-            await self.cleanup(vc)
-
-    @commands.command()
-    async def tts(self, ctx, *, text: str = None):
-        voice_client = ctx.voice_client
-        await self.text_to_speech(ctx, voice_client, text=text)
-
-    @tts.error
-    async def tts_error(self, ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send("Please provide the text you want to convert to speech.")
-        elif isinstance(error, commands.CommandInvokeError):
-            await ctx.send("An error occurred while processing your request.")
-        elif isinstance(error, aiohttp.ClientOSError):
-            await ctx.send("An error occurred while downloading the audio.")
-        else:
-            await ctx.send("An error occurred.")
 
 
 class ChangeNickname(commands.Cog):
@@ -230,7 +163,6 @@ class GitHub(commands.Cog):
 
 async def setup(bot):
     await bot.add_cog(WhoIs(bot))
-    await bot.add_cog(TextToSpeech(bot))
     await bot.add_cog(ChangeNickname(bot))
     await bot.add_cog(Reminder(bot))
     await bot.add_cog(GitHub(bot))
