@@ -8,33 +8,34 @@ import aiohttp
 class TextToSpeech(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.TEXTTOSPEECH_API = "https://text-to-speech-neural-google.p.rapidapi.com/generateAudioFiles"
+        self.TEXTTOSPEECH_API = "https://text-to-speech27.p.rapidapi.com/speech"
 
-    async def text_to_speech(self, ctx, vc, *, text: str = None):
+    async def text_to_speech(self, ctx, vc, *, text: str = ""):
         if ctx.author == ctx.bot.user:
+            return
+
+        if ctx.author.voice is None:
+            await ctx.send("You need to be inside a voice channel to use this command.")
+            return
+
+        if text is None or text.strip() == "":
+            await ctx.send("Please provide the text you want to convert to speech.")
             return
 
         try:
             headers = {
-                "content-type": "application/json",
-                "X-RapidAPI-Key": "a923a5ce6emshf1cac57caefd541p1ef8cbjsna3138661f6a7",
-                "X-RapidAPI-Host": "text-to-speech-neural-google.p.rapidapi.com"
+                "X-RapidAPI-Key": "bd4d41a763msh8a45e7e4dfda107p18423bjsnd27abce669f5",
+                "X-RapidAPI-Host": "text-to-speech27.p.rapidapi.com"
             }
 
-            payload = {
-                "audioFormat": "ogg",
-                "paragraphChunks": [
-                    f"{text}"],
-                "voiceParams": {
-                    "name": "Wavenet-B",
-                    "engine": "google",
-                    "languageCode": "en-IN"
-                }
+            query_params = {
+                "text": text,
+                "lang": "en-us"
             }
 
             async with aiohttp.ClientSession() as session:
-                async with session.get(self.TEXTTOSPEECH_API, params=payload, headers=headers) as response:
-                    response.raise_for_status()  # Raise an exception if the request was not succesful
+                async with session.get(self.TEXTTOSPEECH_API, headers=headers, params=query_params) as response:
+                    response.raise_for_status()  # Raise an exception if the request was not successful
                     response_data = await response.json()
 
                     audio_data = response_data["audioContent"]
@@ -62,10 +63,6 @@ class TextToSpeech(commands.Cog):
     async def tts_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send("Please provide the text you want to convert to speech.")
-        elif isinstance(error, commands.CommandInvokeError):
-            await ctx.send("An error occurred while processing your request.")
-        else:
-            await ctx.send("An error occurred.")
 
 
 async def setup(bot):
