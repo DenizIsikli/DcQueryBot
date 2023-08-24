@@ -1,0 +1,46 @@
+Commands/Files (In use):
+    - Command List 1 (HelpEmbed1)
+        - !wiki
+        - !urban
+        - !qrcode
+        - !imgur
+
+    - Command List 2 (HelpEmbed2)
+        - !mp3
+        - !mp4
+        - !ascii
+        - !asciicm
+
+    - Command List 3 (HelpEmbed3)
+        - !tts
+        - !reminder
+        - !nick
+        - !whois
+
+    - Command List 4 (HelpEmbed4)
+        - !blur
+        - !sharpen
+        - !sepia
+        - !watercolor
+        - !grayscale
+
+
+Commands/Files (Not in use) / Need to be fixed:
+    - ChatGPT.py
+    - !tts
+
+
+Commands/Files (Need to be tested):
+    - ImageManipulation.py
+
+
+Side Commands/Files:
+    - !owner
+    - !botpic
+    - !repo
+
+Admin Commands/Files:
+    - !admin
+    - !delete
+    - !kick
+    - !reload
