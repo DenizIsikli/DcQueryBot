@@ -29,6 +29,7 @@ class Setup:
         if loaded_queries:
             for query in loaded_queries:
                 print(f"Loaded Query File(s): {query}")
+            print("\n")
 
     @staticmethod
     async def setup_cog_instances(bot):
@@ -49,6 +50,7 @@ class Setup:
         if loaded_cogs:
             for cog in loaded_cogs:
                 print(f"Loaded Cog File(s): {cog}")
+            print("\n")
 
     @staticmethod
     async def setup_util_instances(bot):
@@ -69,6 +71,7 @@ class Setup:
         if loaded_utils:
             for util in loaded_utils:
                 print(f"Loaded Util File(s): {util}")
+            print("\n")
 
 
 @dataclass
@@ -102,7 +105,7 @@ class Main:
         @bot.event
         async def on_ready():
             await bot.change_presence(activity=discord.Game('!help'))
-            print(f"\nLogged in as {bot.user}")
+            print(f"Logged in as {bot.user}")
             print("_____________________________")
 
         load_dotenv(dotenv_path=self.base_dir, verbose=True)
