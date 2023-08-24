@@ -11,6 +11,26 @@ class Setup:
         pass
 
     @staticmethod
+    async def setup_query_instances(bot):
+        loaded_queries = []
+
+        try:
+            for filename in os.listdir("ApiQueries"):
+                if filename.endswith(".py"):
+                    query_name = f"ApiQueries.{filename[:-3]}"  # Remove the last 3 characters (.py)
+                    try:
+                        await bot.load_extension(query_name)
+                        loaded_queries.append(query_name)
+                    except Exception as e:
+                        print(f"Failed to load Cog file: {query_name}: {e}")
+        except Exception as e:
+            print(f"Failed to load Query files: {e}")
+
+        if loaded_queries:
+            for query in loaded_queries:
+                print(f"Loaded Query File(s): {query}")
+
+    @staticmethod
     async def setup_cog_instances(bot):
         loaded_cogs = []
 
@@ -28,7 +48,7 @@ class Setup:
 
         if loaded_cogs:
             for cog in loaded_cogs:
-                print(f"Loaded Cog Files: {cog}")
+                print(f"Loaded Cog File(s): {cog}")
 
     @staticmethod
     async def setup_util_instances(bot):
@@ -48,7 +68,7 @@ class Setup:
 
         if loaded_utils:
             for util in loaded_utils:
-                print(f"Loaded Util Files: {util}")
+                print(f"Loaded Util File(s): {util}")
 
 
 @dataclass
@@ -88,6 +108,7 @@ class Main:
         load_dotenv(dotenv_path=self.base_dir, verbose=True)
         bot_token = os.getenv("BOT_TOKEN")
         setup_instance = self.setup
+        await setup_instance.setup_query_instances(bot)
         await setup_instance.setup_cog_instances(bot)
         await setup_instance.setup_util_instances(bot)
         await bot.start(bot_token)
