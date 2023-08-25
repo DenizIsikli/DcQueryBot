@@ -66,7 +66,7 @@ class ApplySharpen(commands.Cog):
         self.bot = bot
 
     @staticmethod
-    async def apply_sharpen(ctx, sharpen_range: str = None):
+    async def apply_sharpen(ctx, sharpen_range: str = "medium"):
         try:
             if ctx.author == ctx.bot.user:
                 return
@@ -112,7 +112,7 @@ class ApplySharpen(commands.Cog):
             await ctx.send(f"An error occurred: {e}")
 
     @commands.command()
-    async def sharpen(self, ctx, sharpen_range: str = None):
+    async def sharpen(self, ctx, sharpen_range: str = "medium"):
         await self.apply_sharpen(ctx, sharpen_range)
 
     @sharpen.error
