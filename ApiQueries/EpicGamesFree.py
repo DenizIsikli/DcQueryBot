@@ -1,5 +1,5 @@
+import os
 import json
-
 import aiohttp
 import discord
 from discord.ext import commands
@@ -26,9 +26,6 @@ class EpicGamesFree(commands.Cog):
                     response_text = await response.text()
                     response_data = json.loads(response_text)
 
-                    print(response_data)
-                    print(response_text[5])
-
                     filename = "EpicGamesFreeGames.txt"
 
                     with open(filename, "w") as file:
@@ -38,7 +35,7 @@ class EpicGamesFree(commands.Cog):
                             game_publisher = game["publisher"]
                             game_discount_price = game["discountPrice"]
                             game_original_price = game["originalPrice"]
-                            game_currencyCode = game["currencyCode"]
+                            game_currency_code = game["currencyCode"]
                             game_url = game["appUrl"]
 
                             file.write(f"Name: {game_name}\n"
@@ -46,11 +43,12 @@ class EpicGamesFree(commands.Cog):
                                        f"Publisher: {game_publisher}\n"
                                        f"Discount price: {game_discount_price}\n"
                                        f"Original price: {game_original_price}\n"
-                                       f"Currency code: {game_currencyCode}\n"
+                                       f"Currency code: {game_currency_code}\n"
                                        f"URL: {game_url}\n"
                                        f"\n\n\n")
 
-                    # await ctx.send(file=discord.File(filename))
+                    await ctx.send(file=discord.File(filename))
+                    os.remove(filename)
 
         except Exception as e:
             await ctx.send(f"An error occurred: {e}")
