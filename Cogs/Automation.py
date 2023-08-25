@@ -11,6 +11,13 @@ class AfkAutomation(commands.Cog):
         self.i = 0
 
     async def afk_automation(self, ctx, timer: int = 60):
+        if ctx.author == ctx.bot.user:
+            return
+
+        if timer <= 0:
+            await ctx.send("Invalid timer value. Timer must be a positive integer.")
+            return
+
         auto = pyautogui
         auto.FAILSAFE = False
         x, y = auto.size()
