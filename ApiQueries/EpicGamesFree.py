@@ -1,4 +1,7 @@
+import json
+
 import aiohttp
+import discord
 from discord.ext import commands
 
 
@@ -19,25 +22,41 @@ class EpicGamesFree(commands.Cog):
 
             async with aiohttp.ClientSession() as session:
                 async with session.get(self.EPICGAMES_API, headers=headers) as response:
-                    response.raise_for_status()  # Raise an exception if the request was not successful
-                    response_json = await response.json()
+                    response.raise_for_status()
+                    response_text = await response.text()
+                    response_data = json.loads(response_text)
 
-                    response_data = response_json[""][0]
-                    game_name = response_data["name"]
-                    game_description = response_data["description"]
-                    game_publisher = response_data["publisher"]
-                    game_discount_price = response_data["discountPrice"]
-                    game_original_price = response_data["originalPrice"]
-                    game_currencyCode = response_data["currencyCode"]
-                    game_url = response_data["appUrl"]
+                    print(response_data)
+                    print(response_text[5])
 
-                    print(str(game_name))
+                    filename = "EpicGamesFreeGames.txt"
+
+                    with open(filename, "w") as file:
+                        for game in response_data[:5]:
+                            game_name = game["name"]
+                            game_description = game["description"]
+                            game_publisher = game["publisher"]
+                            game_discount_price = game["discountPrice"]
+                            game_original_price = game["originalPrice"]
+                            game_currencyCode = game["currencyCode"]
+                            game_url = game["appUrl"]
+
+                            file.write(f"Name: {game_name}\n"
+                                       f"Description: {game_description}\n"
+                                       f"Publisher: {game_publisher}\n"
+                                       f"Discount price: {game_discount_price}\n"
+                                       f"Original price: {game_original_price}\n"
+                                       f"Currency code: {game_currencyCode}\n"
+                                       f"URL: {game_url}\n"
+                                       f"\n\n\n")
+
+                    # await ctx.send(file=discord.File(filename))
 
         except Exception as e:
             await ctx.send(f"An error occurred: {e}")
 
     @commands.command()
-    async def epicgames(self, ctx):
+    async def epic(self, ctx):
         await self.epic_games_free(ctx)
 
 
