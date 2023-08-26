@@ -1,5 +1,10 @@
+import io
 import json
 import aiohttp
+import discord
+import requests
+from PIL import Image
+from datetime import datetime
 from discord.ext import commands
 
 
@@ -12,7 +17,7 @@ class MyAnimeList(commands.Cog):
         if ctx.author == ctx.bot.user:
             return
 
-        self.anime = anime
+        endpoint = f"{self.MYANIMELIST_API}{anime}"
 
         try:
             headers = {
@@ -20,35 +25,41 @@ class MyAnimeList(commands.Cog):
                 "X-RapidAPI-Host": "myanimelist.p.rapidapi.com"
             }
 
-            params = {
-                "q": anime
-            }
-
             async with aiohttp.ClientSession() as session:
-                async with session.get(self.MYANIMELIST_API, headers=headers, params=params) as response:
+                async with session.get(endpoint, headers=headers) as response:
                     response.raise_for_status()  # Raise an exception if the request was not successful
-                    response_text = await response.text()
-                    response_data = json.loads(response_text)
+                    response_json = await response.json()
+                    print(response_json)
 
-                    print(response.content_type)
-                    print(response_text)
+                    try:
+                        anime_info = response_json[0]
 
-                    if response_data:
-                        result = response_data[0]
+                        title = anime_info.get('title', 'Title not found')
+                        description = anime_info.get('description', 'Description not found')
+                        picture_url = anime_info.get('picture_url', 'Picture URL not found')
+                        myanimelist_url = anime_info.get('myanimelist_url', 'MyAnimeList URL not found')
 
-                        title = result.get('title', 'Title not found')
-                        episodes = result.get('num_episodes', 'Episodes not found')
-                        aired = result.get('aired', {}).get('from', 'Airing date not found')
-                        genres = result.get('genres', [])
+                        img = Image.open(requests.get(picture_url, stream=True).raw)
+                        img_resized = img.resize((400, 600))
 
-                        genre_list = ", ".join(genres) if genres else 'No genres found'
+                        embed = discord.Embed(
+                            title=f"{title}",
+                            description=description,
+                            url=myanimelist_url,
+                            color=discord.Color.dark_theme()
+                        )
 
-                        await ctx.send(f"```\n"
-                                       f"Title: {title}\n"
-                                       f"Episodes: {episodes}\n"
-                                       f"Aired: {aired}\n"
-                                       f"Genres: {genre_list}\n"
-                                       f"```")
+                        embed.set_image(url='attachment://resized_image.png')
+
+                        # Add & set footer with timestamp
+                        timestamp = datetime.utcnow()
+                        embed.timestamp = timestamp
+                        embed.set_footer(text=f"Requested by {ctx.author.name}")
+
+                        await ctx.send(embed=embed)
+
+                    except json.JSONDecodeError:
+                        await ctx.send("Error decoding JSON response.")
 
         except Exception as e:
             await ctx.send(f"An error occurred: {e}")
