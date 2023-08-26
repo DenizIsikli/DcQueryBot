@@ -61,7 +61,7 @@ class MyAnimeList(commands.Cog):
             await ctx.send(f"An error occurred: {e}")
 
     @commands.command()
-    async def anilist(self, ctx, *, anime):
+    async def anime(self, ctx, *, anime):
         await self.my_anime_list(ctx, anime=anime)
 
 
