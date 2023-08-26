@@ -22,7 +22,7 @@ class EpicGamesFree(commands.Cog):
 
             async with aiohttp.ClientSession() as session:
                 async with session.get(self.EPICGAMES_API, headers=headers) as response:
-                    response.raise_for_status()
+                    response.raise_for_status()  # Raise an exception if the request was not successful
                     response_text = await response.text()
                     response_data = json.loads(response_text)
 
