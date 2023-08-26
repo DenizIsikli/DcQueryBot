@@ -29,7 +29,6 @@ class MyAnimeList(commands.Cog):
                 async with session.get(endpoint, headers=headers) as response:
                     response.raise_for_status()  # Raise an exception if the request was not successful
                     response_json = await response.json()
-                    print(response_json)
 
                     try:
                         anime_info = response_json[0]
@@ -39,9 +38,6 @@ class MyAnimeList(commands.Cog):
                         picture_url = anime_info.get('picture_url', 'Picture URL not found')
                         myanimelist_url = anime_info.get('myanimelist_url', 'MyAnimeList URL not found')
 
-                        img = Image.open(requests.get(picture_url, stream=True).raw)
-                        img_resized = img.resize((400, 600))
-
                         embed = discord.Embed(
                             title=f"{title}",
                             description=description,
@@ -49,7 +45,7 @@ class MyAnimeList(commands.Cog):
                             color=discord.Color.dark_theme()
                         )
 
-                        embed.set_image(url='attachment://resized_image.png')
+                        embed.set_image(url=picture_url)
 
                         # Add & set footer with timestamp
                         timestamp = datetime.utcnow()
