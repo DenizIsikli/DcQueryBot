@@ -14,6 +14,11 @@ class MyAnimeList(commands.Cog):
         if ctx.author == ctx.bot.user:
             return
 
+        if anime is None:
+            print("hi im here")
+            await ctx.send("Please provide the name of an anime.")
+            return
+
         endpoint = f"{self.MYANIMELIST_API}{anime}"
 
         try:
@@ -42,7 +47,7 @@ class MyAnimeList(commands.Cog):
                             color=discord.Color.dark_theme()
                         )
 
-                        embed.set_image(url=picture_url)
+                        embed.set_thumbnail(url=picture_url)
 
                         # Add & set footer with timestamp
                         timestamp = datetime.utcnow()
@@ -58,7 +63,7 @@ class MyAnimeList(commands.Cog):
             await ctx.send(f"An error occurred: {e}")
 
     @commands.command()
-    async def anime(self, ctx, *, anime):
+    async def anime(self, ctx, *, anime: str = None):
         await self.my_anime_list(ctx, anime=anime)
 
 
