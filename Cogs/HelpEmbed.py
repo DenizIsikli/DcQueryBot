@@ -14,7 +14,7 @@ class HelpEmbedMain(commands.Cog):
 
         embed = discord.Embed(
             title="__Main Command List__",
-            color=discord.Color.purple()
+            color=discord.Color.dark_theme()
         )
         embed.add_field(
             name="**!help1**",
@@ -29,6 +29,16 @@ class HelpEmbedMain(commands.Cog):
         embed.add_field(
             name="**!help3**",
             value="Third command list.",
+            inline=False
+        )
+        embed.add_field(
+            name="**!help4**",
+            value="Fourth command list.",
+            inline=False
+        )
+        embed.add_field(
+            name="**!help5**",
+            value="Fifth command list.",
             inline=False
         )
 
@@ -59,15 +69,7 @@ class HelpEmbed1(commands.Cog):
 
         embed = discord.Embed(
             title="__1st Command List__",
-            color=discord.Color.purple()
-        )
-        embed.add_field(
-            name="**!wiki**",
-            value="Description: Sends a specified amount of 1-5 articles from Wikipedia "
-                  "based on the given search query\n"
-                  "!wiki {int: article amount} {str: search query}\n"
-                  "Example: *!wiki Lev Landau* | *!wiki 2 Lev Landau*",
-            inline=False
+            color=discord.Color.dark_theme()
         )
         embed.add_field(
             name="**!urban**",
@@ -80,7 +82,7 @@ class HelpEmbed1(commands.Cog):
         embed.add_field(
             name="**!qrcode**",
             value="Description: Creates a Qr-Code based on the given link\n"
-                  "!qrcode {link}\n"
+                  "!qrcode {str: link}\n"
                   "Example: *!qrcode GitHub.com*",
             inline=False
         )
@@ -89,6 +91,21 @@ class HelpEmbed1(commands.Cog):
             value="Description: Sends a random GIF from Imgur based on the given category\n"
                   "!imgur {str: search query}\n"
                   "Example: *!imgur cat*",
+            inline=False
+        )
+        embed.add_field(
+            name="**!wiki**",
+            value="Description: Sends a specified amount of 1-5 articles from Wikipedia "
+                  "based on the given search query\n"
+                  "!wiki {int: article amount} {str: search query}\n"
+                  "Example: *!wiki Lev Landau* | *!wiki 2 Lev Landau*",
+            inline=False
+        )
+        embed.add_field(
+            name="**!senti**",
+            value="Description: Calculates the sentiment value of a Wikipedia page\n"
+                  "!senti {str: link}\n"
+                  "Example: *!senti `https://da.wikipedia.org/wiki/Lev_Landau`*",
             inline=False
         )
 
@@ -116,19 +133,19 @@ class HelpEmbed2(commands.Cog):
     async def help_embed_2(ctx):
         embed = discord.Embed(
             title="__2nd Command List__",
-            color=discord.Color.purple()
+            color=discord.Color.dark_theme()
         )
         embed.add_field(
             name="**!mp3**",
             value="Description: Converts a YouTube video into a MP3 file based on the given link\n"
-                  "!mp3 {link}\n"
+                  "!mp3 {str: link}\n"
                   "Example: *!mp3 `https://www.youtube.com/watch?v=HAZoLuME-PU`*",
             inline=False
         )
         embed.add_field(
             name="**!mp4**",
             value="Description: Converts a YouTube video into a MP4 file based on the given link\n"
-                  "!mp4 {link}\n"
+                  "!mp4 {str: link}\n"
                   "Example: *!mp4 `https://www.youtube.com/watch?v=HAZoLuME-PU`*",
             inline=False
         )
@@ -173,7 +190,7 @@ class HelpEmbed3(commands.Cog):
     async def help_embed_3(ctx):
         embed = discord.Embed(
             title="__3rd Command List__",
-            color=discord.Color.purple()
+            color=discord.Color.dark_theme()
         )
         embed.add_field(
             name="**!tts**",
@@ -229,7 +246,7 @@ class HelpEmbed4(commands.Cog):
     async def help_embed_4(ctx):
         embed = discord.Embed(
             title="__4th Command List__",
-            color=discord.Color.purple()
+            color=discord.Color.dark_theme()
         )
         embed.add_field(
             name="**!blur**",
@@ -284,9 +301,58 @@ class HelpEmbed4(commands.Cog):
         await ctx.send("An error occurred while processing your request.")
 
 
+class HelpEmbed5(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    @staticmethod
+    async def help_embed_5(ctx):
+        embed = discord.Embed(
+            title="__5th Command List__",
+            color=discord.Color.dark_theme()
+        )
+        embed.add_field(
+            name="**!anime**",
+            value="Description: Returns an anime from MAL based on the given name\n"
+                  "!anime {str: anime}\n"
+                  "Example: *!anime {anime}*\n",
+            inline=False
+        )
+        embed.add_field(
+            name="**!manga**",
+            value="Description: Returns a manga from MAL based on the given name\n"
+                  "!manga {str: manga}\n"
+                  "Example: *!manga {manga}*\n",
+            inline=False
+        )
+        embed.add_field(
+            name="**!steam**",
+            value="Description: Returns a game from Steam based on the given name\n"
+                  "!steam {str: game}\n"
+                  "Example: *!steam {game}*\n",
+            inline=False
+        )
+
+        # Add & set footer with timestamp
+        timestamp = datetime.datetime.utcnow()
+        embed.timestamp = timestamp
+        embed.set_footer(text=f"Requested by {ctx.author.name}")
+
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    async def help5(self, ctx):
+        await self.help_embed_5(ctx)
+
+    @help5.error
+    async def help5_error(self, ctx):
+        await ctx.send("An error occurred while processing your request.")
+
+
 async def setup(bot):
     await bot.add_cog(HelpEmbedMain(bot))
     await bot.add_cog(HelpEmbed1(bot))
     await bot.add_cog(HelpEmbed2(bot))
     await bot.add_cog(HelpEmbed3(bot))
     await bot.add_cog(HelpEmbed4(bot))
+    await bot.add_cog(HelpEmbed5(bot))
