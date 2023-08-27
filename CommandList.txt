@@ -1,9 +1,10 @@
 Commands/Files (In use):
     - Command List 1 (HelpEmbed1)
-        - !wiki
         - !urban
         - !qrcode
         - !imgur
+        - !wiki
+        - !senti
 
     - Command List 2 (HelpEmbed2)
         - !mp3
