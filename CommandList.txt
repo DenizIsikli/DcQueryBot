@@ -24,6 +24,12 @@ Commands/Files (In use):
         - !watercolor
         - !grayscale
 
+    - Command List 5 (HelpEmbed5)
+        - !anime
+        - !manga
+        - !chat
+        - !epic
+
 
 Commands/Files (Not in use) / Need to be fixed:
     - EpicGamesFree.py
