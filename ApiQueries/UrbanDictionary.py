@@ -1,13 +1,19 @@
-import datetime
-import discord
-from discord.ext import commands
+import re
 import aiohttp
+import discord
+import datetime
+from discord.ext import commands
 
 
 class UrbanDictionaryQuery(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.URBAN_DICTIONARY_API = "https://api.urbandictionary.com/v0/define"
+
+    @staticmethod
+    def remove_brackets(text):
+        # Use regular expression to remove square brackets while maintaining the word inside
+        return re.sub(r'\[([^\]]+)]', r'\1', text)
 
     async def urban_dictionary_query(self, ctx, limit: int = 1, search_query: str = None):
         if ctx.author == ctx.bot.user:
@@ -29,8 +35,8 @@ class UrbanDictionaryQuery(commands.Cog):
 
                         for i, result in enumerate(search_results[:query_limit]):
                             title = result["word"]
-                            meaning = result["definition"]
-                            example = result["example"]
+                            meaning = self.remove_brackets(result["definition"])
+                            example = self.remove_brackets(result["example"])
 
                             embed = discord.Embed(
                                 title=f"**Term {i + 1}/{query_limit}**: {title}",
@@ -55,12 +61,12 @@ class UrbanDictionaryQuery(commands.Cog):
             await ctx.send(f"An unexpected error occurred: {e}")
 
     @commands.command()
-    async def urban(self, ctx, limit=1, *, search_query=""):
+    async def urban(self, ctx, limit: int = 1, *, search_query=""):
         if limit < 1 or limit > 5:
             await ctx.send("Limit must be between 1 and 5.")
             return
 
-        await self.urban_dictionary_query(ctx, limit, search_query)
+        await self.urban_dictionary_query(ctx, limit, search_query=search_query)
 
     @urban.error
     async def urban_error(self, ctx, error):
