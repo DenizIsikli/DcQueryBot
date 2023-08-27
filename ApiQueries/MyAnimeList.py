@@ -32,6 +32,10 @@ class MyAnimeList(commands.Cog):
                     response.raise_for_status()  # Raise an exception if the request was not successful
                     response_json = await response.json()
 
+                    if not response_json:
+                        await ctx.send("No results found for the provided anime.")
+                        return
+
                     try:
                         anime_info = response_json[0]
 
@@ -86,6 +90,10 @@ class MyAnimeList(commands.Cog):
                 async with session.get(endpoint, headers=headers) as response:
                     response.raise_for_status()  # Raise an exception if the request was not successful
                     response_json = await response.json()
+
+                    if not response_json:
+                        await ctx.send("No results found for the provided anime.")
+                        return
 
                     try:
                         manga_info = response_json[0]
