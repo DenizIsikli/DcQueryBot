@@ -363,14 +363,14 @@ class HelpEmbed6(commands.Cog):
             name="**!texttopdf**",
             value="Description: Turns the given text file (.txt) into a PDF with a name of your choice\n"
                   "!texttopdf {str: name}\n"
-                  "Example: *!texttopdf {name}*\n",
+                  "Example: *!texttopdf {attachment: .txt} {name}*\n",
             inline=False
         )
         embed.add_field(
             name="**!wordtopdf**",
             value="Description: Turns the given word file (.docx) into a PDF with a name of your choice\n"
                   "!wordtopdf {str: name}\n"
-                  "Example: *!wordtopdf {name}*\n",
+                  "Example: *!wordtopdf {attachment: .docx} {name}*\n",
             inline=False
         )
 
