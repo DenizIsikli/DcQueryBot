@@ -104,12 +104,11 @@ class Reminder(commands.Cog):
             await ctx.send("Please provide a valid duration (in minutes) for the reminder.")
             return
 
-        await asyncio.sleep(5)
+        await asyncio.sleep(3)
         await ctx.message.delete()
         await asyncio.sleep(duration * 60)
 
-        user_id = ctx.author
-        await user_id.send(f"**Reminder**: {reminder}")
+        await ctx.author.send(f"**Reminder**: {reminder}")
 
     @commands.command()
     async def remindme(self, ctx, duration: float = 0, *, reminder: str = None):
