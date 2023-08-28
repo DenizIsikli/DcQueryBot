@@ -51,8 +51,11 @@ class Kick(commands.Cog):
 
     @commands.command()
     @commands.is_owner()
-    async def kick(self, member, *, reason=None):
-        await member.kick(reason=reason)
+    async def kick(self, ctx, member: discord.Member, *, reason=None):
+        if reason is None:
+            reason="No reason provided"
+        await ctx.guild.kick(member)
+        await ctx.send(f"User {member.mention} has been kicked\nReason: {reason}")
 
     @kick.error
     async def kick_error(self, ctx, error):
