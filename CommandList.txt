@@ -32,6 +32,9 @@ Commands/Files (In use):
         - !chat
         - !epic
 
+    - Command List 6 (HelpEmbed6)
+        - !texttopdf
+        - !wordtopdf
 
 Commands/Files (Not in use) / Need to be fixed:
     - EpicGamesFree.py
@@ -41,12 +44,13 @@ Commands/Files (Not in use) / Need to be fixed:
 
 
 Commands/Files (Need to be tested):
-    - FileHandling.py
+
 
 Side Commands/Files:
     - !owner
     - !botpic
     - !repo
+
 
 Admin Commands/Files:
     - !admin
