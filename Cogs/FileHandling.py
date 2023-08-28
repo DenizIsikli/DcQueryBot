@@ -74,6 +74,7 @@ class WordToPDF(commands.Cog):
             try:
                 await ctx.send(file=discord.File(output_pdf))
             finally:
+                os.remove(input_docx)
                 os.remove(output_pdf)
         else:
             await ctx.send("Unsupported file format. Supported format: .docx | .doc")
