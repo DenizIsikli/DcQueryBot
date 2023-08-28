@@ -349,6 +349,47 @@ class HelpEmbed5(commands.Cog):
         await ctx.send("An error occurred while processing your request.")
 
 
+class HelpEmbed6(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    @staticmethod
+    async def help_embed_6(ctx):
+        embed = discord.Embed(
+            title="__6th Command List__",
+            color=discord.Color.dark_theme()
+        )
+        embed.add_field(
+            name="**!texttopdf**",
+            value="Description: Turns the given text file (.txt) into a PDF with a name of your choice\n"
+                  "!texttopdf {str: name}\n"
+                  "Example: *!texttopdf {name}*\n",
+            inline=False
+        )
+        embed.add_field(
+            name="**!wordtopdf**",
+            value="Description: Turns the given word file (.docx) into a PDF with a name of your choice\n"
+                  "!wordtopdf {str: name}\n"
+                  "Example: *!wordtopdf {name}*\n",
+            inline=False
+        )
+
+        # Add & set footer with timestamp
+        timestamp = datetime.datetime.utcnow()
+        embed.timestamp = timestamp
+        embed.set_footer(text=f"Requested by {ctx.author.name}")
+
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    async def help6(self, ctx):
+        await self.help_embed_6(ctx)
+
+    @help6.error
+    async def help6_error(self, ctx):
+        await ctx.send("An error occurred while processing your request.")
+
+
 async def setup(bot):
     await bot.add_cog(HelpEmbedMain(bot))
     await bot.add_cog(HelpEmbed1(bot))
@@ -356,3 +397,4 @@ async def setup(bot):
     await bot.add_cog(HelpEmbed3(bot))
     await bot.add_cog(HelpEmbed4(bot))
     await bot.add_cog(HelpEmbed5(bot))
+    await bot.add_cog(HelpEmbed6(bot))

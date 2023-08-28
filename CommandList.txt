@@ -36,6 +36,7 @@ Commands/Files (In use):
         - !texttopdf
         - !wordtopdf
 
+
 Commands/Files (Not in use) / Need to be fixed:
     - EpicGamesFree.py
     - ChatGPT.py
