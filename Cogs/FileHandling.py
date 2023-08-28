@@ -32,6 +32,7 @@ class TextToPDF(commands.Cog):
             pdf.multi_cell(0, 10, input_text)
             pdf.output(output_pdf)
 
+            await ctx.message.delete()
             await ctx.send(file=discord.File(output_pdf))
         else:
             await ctx.send("Unsupported file format. Supported format: .txt")
