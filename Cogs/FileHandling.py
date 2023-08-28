@@ -2,7 +2,7 @@ import os
 import discord
 from discord.ext import commands
 from fpdf import FPDF
-import subprocess
+import docx2pdf
 
 
 class TextToPDF(commands.Cog):
@@ -33,7 +33,11 @@ class TextToPDF(commands.Cog):
             pdf.output(output_pdf)
 
             await ctx.message.delete()
-            await ctx.send(file=discord.File(output_pdf))
+
+            try:
+                await ctx.send(file=discord.File(output_pdf))
+            finally:
+                os.remove(output_pdf)
         else:
             await ctx.send("Unsupported file format. Supported format: .txt")
 
@@ -61,11 +65,16 @@ class WordToPDF(commands.Cog):
             input_docx = f"{name}.docx"
             output_pdf = f"{name}.pdf"
 
-            await file_attachment.save(input_docx)  # Save the given attachment
+            await file_attachment.save(input_docx)
 
-            subprocess.run(["unoconv", "--output", output_pdf, "--format", "pdf", input_docx])
+            docx2pdf.convert(input_docx, output_pdf)
 
-            await ctx.send(file=discord.File(output_pdf))
+            await ctx.message.delete()
+
+            try:
+                await ctx.send(file=discord.File(output_pdf))
+            finally:
+                os.remove(output_pdf)
         else:
             await ctx.send("Unsupported file format. Supported format: .docx | .doc")
 
