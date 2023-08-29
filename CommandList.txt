@@ -11,6 +11,7 @@ Commands/Files (In use):
         - !mp4
         - !ascii
         - !asciicm
+        - !gpt
 
     - Command List 3 (HelpEmbed3)
         - !tts
@@ -29,7 +30,6 @@ Commands/Files (In use):
         - !anime
         - !manga
         - !steam
-        - !chat
         - !epic
 
     - Command List 6 (HelpEmbed6)
@@ -39,7 +39,6 @@ Commands/Files (In use):
 
 Commands/Files (Not in use) / Need to be fixed:
     - EpicGamesFree.py
-    - ChatGPT.py
     - !tts
     - !nick
 
