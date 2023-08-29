@@ -250,7 +250,7 @@ class ApplyGrayscale(commands.Cog):
 
             await ctx.message.delete()
             await asyncio.sleep(0.2)
-            await ctx.send(file=discord.File(img_byte_array, "Grayscale_image.png"))
+            await ctx.send(file=discord.File(img_byte_array, "GrayscaleFilter_image.png"))
 
         except IndexError:
             await ctx.send("Please provide an image as an attachment.")
