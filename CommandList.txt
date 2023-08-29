@@ -18,6 +18,7 @@ Commands/Files (In use):
         - !reminder
         - !nick
         - !whois
+        - !resize
 
     - Command List 4 (HelpEmbed4)
         - !blur
@@ -30,7 +31,7 @@ Commands/Files (In use):
         - !anime
         - !manga
         - !steam
-        - !epic
+        - !epic # Not on the help embed yet
 
     - Command List 6 (HelpEmbed6)
         - !texttopdf
