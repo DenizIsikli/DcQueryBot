@@ -143,7 +143,7 @@ class ResizeImage(commands.Cog):
             return
 
         if width is None or height is None:
-            await ctx.send("You need to specify the size you want.")
+            await ctx.send("You need to specify the dimensions you want.")
             return
 
         image_size = (width, height)
@@ -161,7 +161,7 @@ class ResizeImage(commands.Cog):
 
             await ctx.message.delete()
             await asyncio.sleep(0.2)
-            await ctx.send(file=discord.File(resized_image_bytes))
+            await ctx.send(file=discord.File(resized_image_bytes, "Resized_Image.png"))
         except Exception as e:
             await ctx.send(f"An error occurred: {e}")
 
