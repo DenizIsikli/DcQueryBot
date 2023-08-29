@@ -1,8 +1,10 @@
-import discord
-from discord.ext import commands
-import datetime
+import io
 import asyncio
+import discord
+import datetime
+from PIL import Image
 from datetime import datetime
+from discord.ext import commands
 
 
 class WhoIs(commands.Cog):
@@ -131,6 +133,43 @@ class Reminder(commands.Cog):
             await ctx.send(f"An error occurred: {error}")
 
 
+class ResizeImage(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    @staticmethod
+    async def resize_image(ctx, width: int = None, height: int = None):
+        if ctx.author == ctx.bot.user:
+            return
+
+        if width is None or height is None:
+            await ctx.send("You need to specify the size you want.")
+            return
+
+        image_size = (width, height)
+
+        image_attachment = ctx.message.attachments[0]
+        image_bytes = await image_attachment.read()
+
+        try:
+            image = Image.open(io.BytesIO(image_bytes))
+            resized_image = image.resize(image_size)
+
+            resized_image_bytes = io.BytesIO()
+            resized_image.save(resized_image_bytes, format="PNG")
+            resized_image_bytes.seek(0)
+
+            await ctx.message.delete()
+            await asyncio.sleep(0.2)
+            await ctx.send(file=discord.File(resized_image_bytes))
+        except Exception as e:
+            await ctx.send(f"An error occurred: {e}")
+
+    @commands.command()
+    async def resize(self, ctx, width: int = None, height: int = None):
+        await self.resize_image(ctx, width, height)
+
+
 class GitHub(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -164,4 +203,5 @@ async def setup(bot):
     await bot.add_cog(WhoIs(bot))
     await bot.add_cog(ChangeNickname(bot))
     await bot.add_cog(Reminder(bot))
+    await bot.add_cog(ResizeImage(bot))
     await bot.add_cog(GitHub(bot))
