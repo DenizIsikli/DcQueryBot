@@ -19,27 +19,26 @@ class HelpEmbedMain(commands.Cog):
         embed.add_field(
             name="**!help1**",
             value="First command list.",
-            inline=False
         )
         embed.add_field(
             name="**!help2**",
             value="Second command list.",
-            inline=False
         )
         embed.add_field(
             name="**!help3**",
             value="Third command list.",
-            inline=False
         )
         embed.add_field(
             name="**!help4**",
             value="Fourth command list.",
-            inline=False
         )
         embed.add_field(
             name="**!help5**",
             value="Fifth command list.",
-            inline=False
+        )
+        embed.add_field(
+            name="**!help6**",
+            value="Sixth command list.",
         )
 
         # Add & set footer with timestamp
@@ -163,6 +162,13 @@ class HelpEmbed2(commands.Cog):
                   "!asciicm {str: text}\n"
                   "Example: *!asciicm placeholder*\n"
                   "`asciicm does not take numbers as an argument, only text`",
+            inline=False
+        )
+        embed.add_field(
+            name="**!gpt**",
+            value="Description: Query ChatGPT with any given input\n"
+                  "!gpt {str: content}\n"
+                  "Example: *!gpt What is an API*\n",
             inline=False
         )
 
