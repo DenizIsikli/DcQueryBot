@@ -227,6 +227,13 @@ class HelpEmbed3(commands.Cog):
                   "Example: *!whois @Bobby* | *!whois*\n",
             inline=False
         )
+        embed.add_field(
+            name="**!resize**",
+            value="Description: Resizes the image attachment based on the given dimensions\n"
+                  "!resize {attachment: image} {int: width} {int: height}\n"
+                  "Example: *!resize 300 150*\n",
+            inline=False
+        )
 
         # Add & set footer with timestamp
         timestamp = datetime.datetime.utcnow()
