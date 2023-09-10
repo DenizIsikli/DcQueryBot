@@ -1,4 +1,14 @@
 Commands/Files (In use):
+    - General Command List
+        - !help
+        - !help1
+        - !help2
+        - !help3
+        - !help4
+        - !help5
+        - !help6
+
+
     - Command List 1 (HelpEmbed1)
         - !urban
         - !qrcode
