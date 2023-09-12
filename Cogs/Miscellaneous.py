@@ -5,6 +5,8 @@ import datetime
 from PIL import Image
 from datetime import datetime
 from discord.ext import commands
+from googletrans import Translator
+from googletrans.constants import LANGUAGES
 
 
 class WhoIs(commands.Cog):
@@ -170,6 +172,32 @@ class ResizeImage(commands.Cog):
         await self.resize_image(ctx, width, height)
 
 
+class TranslateText(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+        self.translator = Translator()
+
+    async def translater(self, ctx, target_lang: str = None, *, text: str = None):
+        if ctx.author == ctx.bot.user:
+            return
+
+        if target_lang is None:
+            await ctx.send("Specify a language.")
+
+        try:
+            if target_lang in LANGUAGES:
+                translation = self.translator.translate(text, dest=target_lang)
+                await ctx.send(f"Translation to {LANGUAGES[target_lang]}: {translation.text}")
+            else:
+                await ctx.send("Invalid target language. Please provide a valid language code.")
+        except Exception as e:
+            await ctx.send(f"An error occurred: {e}")
+
+    @commands.command()
+    async def translate(self, ctx, target_lang: str = None, *, text: str = None):
+        await self.translater(ctx, target_lang, text=text)
+
+
 class GitHub(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -204,4 +232,5 @@ async def setup(bot):
     await bot.add_cog(ChangeNickname(bot))
     await bot.add_cog(Reminder(bot))
     await bot.add_cog(ResizeImage(bot))
+    await bot.add_cog(TranslateText(bot))
     await bot.add_cog(GitHub(bot))
