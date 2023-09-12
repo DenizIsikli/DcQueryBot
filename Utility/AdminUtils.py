@@ -85,10 +85,24 @@ class Reload(commands.Cog):
             embed.set_footer(text=f"Requested by {ctx.author.name}")
 
             # List for reloaded cogs
+            reloaded_queries = []
             reloaded_cogs = []
             reloaded_util = []
 
             try:
+                try:
+                    for filename in os.listdir("../ApiQueries"):
+                        if filename.endswith(".py"):
+                            query_name = f"Cogs.{filename[:-3]}"  # Remove the last 3 characters (.py)
+                            try:
+                                await self.bot.unload_extensionload_extension(query_name)
+                                await self.bot.load_extension(query_name)
+                                reloaded_queries.append(query_name)
+                            except Exception as e:
+                                print(f"Failed to reload Query file: {query_name}: {e}")
+                except Exception as e:
+                    print(f"Failed to reload any Query files: {e}")
+
                 try:
                     for filename in os.listdir("../Cogs"):
                         if filename.endswith(".py"):
@@ -96,7 +110,7 @@ class Reload(commands.Cog):
                             try:
                                 await self.bot.unload_extension(cog_name)
                                 await self.bot.load_extension(cog_name)
-                                reloaded_cogs.append(cog_name)  # Add file to list
+                                reloaded_cogs.append(cog_name)
                             except Exception as e:
                                 print(f"Failed to reload Cog file: {cog_name}: {e}")
                 except Exception as e:
