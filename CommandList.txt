@@ -55,7 +55,7 @@ Commands/Files (Not in use) / Need to be fixed:
 
 
 Commands/Files (Need to be tested):
-
+    - !translate
 
 Side Commands/Files:
     - !owner
