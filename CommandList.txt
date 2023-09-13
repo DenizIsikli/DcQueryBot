@@ -41,6 +41,7 @@ Commands/Files (In use):
         - !anime
         - !manga
         - !steam
+        - !translate
         - !epic # Not on the help embed yet
 
     - Command List 6 (HelpEmbed6)
