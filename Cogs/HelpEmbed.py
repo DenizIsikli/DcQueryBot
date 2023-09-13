@@ -354,7 +354,7 @@ class HelpEmbed5(commands.Cog):
         )
         embed.add_field(
             name="**!languagecode**",
-            value="Description: Shows a text file of the different language codes available\n"
+            value="Description: Shows a text file of the different language codes available for translation\n"
                   "!languagecode\n"
                   "Example: *!languagecode*\n",
             inline=False
