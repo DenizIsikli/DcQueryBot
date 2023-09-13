@@ -42,21 +42,13 @@ Commands/Files (In use):
         - !manga
         - !steam
         - !translate
+        - !languagecode
         - !epic # Not on the help embed yet
 
     - Command List 6 (HelpEmbed6)
         - !texttopdf
         - !wordtopdf
 
-
-Commands/Files (Not in use) / Need to be fixed:
-    - EpicGamesFree.py
-    - !tts
-    - !nick
-
-
-Commands/Files (Need to be tested):
-    - !translate
 
 Side Commands/Files:
     - !owner
@@ -69,3 +61,13 @@ Admin Commands/Files:
     - !delete
     - !kick
     - !reload
+
+
+Commands/Files (Not in use) / Need to be fixed:
+    - EpicGamesFree.py
+    - !tts
+    - !nick
+
+
+Commands/Files (Need to be tested):
+
