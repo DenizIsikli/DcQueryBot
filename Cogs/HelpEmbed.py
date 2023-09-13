@@ -352,6 +352,13 @@ class HelpEmbed5(commands.Cog):
                   "Example: *!translate fr Hello*\n",
             inline=False
         )
+        embed.add_field(
+            name="**!languagecode**",
+            value="Description: Shows a text file of the different language codes available\n"
+                  "!languagecode\n"
+                  "Example: *!languagecode*\n",
+            inline=False
+        )
 
         # Add & set footer with timestamp
         timestamp = datetime.datetime.utcnow()
