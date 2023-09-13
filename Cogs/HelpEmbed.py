@@ -345,6 +345,13 @@ class HelpEmbed5(commands.Cog):
                   "Example: *!steam {game}*\n",
             inline=False
         )
+        embed.add_field(
+            name="**!translate**",
+            value="Description: Translates any given text to the target language\n"
+                  "!translate {str: target_lang} {str: text}\n"
+                  "Example: *!translate fr Hello*\n",
+            inline=False
+        )
 
         # Add & set footer with timestamp
         timestamp = datetime.datetime.utcnow()
