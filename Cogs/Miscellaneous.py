@@ -1,3 +1,4 @@
+import os
 import io
 import asyncio
 import discord
@@ -206,126 +207,35 @@ class TranslateText(commands.Cog):
 
     @commands.command()
     async def languagecode(self, ctx):
-        LANGUAGES = {
-            'af': 'afrikaans',
-            'sq': 'albanian',
-            'am': 'amharic',
-            'ar': 'arabic',
-            'hy': 'armenian',
-            'az': 'azerbaijani',
-            'eu': 'basque',
-            'be': 'belarusian',
-            'bn': 'bengali',
-            'bs': 'bosnian',
-            'bg': 'bulgarian',
-            'ca': 'catalan',
-            'ceb': 'cebuano',
-            'ny': 'chichewa',
-            'zh-cn': 'chinese (simplified)',
-            'zh-tw': 'chinese (traditional)',
-            'co': 'corsican',
-            'hr': 'croatian',
-            'cs': 'czech',
-            'da': 'danish',
-            'nl': 'dutch',
-            'en': 'english',
-            'eo': 'esperanto',
-            'et': 'estonian',
-            'tl': 'filipino',
-            'fi': 'finnish',
-            'fr': 'french',
-            'fy': 'frisian',
-            'gl': 'galician',
-            'ka': 'georgian',
-            'de': 'german',
-            'el': 'greek',
-            'gu': 'gujarati',
-            'ht': 'haitian creole',
-            'ha': 'hausa',
-            'haw': 'hawaiian',
-            'iw': 'hebrew',
-            'he': 'hebrew',
-            'hi': 'hindi',
-            'hmn': 'hmong',
-            'hu': 'hungarian',
-            'is': 'icelandic',
-            'ig': 'igbo',
-            'id': 'indonesian',
-            'ga': 'irish',
-            'it': 'italian',
-            'ja': 'japanese',
-            'jw': 'javanese',
-            'kn': 'kannada',
-            'kk': 'kazakh',
-            'km': 'khmer',
-            'ko': 'korean',
-            'ku': 'kurdish (kurmanji)',
-            'ky': 'kyrgyz',
-            'lo': 'lao',
-            'la': 'latin',
-            'lv': 'latvian',
-            'lt': 'lithuanian',
-            'lb': 'luxembourgish',
-            'mk': 'macedonian',
-            'mg': 'malagasy',
-            'ms': 'malay',
-            'ml': 'malayalam',
-            'mt': 'maltese',
-            'mi': 'maori',
-            'mr': 'marathi',
-            'mn': 'mongolian',
-            'my': 'myanmar (burmese)',
-            'ne': 'nepali',
-            'no': 'norwegian',
-            'or': 'odia',
-            'ps': 'pashto',
-            'fa': 'persian',
-            'pl': 'polish',
-            'pt': 'portuguese',
-            'pa': 'punjabi',
-            'ro': 'romanian',
-            'ru': 'russian',
-            'sm': 'samoan',
-            'gd': 'scots gaelic',
-            'sr': 'serbian',
-            'st': 'sesotho',
-            'sn': 'shona',
-            'sd': 'sindhi',
-            'si': 'sinhala',
-            'sk': 'slovak',
-            'sl': 'slovenian',
-            'so': 'somali',
-            'es': 'spanish',
-            'su': 'sundanese',
-            'sw': 'swahili',
-            'sv': 'swedish',
-            'tg': 'tajik',
-            'ta': 'tamil',
-            'te': 'telugu',
-            'th': 'thai',
-            'tr': 'turkish',
-            'uk': 'ukrainian',
-            'ur': 'urdu',
-            'ug': 'uyghur',
-            'uz': 'uzbek',
-            'vi': 'vietnamese',
-            'cy': 'welsh',
-            'xh': 'xhosa',
-            'yi': 'yiddish',
-            'yo': 'yoruba',
-            'zu': 'zulu',
-        }
+        with open("Language_Codes.txt", "w") as file:
+            file.write(
+                "Language Codes\n"
+                "af: Afrikaans | sq: Albanian | am: Amharic | ar: Arabic | hy: Armenian\n"
+                "az: Azerbaijani | eu: Basque | be: Belarusian | bn: Bengali | bs: Bosnian\n"
+                "bg: Bulgarian | ca: Catalan | ceb: Cebuano | ny: Chichewa | zh-cn: Chinese (Simplified)\n"
+                "zh-tw: Chinese (Traditional) | co: Corsican | hr: Croatian | cs: Czech | da: Danish\n"
+                "nl: Dutch | en: English | eo: Esperanto | et: Estonian | tl: Filipino\n"
+                "fi: Finnish | fr: French | fy: Frisian | gl: Galician | ka: Georgian\n"
+                "de: German | el: Greek | gu: Gujarati | ht: Haitian Creole | ha: Hausa\n"
+                "haw: Hawaiian | iw: Hebrew | he: Hebrew | hi: Hindi | hmn: Hmong\n"
+                "hu: Hungarian | is: Icelandic | ig: Igbo | id: Indonesian | ga: Irish\n"
+                "it: Italian | ja: Japanese | jw: Javanese | kn: Kannada | kk: Kazakh\n"
+                "km: Khmer | ko: Korean | ku: Kurdish (Kurmanji) | ky: Kyrgyz | lo: Lao\n"
+                "la: Latin | lv: Latvian | lt: Lithuanian | lb: Luxembourgish | mk: Macedonian\n"
+                "mg: Malagasy | ms: Malay | ml: Malayalam | mt: Maltese | mi: Maori\n"
+                "mr: Marathi | mn: Mongolian | my: Myanmar (Burmese) | ne: Nepali | no: Norwegian\n"
+                "or: Odia | ps: Pashto | fa: Persian | pl: Polish | pt: Portuguese\n"
+                "pa: Punjabi | ro: Romanian | ru: Russian | sm: Samoan | gd: Scots Gaelic\n"
+                "sr: Serbian | st: Sesotho | sn: Shona | sd: Sindhi | si: Sinhala\n"
+                "sk: Slovak | sl: Slovenian | so: Somali | es: Spanish | su: Sundanese\n"
+                "sw: Swahili | sv: Swedish | tg: Tajik | ta: Tamil | te: Telugu\n"
+                "th: Thai | tr: Turkish | uk: Ukrainian | ur: Urdu | ug: Uyghur\n"
+                "uz: Uzbek | vi: Vietnamese | cy: Welsh | xh: Xhosa | yi: Yiddish\n"
+                "yo: Yoruba | zu: Zulu\n"
+            )
 
-        language_code = "**Language Code**\n"
-
-        for code, language in LANGUAGES.items():
-            language_code += f"- {code}: {language}\n"
-            self.count += 1
-
-            if self.count % 5 == 0:
-                language_code += "\n"
-
-        await ctx.send(f"{language_code}")
+        await ctx.send(file=discord.File("Language_Codes.txt"))
+        os.remove("Language_Codes.txt")
 
 
 class GitHub(commands.Cog):
