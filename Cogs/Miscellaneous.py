@@ -267,6 +267,21 @@ class GitHub(commands.Cog):
         await self.bot_repository(ctx)
 
 
+class CommandList(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+        self.command_list_file = "C:\\Users\\deniz\\PycharmProjects\\DcQueryBot\\CommandList.txt"
+
+    @commands.command(name="commandlist")
+    async def command_list(self, ctx):
+        try:
+            await ctx.send(file=discord.File(self.command_list_file))
+        except FileNotFoundError:
+            await ctx.send("Command list not found.")
+        except Exception as e:
+            await ctx.send(f"An error occurred: {str(e)}")
+
+
 async def setup(bot):
     await bot.add_cog(WhoIs(bot))
     await bot.add_cog(ChangeNickname(bot))
@@ -274,3 +289,4 @@ async def setup(bot):
     await bot.add_cog(ResizeImage(bot))
     await bot.add_cog(TranslateText(bot))
     await bot.add_cog(GitHub(bot))
+    await bot.add_cog(CommandList(bot))
