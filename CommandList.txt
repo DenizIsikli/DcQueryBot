@@ -48,6 +48,7 @@ Commands/Files (In use):
     - Command List 6 (HelpEmbed6)
         - !texttopdf
         - !wordtopdf
+        - !compress
 
 
 Side Commands/Files:
