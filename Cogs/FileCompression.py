@@ -8,27 +8,28 @@ class FileCompression(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-        self.input_file = None
-        self.output_file = None
-
     @staticmethod
-    async def compress_file(input_file, output_file):
+    async def compress_file(ctx, input_file):
         try:
+            _, input_file_extension = os.path.splitext(input_file)
+            output_file_extension = f"{input_file_extension}.zlib"
+
             with open(input_file, 'rb') as f:
                 data = f.read()
                 compressed_data = zlib.compress(data, level=zlib.Z_BEST_COMPRESSION)
 
+            output_file = f"tmp_{input_file_extension}.zlib"
+
             with open(output_file, 'wb') as f:
                 f.write(compressed_data)
 
-            os.remove(input_file)
-            os.remove(output_file)
+            return output_file, output_file_extension
 
         except FileNotFoundError:
-            print(f'Error: The input file "{input_file}" was not found.')
+            await ctx.send(f'Error: The input file "{input_file}" was not found.')
 
         except Exception as e:
-            print(f'An error occurred: {e}')
+            await ctx.send(f'An error occurred: {e}')
 
     @commands.command()
     async def compress(self, ctx):
@@ -37,31 +38,26 @@ class FileCompression(commands.Cog):
                 await ctx.send("Please provide a file as an attachment.")
                 return
 
-            # Get the user's uploaded image
-            image_attachment = ctx.message.attachments[0]
+            # Get the user's uploaded file
+            file_attachment = ctx.message.attachments[0]
 
-            self.input_file = f"tmp_{image_attachment.filename}"
-            await image_attachment.save(self.input_file)
+            input_file = f"tmp_{file_attachment.filename}"
+            await file_attachment.save(input_file)
 
-            self.output_file = f"tmp_{image_attachment.filename}.zlib"
+            compressed_output, compressed_extension = await self.compress_file(ctx, input_file)
 
-            input_file_size = os.path.getsize(self.input_file)
-            output_file_size = os.path.getsize(self.output_file)
+            input_file_size = os.path.getsize(input_file)
+            output_file_size = os.path.getsize(compressed_output)
 
-            await self.compress_file(self.input_file, self.output_file)
-
-            await ctx.send(f"Input file size (bytes): {input_file_size}\n"
-                           f"Output file size (bytes): {output_file_size}\n")
-            await ctx.send(file=discord.File(self.output_file))
+            if compressed_output:
+                await ctx.send(f"Input file size (bytes): {input_file_size}\n"
+                               f"Output file size (bytes): {output_file_size}\n")
+                await ctx.send(file=discord.File(compressed_output))
+                os.remove(input_file)
+                os.remove(compressed_output)
 
         except Exception as e:
             await ctx.send(f"An error occurred: {e}")
-
-        finally:
-            if os.path.exists(self.input_file):
-                os.remove(self.input_file)
-            if os.path.exists(self.output_file):
-                os.remove(self.output_file)
 
 
 async def setup(bot):
