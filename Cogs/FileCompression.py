@@ -11,19 +11,16 @@ class FileCompression(commands.Cog):
     @staticmethod
     async def compress_file(ctx, input_file):
         try:
-            _, input_file_extension = os.path.splitext(input_file)
-            output_file_extension = f"{input_file_extension}.zlib"
-
             with open(input_file, 'rb') as f:
                 data = f.read()
                 compressed_data = zlib.compress(data, level=zlib.Z_BEST_COMPRESSION)
 
-            output_file = f"tmp_{input_file_extension}.zlib"
+            output_file = f"tmp_{os.path.splitext(input_file)[1]}.zlib"
 
             with open(output_file, 'wb') as f:
                 f.write(compressed_data)
 
-            return output_file, output_file_extension
+            return output_file
 
         except FileNotFoundError:
             await ctx.send(f'Error: The input file "{input_file}" was not found.')
@@ -44,12 +41,13 @@ class FileCompression(commands.Cog):
             input_file = f"tmp_{file_attachment.filename}"
             await file_attachment.save(input_file)
 
-            compressed_output, compressed_extension = await self.compress_file(ctx, input_file)
+            compressed_output = await self.compress_file(ctx, input_file)
 
             input_file_size = os.path.getsize(input_file)
             output_file_size = os.path.getsize(compressed_output)
 
             if compressed_output:
+                await ctx.message.delete()
                 await ctx.send(f"Input file size (bytes): {input_file_size}\n"
                                f"Output file size (bytes): {output_file_size}\n")
                 await ctx.send(file=discord.File(compressed_output))
@@ -61,4 +59,4 @@ class FileCompression(commands.Cog):
 
 
 async def setup(bot):
-    bot.add_cog(FileCompression(bot))
+    await bot.add_cog(FileCompression(bot))
