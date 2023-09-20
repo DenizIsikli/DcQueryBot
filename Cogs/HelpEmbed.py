@@ -400,6 +400,13 @@ class HelpEmbed6(commands.Cog):
                   "Example: *!wordtopdf {attachment: .docx} {name}*\n",
             inline=False
         )
+        embed.add_field(
+            name="**!compress**",
+            value="Description: Compresses any type of file\n"
+                  "!compress {attachment: file}\n"
+                  "Example: *!compress {attachment: .txt}*\n",
+            inline=False
+        )
 
         # Add & set footer with timestamp
         timestamp = datetime.datetime.utcnow()
