@@ -1,3 +1,4 @@
+import io
 import os
 import discord
 from discord.ext import commands
@@ -9,13 +10,11 @@ class FileCompression(commands.Cog):
         self.bot = bot
 
     @staticmethod
-    async def compress_file(ctx, input_file):
+    async def compress_file(ctx, input_file=None, output_file=None):
         try:
             with open(input_file, 'rb') as f:
                 data = f.read()
                 compressed_data = zlib.compress(data, level=zlib.Z_BEST_COMPRESSION)
-
-            output_file = f"tmp_{os.path.splitext(input_file)[1]}.zlib"
 
             with open(output_file, 'wb') as f:
                 f.write(compressed_data)
@@ -37,11 +36,11 @@ class FileCompression(commands.Cog):
 
             # Get the user's uploaded file
             file_attachment = ctx.message.attachments[0]
-
             input_file = f"tmp_{file_attachment.filename}"
             await file_attachment.save(input_file)
 
-            compressed_output = await self.compress_file(ctx, input_file)
+            output_file = f"tmp_{os.path.splitext(input_file)[0]}.zlib"
+            compressed_output = await self.compress_file(ctx, input_file, output_file)
 
             input_file_size = os.path.getsize(input_file)
             output_file_size = os.path.getsize(compressed_output)
@@ -51,6 +50,7 @@ class FileCompression(commands.Cog):
                 await ctx.send(f"Input file size (bytes): {input_file_size}\n"
                                f"Output file size (bytes): {output_file_size}\n")
                 await ctx.send(file=discord.File(compressed_output))
+
                 os.remove(input_file)
                 os.remove(compressed_output)
 
