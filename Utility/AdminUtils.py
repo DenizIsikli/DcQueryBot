@@ -148,19 +148,14 @@ class Reload(commands.Cog):
 class Mute(commands.Cog):
     @commands.command()
     @commands.is_owner()
-    async def mute(self, ctx, member: discord.Member, *, reason=None):
-        if reason is None:
-            reason = "No reason provided"
-
-        # Get the muted role (create it if it doesn't exist)
+    async def mute(self, ctx, member: discord.Member):
         muted_role = discord.utils.get(ctx.guild.roles, name="Muted")
         if not muted_role:
             muted_role = await ctx.guild.create_role(name="Muted")
             for channel in ctx.guild.text_channels:
                 await channel.set_permissions(muted_role, send_messages=False)
 
-        await member.add_roles(muted_role, reason=reason)
-        await ctx.send(f"User {member.mention} has been muted\nReason: {reason}")
+        await member.add_roles(muted_role)
 
     @commands.command()
     @commands.is_owner()
@@ -168,9 +163,8 @@ class Mute(commands.Cog):
         muted_role = discord.utils.get(ctx.guild.roles, name="Muted")
         if muted_role and muted_role in member.roles:
             await member.remove_roles(muted_role)
-            await ctx.send(f"User {member.mention} has been unmuted")
         else:
-            await ctx.send(f"{member.mention} is not muted.")
+            await ctx.send("User is not muted")
 
 
 async def setup(bot):
