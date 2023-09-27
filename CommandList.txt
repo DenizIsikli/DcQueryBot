@@ -43,7 +43,6 @@ Commands/Files (In use):
         - !steam
         - !translate
         - !languagecode
-        - !epic # Not on the help embed yet
 
     - Command List 6 (HelpEmbed6)
         - !texttopdf
@@ -64,10 +63,10 @@ Admin Commands/Files:
     - !reload
 
 
-Commands/Files (Not in use) / Need to be fixed:
-    - EpicGamesFree.py
-    - !tts
-    - !nick
+Commands/Files - Not in use / Need to be fixed:
+    - !epic (EpicGamesFree.py)
+    - !tts (TextToSpeech.py)
+    - !nickname (Miscellaneous.py)
 
 
 Commands/Files (Need to be tested):
