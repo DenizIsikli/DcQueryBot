@@ -18,6 +18,7 @@ class AdminEmbed(commands.Cog):
         embed.add_field(name="**!delete**", value="*Delete x amount of channel messages: default amount = 1*")
         embed.add_field(name="**!kick**", value="*Kick specified member: reason[optional]*")
         embed.add_field(name="**!reload**", value="*Reload all Cog files*")
+        embed.add_field(name="**!mute**", value="*Mute specified member*")
 
         # Add & set footer with timestamp
         timestamp = datetime.datetime.utcnow()
