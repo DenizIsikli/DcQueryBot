@@ -213,10 +213,10 @@ class HelpEmbed3(commands.Cog):
             inline=False
         )
         embed.add_field(
-            name="**!nick**",
+            name="**!nickname**",
             value="Description: Changes your nickname on the server based on the given text\n"
-                  "!nick {str: text}\n"
-                  "Example: *!nick Bobby*\n",
+                  "!nickname {str: text}\n"
+                  "Example: *!nickname Bobby*\n",
             inline=False
         )
         embed.add_field(
