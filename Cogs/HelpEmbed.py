@@ -40,6 +40,10 @@ class HelpEmbedMain(commands.Cog):
             name="**!help6**",
             value="Sixth command list.",
         )
+        embed.add_field(
+            name="**!commandlist**",
+            value="Description: Sends a list of all bot commands",
+        )
 
         # Add & set footer with timestamp
         timestamp = datetime.datetime.utcnow()
