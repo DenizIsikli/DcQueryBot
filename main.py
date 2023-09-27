@@ -96,6 +96,7 @@ class Main:
     def __init__(self):
         self.setup = Setup()
         self.base_dir = "C:/Users/deniz/PycharmProjects/DcQueryBot/config/config.env"
+        self.github_link = "https://github.com/DenizIsikli/DcQueryBot"
         self.owner_id = 538816980845854720
 
     async def main(self):
@@ -104,7 +105,8 @@ class Main:
 
         @bot.event
         async def on_ready():
-            await bot.change_presence(activity=discord.Game('!help'))
+            await bot.change_presence(activity=discord.Game(f"!help | !repo"))
+
             print(f"Logged in as {bot.user}")
             print("_____________________________")
 
