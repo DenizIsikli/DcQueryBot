@@ -7,6 +7,7 @@ Commands/Files (In use):
         - !help4
         - !help5
         - !help6
+        - !commandlist
 
 
     - Command List 1 (HelpEmbed1)
