@@ -82,11 +82,11 @@ class ChangeNickname(commands.Cog):
             await ctx.send("I don't have permission to change nicknames.")
 
     @commands.command()
-    async def nick(self, ctx, *, new_name: str = None):
+    async def nickname(self, ctx, *, new_name: str = None):
         await self.change_nickname(ctx, new_name=new_name)
 
-    @nick.error
-    async def nick_error(self, ctx, error):
+    @nickname.error
+    async def nickname_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send("Please provide the new nickname you want to set.")
         elif isinstance(error, commands.CommandInvokeError):
