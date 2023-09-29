@@ -105,7 +105,7 @@ class Main:
 
         @bot.event
         async def on_ready():
-            await bot.change_presence(activity=discord.Game(f"!help | !repo"))
+            await bot.change_presence(activity=discord.Game(f"!help"))
 
             print(f"Logged in as {bot.user}")
             print("_____________________________")
