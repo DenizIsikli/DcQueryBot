@@ -350,3 +350,4 @@ async def setup(bot):
     await bot.add_cog(ApplySepia(bot))
     await bot.add_cog(ApplyWatercolor(bot))
     await bot.add_cog(ApplyGrayscale(bot))
+    await bot.add_cog(ApplyInvert(bot))
