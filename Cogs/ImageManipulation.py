@@ -270,6 +270,56 @@ class ApplyGrayscale(commands.Cog):
             await ctx.send(f"An error occurred: {error}")
 
 
+class ApplyInvert(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    @staticmethod
+    async def apply_invert(ctx):
+        try:
+            if ctx.author == ctx.bot.user:
+                return
+
+            image_attachment = ctx.message.attachments[0]
+
+            # Read the attachment as bytes
+            image_bytes = await image_attachment.read()
+
+            # Open the image using PIL
+            image = Image.open(io.BytesIO(image_bytes))
+
+            # Invert the image
+            inverted_image = ImageOps.invert(image)
+
+            # Convert the PIL Image to bytes since discord.File doesn't take "Image"
+            img_byte_array = io.BytesIO()
+            inverted_image.save(img_byte_array, format="PNG")
+
+            # Seek back to the beginning of the buffer
+            img_byte_array.seek(0)
+
+            await ctx.message.delete()
+            await asyncio.sleep(0.2)
+            await ctx.send(file=discord.File(img_byte_array, "InvertedFilter_image.png"))
+
+        except IndexError:
+            await ctx.send("Please provide an image as an attachment.")
+
+        except Exception as e:
+            await ctx.send(f"An error occurred: {e}")
+
+    @commands.command()
+    async def invert(self, ctx):
+        await self.apply_invert(ctx)
+
+    @invert.error
+    async def invert_error(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send("Invalid argument.")
+        else:
+            await ctx.send(f"An error occurred: {error}")
+
+
 async def setup(bot):
     await bot.add_cog(ApplyBlur(bot))
     await bot.add_cog(ApplySharpen(bot))
