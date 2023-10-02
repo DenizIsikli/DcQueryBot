@@ -301,6 +301,13 @@ class HelpEmbed4(commands.Cog):
                   "Example: *!grayscale {image}*\n",
             inline=False
         )
+        embed.add_field(
+            name="**!invert**",
+            value="Description: Applies an invert filter to the given image\n"
+                  "!invert {attachment: image}\n"
+                  "Example: *!invert {image}*\n",
+            inline=False
+        )
 
         # Add & set footer with timestamp
         timestamp = datetime.datetime.utcnow()

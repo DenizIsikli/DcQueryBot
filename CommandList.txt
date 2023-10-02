@@ -37,6 +37,7 @@ Commands/Files (In use):
         - !sepia
         - !watercolor
         - !grayscale
+        - !invert
 
     - Command List 5 (HelpEmbed5)
         - !anime
