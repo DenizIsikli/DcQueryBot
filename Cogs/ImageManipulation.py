@@ -18,6 +18,10 @@ class ApplyBlur(commands.Cog):
             # Get the user's uploaded image
             image_attachment = ctx.message.attachments[0]
 
+            if image_attachment is None:
+                await ctx.send("Please provide an image as an attachment.")
+                return
+
             # Read the attachment as bytes
             image_bytes = await image_attachment.read()
 
@@ -72,6 +76,10 @@ class ApplySharpen(commands.Cog):
                 return
 
             image_attachment = ctx.message.attachments[0]
+
+            if image_attachment is None:
+                await ctx.send("Please provide an image as an attachment.")
+                return
 
             # Read the attachment as bytes
             image_bytes = await image_attachment.read()
@@ -133,6 +141,10 @@ class ApplySepia(commands.Cog):
 
             image_attachment = ctx.message.attachments[0]
 
+            if image_attachment is None:
+                await ctx.send("Please provide an image as an attachment.")
+                return
+
             # Read the attachment as bytes
             image_bytes = await image_attachment.read()
 
@@ -180,6 +192,10 @@ class ApplyWatercolor(commands.Cog):
                 return
 
             image_attachment = ctx.message.attachments[0]
+
+            if image_attachment is None:
+                await ctx.send("Please provide an image as an attachment.")
+                return
 
             # Read the attachment as bytes
             image_bytes = await image_attachment.read()
@@ -232,6 +248,10 @@ class ApplyGrayscale(commands.Cog):
 
             image_attachment = ctx.message.attachments[0]
 
+            if image_attachment is None:
+                await ctx.send("Please provide an image as an attachment.")
+                return
+
             # Read the attachment as bytes
             image_bytes = await image_attachment.read()
 
@@ -281,6 +301,10 @@ class ApplyInvert(commands.Cog):
                 return
 
             image_attachment = ctx.message.attachments[0]
+
+            if image_attachment is None:
+                await ctx.send("Please provide an image as an attachment.")
+                return
 
             # Read the attachment as bytes
             image_bytes = await image_attachment.read()
