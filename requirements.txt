@@ -7,9 +7,13 @@ googletrans==4.0.0rc1
 keyboard==0.13.5
 newspaper3k==0.2.8
 Pillow==10.0.1
+Pillow==10.0.1
 PyAutoGUI==0.9.53
 python-dotenv==1.0.0
 pytube==15.0.0
 qrcode==7.4.2
 textblob==0.17.1
 validators==0.21.2
+wikipedia==1.4.0
+youtube-search-python==1.4.2
+discord~=2.3.1
