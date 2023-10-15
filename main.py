@@ -4,6 +4,7 @@ from dataclasses import dataclass
 import asyncio
 import os
 from dotenv import load_dotenv
+import install as install
 
 
 class Setup:
@@ -119,5 +120,6 @@ class Main:
 
 
 if __name__ == "__main__":
-    main_instance = Main()
-    asyncio.run(main_instance.main())
+    # main_instance = Main()
+    # asyncio.run(main_instance.main())
+    install.install_dependencies()
