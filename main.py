@@ -120,6 +120,5 @@ class Main:
 
 
 if __name__ == "__main__":
-    # main_instance = Main()
-    # asyncio.run(main_instance.main())
-    install.install_dependencies()
+    main_instance = Main()
+    asyncio.run(main_instance.main())
