@@ -1,6 +1,7 @@
 import subprocess
 import venv
 
+
 # Only run this function if you haven't already created a virtual environment
 def create_virtual_environment():
     venv.create("venv", with_pip=True)
