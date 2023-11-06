@@ -4,7 +4,6 @@ from dataclasses import dataclass
 import asyncio
 import os
 from dotenv import load_dotenv
-import install as install
 
 
 class Setup:
