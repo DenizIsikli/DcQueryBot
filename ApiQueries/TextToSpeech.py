@@ -1,4 +1,3 @@
-import os
 from discord import FFmpegPCMAudio
 from discord.ext import commands
 import asyncio
@@ -10,7 +9,7 @@ class TextToSpeech(commands.Cog):
         self.bot = bot
         self.TEXTTOSPEECH_API = "https://text-to-speech27.p.rapidapi.com/speech"
 
-    async def text_to_speech(self, ctx, vc, *, content: str = ""):
+    async def text_to_speech(self, ctx, *, content: str = ""):
         if ctx.author == ctx.bot.user:
             return
 
@@ -50,8 +49,7 @@ class TextToSpeech(commands.Cog):
 
     @commands.command()
     async def tts(self, ctx, *, content: str = None):
-        vc = ctx.author.voice.channel
-        await self.text_to_speech(ctx, vc, content=content)
+        await self.text_to_speech(ctx, content=content)
 
     @tts.error
     async def tts_error(self, ctx, error):
