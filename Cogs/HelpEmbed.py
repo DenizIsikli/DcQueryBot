@@ -308,6 +308,13 @@ class HelpEmbed4(commands.Cog):
                   "Example: *!invert {image}*\n",
             inline=False
         )
+        embed.add_field(
+            name="**!solarize**",
+            value="Description: Applies a solarize filter to the given image\n"
+                  "!solarize {attachment: image}\n"
+                  "Example: *!solarize {image}*\n",
+            inline=False
+        )
 
         # Add & set footer with timestamp
         timestamp = datetime.datetime.utcnow()
