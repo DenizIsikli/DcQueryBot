@@ -29,7 +29,7 @@ class ApplyBlur(commands.Cog):
             image = Image.open(io.BytesIO(image_bytes))
 
             # Parameters:
-            # - range(optional): Amount of blur(0.1 to 5.0, default: 1.0)
+            # Range: Amount of blur(0.1 to 5.0, default: 1.0)
             if blur_range < 0.1 or blur_range > 5.0:
                 await ctx.send("Please provide a range from 0.1 to 5.0.")
                 return
@@ -258,7 +258,7 @@ class ApplyGrayscale(commands.Cog):
             # Open the image using PIL
             image = Image.open(io.BytesIO(image_bytes))
 
-            # Convert the image to grayscale
+            # Apply grayscale filter
             grayscale_image = image.convert("L")
 
             # Convert the PIL Image to bytes since discord.File doesn't take "Image"
@@ -312,7 +312,7 @@ class ApplyInvert(commands.Cog):
             # Open the image using PIL
             image = Image.open(io.BytesIO(image_bytes))
 
-            # Invert the image
+            # Apply invert filter
             inverted_image = ImageOps.invert(image)
 
             # Convert the PIL Image to bytes since discord.File doesn't take "Image"
@@ -344,6 +344,60 @@ class ApplyInvert(commands.Cog):
             await ctx.send(f"An error occurred: {error}")
 
 
+class ApplySolarize(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    @staticmethod
+    async def apply_solarize(ctx):
+        try:
+            if ctx.author == ctx.bot.user:
+                return
+
+            image_attachment = ctx.message.attachments[0]
+
+            if image_attachment is None:
+                await ctx.send("Please provide an image as an attachment")
+                return
+
+            # Read the attachment as bytes
+            image_bytes = await image_attachment.read()
+
+            # Open the image using PIL
+            image = Image.open(io.BytesIO(image_bytes))
+
+            # Apply solarize filter
+            solarized_image = ImageOps.solarize(image)
+
+            # Convert the PIL Image to bytes since discord.File doesn't take "Image"
+            img_byte_array = io.BytesIO()
+            solarized_image.save(img_byte_array, format="PNG")
+
+            # Seek back to the beginning of the buffer
+            img_byte_array.seek(0)
+
+            await ctx.message.delete()
+            await asyncio.sleep(0.2)
+            await ctx.send(file=discord.File(img_byte_array, "SolarizedFilter_image.png"))
+
+        except IndexError:
+            await ctx.send("Please provide an image as an attachment.")
+
+        except Exception as e:
+            await ctx.send(f"An error occurred: {e}")
+
+    @commands.command()
+    async def solarize(self, ctx):
+        await self.apply_solarize(ctx)
+
+    @solarize.error
+    async def solarize_error(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send("Invalid argument.")
+        else:
+            await ctx.send(f"An error occurred: {error}")
+
+
 async def setup(bot):
     await bot.add_cog(ApplyBlur(bot))
     await bot.add_cog(ApplySharpen(bot))
@@ -351,3 +405,4 @@ async def setup(bot):
     await bot.add_cog(ApplyWatercolor(bot))
     await bot.add_cog(ApplyGrayscale(bot))
     await bot.add_cog(ApplyInvert(bot))
+    await bot.add_cog(ApplySolarize(bot))
