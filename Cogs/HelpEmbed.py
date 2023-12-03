@@ -76,8 +76,8 @@ class HelpEmbed1(commands.Cog):
         )
         embed.add_field(
             name="**!urban**",
-            value="Description: Sends a specified amount of 1-5 words from Urban Dictionary "
-                  "based on the given search query\n"
+            value="Description: Retrieves a selection of 1-5 words from Urban Dictionary "
+                  "that match the provided search query\n"
                   "!urban {int: word amount} {str: search query}\n"
                   "Example: *!urban Shookie* | *!urban 2 Shookie*",
             inline=False
@@ -91,22 +91,22 @@ class HelpEmbed1(commands.Cog):
         )
         embed.add_field(
             name="**!imgur**",
-            value="Description: Sends a random GIF from Imgur based on the given category\n"
+            value="Description: Retrieves a random GIF from Imgur based on the specified category\n"
                   "!imgur {str: search query}\n"
                   "Example: *!imgur cat*",
             inline=False
         )
         embed.add_field(
             name="**!wiki**",
-            value="Description: Sends a specified amount of 1-5 articles from Wikipedia "
-                  "based on the given search query\n"
+            value="Description: Retrieves a selection of 1-5 articles from Wikipedia "
+                  "that match the provided search query\n"
                   "!wiki {int: article amount} {str: search query}\n"
                   "Example: *!wiki Lev Landau* | *!wiki 2 Lev Landau*",
             inline=False
         )
         embed.add_field(
             name="**!senti**",
-            value="Description: Calculates the sentiment value of a Wikipedia page\n"
+            value="Description: Calculates the sentiment value of a Wikipedia article\n"
                   "!senti {str: link}\n"
                   "Example: *!senti `https://da.wikipedia.org/wiki/Lev_Landau`*",
             inline=False
@@ -344,14 +344,14 @@ class HelpEmbed5(commands.Cog):
         )
         embed.add_field(
             name="**!anime**",
-            value="Description: Returns an anime from MAL based on the given name\n"
+            value="Description: Returns an anime from MAL (My Anime List) based on the given name\n"
                   "!anime {str: anime}\n"
                   "Example: *!anime {anime}*\n",
             inline=False
         )
         embed.add_field(
             name="**!manga**",
-            value="Description: Returns a manga from MAL based on the given name\n"
+            value="Description: Returns a manga from MAL (My Anime List) based on the given name\n"
                   "!manga {str: manga}\n"
                   "Example: *!manga {manga}*\n",
             inline=False
@@ -420,7 +420,7 @@ class HelpEmbed6(commands.Cog):
         )
         embed.add_field(
             name="**!compress**",
-            value="Description: Compresses any type of file\n"
+            value="Description: Compresses a text file\n"
                   "!compress {attachment: file}\n"
                   "Example: *!compress {attachment: .txt}*\n",
             inline=False
