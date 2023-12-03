@@ -101,7 +101,7 @@ class Reminder(commands.Cog):
         self.reminders = []
 
     @staticmethod
-    async def reminder(ctx, duration: float = 0, *, reminder: str = None):
+    async def reminder(ctx, duration: float = 1, *, reminder: str = None):
         if ctx.author == ctx.bot.user:
             return
 
