@@ -27,7 +27,7 @@ Commands/Files (In use):
     - Command List 3 (HelpEmbed3)
         - !tts
         - !reminder
-        - !nick
+        - !nickname
         - !whois
         - !resize
 
