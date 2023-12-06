@@ -2,8 +2,9 @@
 <h3 align="center">A Discord bot made for no reason at all</h3>           
 
 <div align="center">
-  
-[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://raw.githubusercontent.com/Fido2603/WatchDog/master/LICENSE)
+Website: https://uselessbotwebsite.netlify.app/ <br/><br/>
+
+  [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://raw.githubusercontent.com/Fido2603/WatchDog/master/LICENSE)
 </div>
 
 ---
