@@ -101,7 +101,7 @@ class Reminder(commands.Cog):
         self.reminders = []
 
     @staticmethod
-    async def reminder(ctx, duration: float = 1, *, reminder: str = None):
+    async def reminder(ctx, duration: float, *, reminder: str):
         if ctx.author == ctx.bot.user:
             return
 
@@ -116,13 +116,13 @@ class Reminder(commands.Cog):
         await ctx.author.send(f"**Reminder**: {reminder}")
 
     @commands.command()
-    async def remindme(self, ctx, duration: float = 0, *, reminder: str = None):
+    async def remindme(self, ctx, duration: float = 10, *, reminder: str = None):
         if duration <= 0:
             await ctx.send("Please provide a valid duration (in minutes) for the reminder.")
             return
 
         if reminder is None:
-            reminder = "Default reminder"
+            reminder = "No reminder was specified"
 
         await self.reminder(ctx, duration, reminder=reminder)
 
