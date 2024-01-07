@@ -212,7 +212,7 @@ class HelpEmbed3(commands.Cog):
         embed.add_field(
             name="**!reminder**",
             value="Description: Places a reminder based on the given duration in minutes, and text\n"
-                  "!reminder {int: duration} {str: reminder}\n"
+                  "!reminder {float: duration} {str: reminder}\n"
                   "Example: *!reminder 25 Check the oven*\n",
             inline=False
         )
@@ -423,6 +423,20 @@ class HelpEmbed6(commands.Cog):
             value="Description: Compresses a text file\n"
                   "!compress {attachment: file}\n"
                   "Example: *!compress {attachment: .txt}*\n",
+            inline=False
+        )
+        embed.add_field(
+            name="**!pomodoro**",
+            value="Description: Starts a pomodoro timer with the given study duration, break duration and cycles\n"
+                  "!pomodoro {float: study_duration} {float: break_duration} {int: cycles}\n"
+                  "Example: *!pomodoro 25 5 4*\n",
+            inline=False
+        )
+        embed.add_field(
+            name="**!pomodorostop**",
+            value="Description: Stops the pomodoro timer\n"
+                  "!pomodorostop\n"
+                  "Example: *!pomodorostop*\n",
             inline=False
         )
 
