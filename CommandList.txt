@@ -53,6 +53,7 @@ Commands/Files (In use):
         - !compress
         - !pomodoro
         - !pomodorostop
+        - !callduration
 
 
 Side Commands/Files:

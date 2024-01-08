@@ -439,6 +439,12 @@ class HelpEmbed6(commands.Cog):
                   "Example: *!pomodorostop*\n",
             inline=False
         )
+        embed.add_field(
+            name="**!callduration**",
+            value="Description: Calculates the duration of your current voice call\n"
+                  "!callduration\n"
+                  "Example: *!callduration*\n",
+        )
 
         # Add & set footer with timestamp
         timestamp = datetime.datetime.utcnow()
