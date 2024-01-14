@@ -35,7 +35,8 @@ class PDFMerge(commands.Cog):
         pdf_writer.write(merged_pdf_stream)
         merged_pdf_stream.seek(0)
 
-        await ctx.send(file=discord.File(merged_pdf_stream, 'merged_document.pdf'))
+        await ctx.send(file=discord.File(merged_pdf_stream, 'Merged_Document.pdf'))
+
 
 async def setup(bot):
     await bot.add_cog(PDFMerge(bot))
