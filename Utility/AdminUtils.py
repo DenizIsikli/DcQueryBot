@@ -169,15 +169,8 @@ class Mute(commands.Cog):
 
 
 async def setup(bot):
-    # Util commands
     await bot.add_cog(Reload(bot))
-
-    # Admin commands
     await bot.add_cog(AdminDelete(bot))
     await bot.add_cog(Kick(bot))
-
-    # Embed commands
     await bot.add_cog(AdminEmbed(bot))
-
-    # Mute commands
     await bot.add_cog(Mute(bot))
