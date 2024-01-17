@@ -439,12 +439,6 @@ class HelpEmbed6(commands.Cog):
                   "Example: *!pomodorostop*\n",
             inline=False
         )
-        embed.add_field(
-            name="**!callduration**",
-            value="Description: Calculates the duration of your current voice call\n"
-                  "!callduration\n"
-                  "Example: *!callduration*\n",
-        )
 
         # Add & set footer with timestamp
         timestamp = datetime.datetime.utcnow()
@@ -462,6 +456,53 @@ class HelpEmbed6(commands.Cog):
         await ctx.send("An error occurred while processing your request.")
 
 
+class HelpEmbed7(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    @staticmethod
+    async def help_embed_7(ctx):
+        embed = discord.Embed(
+            title="__6th Command List__",
+            color=discord.Color.dark_theme()
+        )
+        embed.add_field(
+            name="**!callduration**",
+            value="Description: Calculates the duration of your current voice call\n"
+                  "!callduration\n"
+                  "Example: *!callduration*\n",
+        )
+        embed.add_field(
+            name="**!pdfmerge**",
+            value="Description: Merges a maximum of 2 PDF files into one\n"
+                  "!pdfmerge {attachment: pdf_file}\n"
+                  "Example: *!pdfmerge {attachment: pdf_file}*\n",
+        )
+
+        embed.add_field(
+            name="**!compress**",
+            value="Description: Compresses a text file\n"
+                  "!compress {attachment: file}\n"
+                  "Example: *!compress {attachment: .txt}*\n",
+            inline=False
+        )
+
+        # Add & set footer with timestamp
+        timestamp = datetime.datetime.utcnow()
+        embed.timestamp = timestamp
+        embed.set_footer(text=f"Requested by {ctx.author.name}")
+
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    async def help7(self, ctx):
+        await self.help_embed_7(ctx)
+
+    @help7.error
+    async def help7_error(self, ctx):
+        await ctx.send("An error occurred while processing your request.")
+
+
 async def setup(bot):
     await bot.add_cog(HelpEmbedMain(bot))
     await bot.add_cog(HelpEmbed1(bot))
@@ -470,3 +511,4 @@ async def setup(bot):
     await bot.add_cog(HelpEmbed4(bot))
     await bot.add_cog(HelpEmbed5(bot))
     await bot.add_cog(HelpEmbed6(bot))
+    await bot.add_cog(HelpEmbed7(bot))

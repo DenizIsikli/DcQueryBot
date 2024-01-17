@@ -53,8 +53,10 @@ Commands/Files (In use):
         - !compress
         - !pomodoro
         - !pomodorostop
-        - !callduration
 
+    - Command List 7 (HelpEmbed7)
+        - !callduration
+        - !pdfmerge
 
 Side Commands/Files:
     - !owner
