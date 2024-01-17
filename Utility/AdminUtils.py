@@ -32,7 +32,7 @@ class AdminDelete(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(aliases=['del'])
     @commands.is_owner()
     async def delete(self, ctx, amount=1):
         await ctx.channel.purge(limit=amount+1)
