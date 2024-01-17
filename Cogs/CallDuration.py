@@ -23,8 +23,8 @@ class VoiceDurationTracker(commands.Cog):
         member = ctx.message.author
         if member.id in self.voice_channel_join_times:
             join_time = self.voice_channel_join_times[member.id]
-            duration = datetime.now() - join_time
-            await ctx.send(f"{member.display_name}, you've been in the call for {duration}.")
+            duration = datetime.now().replace(microsecond=0) - join_time.replace(microsecond=0)
+            await ctx.send(f"{member.display_name}, you've been in the call for {duration}")
         else:
             await ctx.send("You're not currently in a voice channel.")
 
