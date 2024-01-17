@@ -70,5 +70,5 @@ class TranslateText(commands.Cog):
         os.remove("Language_Codes.txt")
 
 
-def setup(bot):
-    bot.add_cog(TranslateText(bot))
+async def setup(bot):
+    await bot.add_cog(TranslateText(bot))
