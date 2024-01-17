@@ -51,6 +51,7 @@ Commands/Files (In use):
         - !texttopdf
         - !wordtopdf
         - !compress
+        - !decompress
         - !pomodoro
         - !pomodorostop
 

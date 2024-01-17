@@ -420,9 +420,16 @@ class HelpEmbed6(commands.Cog):
         )
         embed.add_field(
             name="**!compress**",
-            value="Description: Compresses a text file\n"
+            value="Description: Compresses any file\n"
                   "!compress {attachment: file}\n"
                   "Example: *!compress {attachment: .txt}*\n",
+            inline=False
+        )
+        embed.add_field(
+            name="**!decompress**",
+            value="Description: Decompresses any file\n"
+                  "!decompress {attachment: file}\n"
+                  "Example: *!decompress {attachment: .txt}*\n",
             inline=False
         )
         embed.add_field(
