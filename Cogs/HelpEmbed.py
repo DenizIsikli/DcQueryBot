@@ -489,7 +489,7 @@ class HelpEmbed7(commands.Cog):
         )
         embed.add_field(
             name="**!website**",
-            value="Description: Sends a link to the bot's website\n"
+            value="Description: Sends a link to the bots website\n"
                   "!website\n"
                   "Example: *!website*\n",
             inline=False
