@@ -58,6 +58,7 @@ Commands/Files (In use):
     - Command List 7 (HelpEmbed7)
         - !callduration
         - !pdfmerge
+        - !website
 
 Side Commands/Files:
     - !owner

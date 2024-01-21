@@ -478,19 +478,20 @@ class HelpEmbed7(commands.Cog):
             value="Description: Calculates the duration of your current voice call\n"
                   "!callduration\n"
                   "Example: *!callduration*\n",
+            inline=False
         )
         embed.add_field(
             name="**!pdfmerge**",
             value="Description: Merges a maximum of 2 PDF files into one\n"
                   "!pdfmerge {attachment: pdf_file}\n"
                   "Example: *!pdfmerge {attachment: pdf_file}*\n",
+            inline=False
         )
-
         embed.add_field(
-            name="**!compress**",
-            value="Description: Compresses a text file\n"
-                  "!compress {attachment: file}\n"
-                  "Example: *!compress {attachment: .txt}*\n",
+            name="**!website**",
+            value="Description: Sends a link to the bot's website\n"
+                  "!website\n"
+                  "Example: *!website*\n",
             inline=False
         )
 
