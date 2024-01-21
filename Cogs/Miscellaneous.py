@@ -190,5 +190,4 @@ async def setup(bot):
     await bot.add_cog(ChangeNickname(bot))
     await bot.add_cog(Reminder(bot))
     await bot.add_cog(ResizeImage(bot))
-    await bot.add_cog(GitHub(bot))
     await bot.add_cog(CommandList(bot))
