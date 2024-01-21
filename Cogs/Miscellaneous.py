@@ -170,35 +170,6 @@ class ResizeImage(commands.Cog):
         await self.resize_image(ctx, width, height)
 
 
-class GitHub(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
-
-    @staticmethod
-    async def bot_owner(ctx):
-        await ctx.send("https://github.com/DenizIsikli")
-
-    @commands.command()
-    async def owner(self, ctx):
-        await self.bot_owner(ctx)
-
-    @staticmethod
-    async def bot_picture(ctx):
-        await ctx.send("https://cdn.discordapp.com/attachments/826814606298316882/1142173434567200869/love.png")
-
-    @commands.command()
-    async def botpic(self, ctx):
-        await self.bot_picture(ctx)
-
-    @staticmethod
-    async def bot_repository(ctx):
-        await ctx.send("https://github.com/DenizIsikli/DcQueryBot")
-
-    @commands.command()
-    async def repo(self, ctx):
-        await self.bot_repository(ctx)
-
-
 class CommandList(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

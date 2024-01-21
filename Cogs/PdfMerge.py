@@ -24,7 +24,7 @@ class PDFMerge(commands.Cog):
 
         pdf_writer = PdfFileWriter()
 
-        for attachment in ctx.message.attachments:
+        for attachment in ctx.message.attachments[:2]:
             if attachment.filename.endswith('.pdf'):
                 file_stream = await self.download_file(attachment.url)
                 pdf_reader = PdfFileReader(file_stream)
