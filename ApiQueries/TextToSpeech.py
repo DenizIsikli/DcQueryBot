@@ -2,12 +2,13 @@ from discord import FFmpegPCMAudio
 from discord.ext import commands
 import asyncio
 import aiohttp
+import discord
 
 
 class TextToSpeech(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.TEXTTOSPEECH_API = "https://text-to-speech27.p.rapidapi.com/speech"
+        self.TEXTTOSPEECH_API = "https://cloudlabs-text-to-speech.p.rapidapi.com/synthesize"
 
     async def text_to_speech(self, ctx, *, content: str = ""):
         if ctx.author == ctx.bot.user:
@@ -22,27 +23,28 @@ class TextToSpeech(commands.Cog):
             return
 
         try:
-            headers = {
-                "X-RapidAPI-Key": "2ba10896fdmsh6eb24b198a7b520p1fef74jsneb8afa07df45",
-                "X-RapidAPI-Host": "text-to-speech27.p.rapidapi.com"
+            payload = {
+                "voice_code": "en-US-1",
+                "text": content,
+                "speed": "1.00",
+                "pitch": "1.00",
+                "output_type": "audio_url"
             }
 
-            querystring = {"text": f"{content}", "lang": "en-us"}
+            headers = {
+                "content-type": "application/x-www-form-urlencoded",
+                "X-RapidAPI-Key": "f4093ae77fmsh3b5b518992b9c97p136562jsn8eb575f33b51",
+                "X-RapidAPI-Host": "cloudlabs-text-to-speech.p.rapidapi.com"
+            }
 
             async with aiohttp.ClientSession() as session:
-                async with session.get(self.TEXTTOSPEECH_API, headers=headers, params=querystring) as response:
+                async with session.post(self.TEXTTOSPEECH_API, data=payload, headers=headers) as response:
                     response.raise_for_status()  # Raise an exception if the request was not successful
                     response_data = await response.json()
-                    print(response_data)
-                    print("test")
 
-                    vc = ctx.author.voice.channel
-                    await vc.connect()
-
-                    vc.play(FFmpegPCMAudio(response_data["audio_url"]))
-                    while vc.is_playing():
-                        await asyncio.sleep(1)
-                    await vc.disconnect()
+                    audio_url = response_data["result"]["audio_url"]
+                    # send the mp3 as an attachment
+                    await ctx.send(audio_url)
 
         except Exception as e:
             await ctx.send(f"Failed to save the text to audio: {e}")
