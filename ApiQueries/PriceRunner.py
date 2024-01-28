@@ -1,8 +1,9 @@
+import os
 from discord.ext import commands
-import discord
-import requests
 from bs4 import BeautifulSoup
 from dataclasses import dataclass
+import aiohttp
+import discord
 
 
 @dataclass
@@ -13,8 +14,9 @@ class Product:
     link: str = None
 
 
-class PriceRunnerAPI:
-    def __init__(self):
+class PriceRunnerAPI(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
         self.url = "https://www.pricerunner.dk"
         self.products = []
 
@@ -36,26 +38,26 @@ class PriceRunnerAPI:
     async def search_product(self, product_name):
         self.products = []
         search_url = f'{self.url}/search?q={product_name.replace(" ", "+")}'
+        async with aiohttp.ClientSession() as session:
+            try:
+                async with session.get(search_url) as response:
+                    if response.status == 200:
+                        text = await response.text()
+                        soup = BeautifulSoup(text, 'html.parser')
+                        product_div = soup.find('div', class_='mIkxpLfxgo pr-1dtdlzd')
 
-        try:
-            response = requests.get(search_url)
+                        if product_div:
+                            for item_div in product_div.find_all('div', class_='pr-1k8dg1g'):
+                                product = await self.scrape_product_data(item_div)
+                                self.products.append(product)
 
-            if response.status_code == 200:
-                soup = BeautifulSoup(response.text, 'html.parser')
-                product_div = soup.find('div', class_='mIkxpLfxgo pr-1dtdlzd')
+                    if soup.find('button', class_='pr-5cnc2s'):
+                        pass
 
-                if product_div:
-                    for item_div in product_div.find_all('div', class_='pr-1k8dg1g'):
-                        product = self.scrape_product_data(item_div)
-                        self.products.append(Product(product.name, product.info, product.price, product.link))
-
-                if soup.find('button', class_='pr-5cnc2s'):
-                    pass
-
-        except requests.exceptions.RequestException as e:
-            print(f"Error: {e}")
-        except Exception as e:
-            print(f"An error occurred: {e}")
+            except aiohttp.ClientError as e:
+                print(f"Error: {e}")
+            except Exception as e:
+                print(f"An error occurred: {e}")
 
         return self.products
 
@@ -63,19 +65,25 @@ class PriceRunnerAPI:
     async def run(self, ctx, product_name=None):
         try:
             if product_name is None:
-                return ctx.send("Please enter a product name")
+                await ctx.send("Please enter a product name")
 
-            products = self.search_product(product_name)
+            products = await self.search_product(product_name)
 
             if products:
                 response_str = '\n'.join(f"{i + 1}: {product}" for i, product in enumerate(products))
                 print(f"{response_str}\n")
-                ctx.send(response_str)
+
+                with open('PriceRunner.txt', 'w') as f:
+                    f.write(response_str)
+
+                await ctx.send(file=discord.File('PriceRunner.txt'))
+                os.remove('PriceRunner.txt')
+
             else:
-                ctx.send("No results found for the provided product.")
+                await ctx.send("No results found for the provided product.")
 
         except Exception as e:
-            ctx.send(f"An error occurred: {e}")
+            await ctx.send(f"An error occurred: {e}")
 
     @commands.command()
     async def pricerunner(self, ctx, *, product_name=None):
@@ -83,4 +91,4 @@ class PriceRunnerAPI:
 
 
 async def setup(bot):
-    bot.add_cog(PriceRunnerAPI(bot))
+    await bot.add_cog(PriceRunnerAPI(bot))

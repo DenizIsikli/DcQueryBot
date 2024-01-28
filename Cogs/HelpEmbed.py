@@ -41,6 +41,10 @@ class HelpEmbedMain(commands.Cog):
             value="Sixth command list.",
         )
         embed.add_field(
+            name="**!help7**",
+            value="Seventh command list.",
+        )
+        embed.add_field(
             name="**!commandlist**",
             value="Description: Sends a list of all bot commands",
         )
@@ -470,7 +474,7 @@ class HelpEmbed7(commands.Cog):
     @staticmethod
     async def help_embed_7(ctx):
         embed = discord.Embed(
-            title="__6th Command List__",
+            title="__7th Command List__",
             color=discord.Color.dark_theme()
         )
         embed.add_field(
@@ -485,6 +489,13 @@ class HelpEmbed7(commands.Cog):
             value="Description: Merges a maximum of 2 PDF files into one\n"
                   "!pdfmerge {attachment: pdf_file}\n"
                   "Example: *!pdfmerge {attachment: pdf_file}*\n",
+            inline=False
+        )
+        embed.add_field(
+            name="**!pricerunner**",
+            value="Description: Retrieves a selection of 20 products from PriceRunner\n"
+                  "!pricerunner {str: product name}\n"
+                  "Example: *!pricerunner {product name}*\n",
             inline=False
         )
         embed.add_field(
