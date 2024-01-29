@@ -95,7 +95,7 @@ intents_instance = Intents().create_instance()
 class Main:
     def __init__(self):
         self.setup = Setup()
-        self.base_dir = "C:/Users/deniz/PycharmProjects/DcQueryBot/config/config.env"
+        self.base_dir = "config/config.env"
         self.owner_id = 538816980845854720
 
     async def main(self):
