@@ -70,14 +70,22 @@ class PriceRunnerAPI(commands.Cog):
             products = await self.search_product(product_name)
 
             if products:
-                response_str = '\n'.join(f"{i + 1}: {product}" for i, product in enumerate(products))
+                for i, product in enumerate(products[:20]):
+                    _product_name_ = product.name
+                    _product_info_ = product.info
+                    _product_price_ = product.price
+                    _product_link_ = product.link
+
+                    response_str = f"{i + 1}: {_product_name_}\n{_product_info_}\n{_product_price_}\n{_product_link_}\n"
+
+                # response_str = '\n'.join(f"{i + 1}: {product}\n" for i, product in enumerate(products[:20]))
                 print(f"{response_str}\n")
 
                 with open('PriceRunner.txt', 'w') as f:
                     f.write(response_str)
 
                 await ctx.send(file=discord.File('PriceRunner.txt'))
-                os.remove('PriceRunner.txt')
+                os.remove(f'PriceRunner{product_name}.txt')
 
             else:
                 await ctx.send("No results found for the provided product.")
