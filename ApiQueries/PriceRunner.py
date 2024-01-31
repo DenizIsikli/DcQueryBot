@@ -70,23 +70,21 @@ class PriceRunnerAPI(commands.Cog):
             products = await self.search_product(product_name)
 
             if products:
-                for i, product in enumerate(products[:20]):
-                    _product_name_ = product.name
-                    _product_info_ = product.info
-                    _product_price_ = product.price
-                    _product_link_ = product.link
+                with open(f'PriceRunner{product_name}.txt', 'w') as f:
+                    for i, product in enumerate(products[:20]):
 
-                    response_str = f"{i + 1}: {_product_name_}\n{_product_info_}\n{_product_price_}\n{_product_link_}\n"
+                        product_str = (f"Product {i + 1}: "
+                                       f"{product.name}\n"
+                                       f"{product.info}\n"
+                                       f"{product.price}\n"
+                                       f"{product.link}\n")
 
-                # response_str = '\n'.join(f"{i + 1}: {product}\n" for i, product in enumerate(products[:20]))
-                print(f"{response_str}\n")
+                        print(product_str)
 
-                with open('PriceRunner.txt', 'w') as f:
-                    f.write(response_str)
+                        f.write(f"{product_str}\n")
 
-                await ctx.send(file=discord.File('PriceRunner.txt'))
+                await ctx.send(file=discord.File(f'PriceRunner{product_name}.txt'))
                 os.remove(f'PriceRunner{product_name}.txt')
-
             else:
                 await ctx.send("No results found for the provided product.")
 
@@ -96,6 +94,13 @@ class PriceRunnerAPI(commands.Cog):
     @commands.command()
     async def pricerunner(self, ctx, *, product_name=None):
         await self.run(self, ctx, product_name)
+
+    @pricerunner.error
+    async def pricerunner_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send("Usage: `!pricerunner <product_name>`")
+        else:
+            await ctx.send(f"An error occurred: {error}")
 
 
 async def setup(bot):
