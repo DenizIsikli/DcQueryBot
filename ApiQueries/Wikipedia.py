@@ -1,5 +1,6 @@
 import asyncio
 import aiohttp
+import random
 from discord.ext import commands
 from textblob import TextBlob
 from newspaper import Article
@@ -10,16 +11,17 @@ class WikipediaQuery(commands.Cog):
         self.bot = bot
         self.WIKIPEDIA_API = "https://en.wikipedia.org/w/api.php"
 
-    async def wikipedia_query(self, ctx, limit: int = 1, search_query: str = None):
+    async def wikipedia_query(self, ctx, article_amount: int = 1, search_query: str = None):
         if ctx.author == ctx.bot.user:
             return
 
-        if limit < 0:
-            raise commands.BadArgument("Limit cannot be a negative value.")
-        elif limit < 1:
-            raise commands.BadArgument("Limit must be greater than or equal to 1.")
-        elif limit > 5:
-            raise commands.BadArgument("Limit must be less than or equal to 5.")
+        if search_query is None:
+            await ctx.send("Please provide a search query.")
+            return
+
+        if article_amount < 1 or article_amount > 5:
+            await ctx.send("Article amount must be between 1 and 5.")
+            return
 
         try:
             params = {
@@ -37,16 +39,20 @@ class WikipediaQuery(commands.Cog):
 
                     if "query" in response_data and "search" in response_data["query"]:
                         search_results = response_data["query"]["search"]
+                        random.shuffle(search_results)
 
-                        for i, result in enumerate(search_results[:limit]):
+                        search_results_limited = search_results[:article_amount]
+
+                        for i, result in enumerate(search_results_limited):
                             title = result["title"]
                             page_url = f"https://en.wikipedia.org/wiki/{title.replace(' ', '_')}"
 
                             await ctx.send(f""
-                                           f"**Search Result {i + 1}/{limit}**: {title}\n"
+                                           f"**Search Result {i + 1}/{article_amount}**: {title}\n"
                                            f"**Page URL**: {page_url}"
                                            )
                     else:
+                        await ctx.send("No results found for the provided search query.")
                         return
 
         except aiohttp.ClientOSError as e:
@@ -56,19 +62,15 @@ class WikipediaQuery(commands.Cog):
             await ctx.send(f"An unexpected error occurred: {e}")
 
     @commands.command()
-    async def wiki(self, ctx, limit=1, *, search_query=""):
-        if limit < 1 or limit > 5:
-            await ctx.send("Limit must be between 1 and 5.")
-            return
-
-        await self.wikipedia_query(ctx, limit, search_query)
+    async def wiki(self, ctx, article_amount=1, *, search_query=None):
+        await self.wikipedia_query(ctx, article_amount=article_amount, search_query=search_query)
 
     @wiki.error
     async def wiki_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send("Usage: `!wiki [<limit>] <search_query>`")
+            await ctx.send("Usage: `!wiki <article_amount> <search_query>`")
         elif isinstance(error, commands.BadArgument):
-            await ctx.send("Invalid argument. Please provide a valid limit (integer) and search query.")
+            await ctx.send("Invalid argument. Please provide an article amount (integer)")
         else:
             await ctx.send(f"An error occurred: {error}")
 
