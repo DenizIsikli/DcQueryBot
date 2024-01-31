@@ -81,7 +81,7 @@ class HelpEmbed1(commands.Cog):
         embed.add_field(
             name="**!urban**",
             value="Description: Retrieves a selection of 1-5 words from Urban Dictionary "
-                  "that match the provided search query\n"
+                  "that match the provided search query - word amount must be specified\n"
                   "!urban {int: word amount} {str: search query}\n"
                   "Example: *!urban Shookie* | *!urban 2 Shookie*",
             inline=False
@@ -103,7 +103,7 @@ class HelpEmbed1(commands.Cog):
         embed.add_field(
             name="**!wiki**",
             value="Description: Retrieves a selection of 1-5 articles from Wikipedia "
-                  "that match the provided search query\n"
+                  "that match the provided search query - article amount must be specified\n"
                   "!wiki {int: article amount} {str: search query}\n"
                   "Example: *!wiki Lev Landau* | *!wiki 2 Lev Landau*",
             inline=False
@@ -369,7 +369,7 @@ class HelpEmbed5(commands.Cog):
         )
         embed.add_field(
             name="**!translate**",
-            value="Description: Translates any given text to the target language\n"
+            value="Description: Translates any given text to the target language - Use !languagecode if unsure\n"
                   "!translate {str: target_lang} {str: text}\n"
                   "Example: *!translate fr Hello*\n",
             inline=False
@@ -493,9 +493,9 @@ class HelpEmbed7(commands.Cog):
         )
         embed.add_field(
             name="**!pricerunner**",
-            value="Description: Retrieves a selection of 20 products from PriceRunner\n"
+            value="Description: Retrieves a selection of 20 products from PriceRunner - Default amount is 20\n"
                   "!pricerunner {str: product name}\n"
-                  "Example: *!pricerunner {product name}*\n",
+                  "Example: *!pricerunner Intel Core i9*\n",
             inline=False
         )
         embed.add_field(
