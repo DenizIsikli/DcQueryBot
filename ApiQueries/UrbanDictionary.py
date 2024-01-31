@@ -1,4 +1,5 @@
 import re
+import random
 import aiohttp
 import discord
 import datetime
@@ -12,11 +13,19 @@ class UrbanDictionaryQuery(commands.Cog):
 
     @staticmethod
     def remove_brackets(text):
-        # Use regular expression to remove square brackets while maintaining the word inside
+        # Remove brackets from text
         return re.sub(r'\[([^\]]+)]', r'\1', text)
 
-    async def urban_dictionary_query(self, ctx, limit: int = 1, search_query: str = None):
+    async def urban_dictionary_query(self, ctx, word_amount: int = 1, search_query: str = None):
         if ctx.author == ctx.bot.user:
+            return
+
+        if search_query is None:
+            await ctx.send("Please provide a search query.")
+            return
+
+        if word_amount < 1 or word_amount > 5:
+            await ctx.send("Word amount must be between 1 and 5.")
             return
 
         try:
@@ -31,15 +40,17 @@ class UrbanDictionaryQuery(commands.Cog):
 
                     if "list" in response_data:
                         search_results = response_data["list"]
-                        query_limit = limit
+                        random.shuffle(search_results)
 
-                        for i, result in enumerate(search_results[:query_limit]):
+                        search_results_limited = search_results[:word_amount]
+
+                        for i, result in enumerate(search_results_limited):
                             title = result["word"]
                             meaning = self.remove_brackets(result["definition"])
                             example = self.remove_brackets(result["example"])
 
                             embed = discord.Embed(
-                                title=f"**Term {i + 1}/{query_limit}**: {title}",
+                                title=f"**Term {i + 1}/{word_amount}**: {title}",
                                 color=discord.Color.blue()
                             )
                             embed.add_field(name="**Meaning**: ", value=meaning, inline=False)
@@ -61,19 +72,15 @@ class UrbanDictionaryQuery(commands.Cog):
             await ctx.send(f"An unexpected error occurred: {e}")
 
     @commands.command()
-    async def urban(self, ctx, limit: int = 1, *, search_query=""):
-        if limit < 1 or limit > 5:
-            await ctx.send("Limit must be between 1 and 5.")
-            return
-
-        await self.urban_dictionary_query(ctx, limit, search_query=search_query)
+    async def urban(self, ctx, word_amount=1, *, search_query=None):
+        await self.urban_dictionary_query(ctx, word_amount, search_query=search_query)
 
     @urban.error
     async def urban_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send("Usage: `!urban [<limit>] <search_query>`")
+            await ctx.send("Usage: `!urban <word_amount> <search_query>`")
         elif isinstance(error, commands.BadArgument):
-            await ctx.send("Bad argument. Please provide a valid limit (integer) and search query.")
+            await ctx.send("Invalid argument. Please provide a word amount (integer)")
         else:
             await ctx.send(f"An error occurred: {error}")
 
