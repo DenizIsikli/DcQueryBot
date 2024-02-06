@@ -20,8 +20,7 @@ class PriceRunnerAPI(commands.Cog):
         self.url = "https://www.pricerunner.dk"
         self.products = []
 
-    @staticmethod
-    async def scrape_product_data(item_div):
+    async def scrape_product_data(self, item_div):
         name_element = item_div.find('h3', class_='pr-c6rk6p')
         info_element = item_div.find('p', class_='pr-f6mg9h')
         price_element = item_div.find('span', class_='pr-yp1q6p')
@@ -31,7 +30,7 @@ class PriceRunnerAPI(commands.Cog):
         name = name_element.text if name_element else None
         info = info_element.text if info_element else None
         price = price_element.text.replace('\xa0', '') if price_element else None
-        link = f"https://www.pricerunner.dk{link_element}" if link_element else None
+        link = f"{self.url}{link_element}" if link_element else None
 
         return Product(name, info, price, link)
 
@@ -61,26 +60,22 @@ class PriceRunnerAPI(commands.Cog):
 
         return self.products
 
-    @staticmethod
     async def run(self, ctx, product_name=None):
         try:
             if product_name is None:
                 await ctx.send("Please enter a product name")
+                return
 
             products = await self.search_product(product_name)
 
             if products:
                 with open(f'PriceRunner{product_name}.txt', 'w') as f:
                     for i, product in enumerate(products[:20]):
-
                         product_str = (f"Product {i + 1}: "
                                        f"{product.name}\n"
                                        f"{product.info}\n"
                                        f"{product.price}\n"
                                        f"{product.link}\n")
-
-                        print(product_str)
-
                         f.write(f"{product_str}\n")
 
                 await ctx.send(file=discord.File(f'PriceRunner{product_name}.txt'))
@@ -93,7 +88,7 @@ class PriceRunnerAPI(commands.Cog):
 
     @commands.command()
     async def pricerunner(self, ctx, *, product_name=None):
-        await self.run(self, ctx, product_name)
+        await self.run(ctx, product_name)
 
     @pricerunner.error
     async def pricerunner_error(self, ctx, error):
