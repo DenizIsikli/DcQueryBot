@@ -17,6 +17,11 @@ class HelpEmbedMain(commands.Cog):
             color=discord.Color.dark_theme()
         )
         embed.add_field(
+            name="**!website**",
+            value="Website for the Discord Bot",
+            inline=False
+        )
+        embed.add_field(
             name="**!help1**",
             value="First command list.",
         )
@@ -496,13 +501,6 @@ class HelpEmbed7(commands.Cog):
             value="Description: Retrieves a selection of 20 products from PriceRunner - Default amount is 20\n"
                   "!pricerunner {str: product name}\n"
                   "Example: *!pricerunner Intel Core i9*\n",
-            inline=False
-        )
-        embed.add_field(
-            name="**!website**",
-            value="Description: Sends a link to the bots website\n"
-                  "!website\n"
-                  "Example: *!website*\n",
             inline=False
         )
 

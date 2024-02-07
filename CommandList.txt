@@ -1,12 +1,14 @@
 Commands/Files (In use):
     - General Command List
         - !help
+        - !website
         - !help1
         - !help2
         - !help3
         - !help4
         - !help5
         - !help6
+        - !help7
         - !commandlist
 
 
@@ -59,7 +61,6 @@ Commands/Files (In use):
         - !callduration
         - !pdfmerge
         - !pricerunner
-        - !website
 
 Side Commands/Files:
     - !owner
