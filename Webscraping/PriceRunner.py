@@ -1,4 +1,5 @@
 import os
+import time
 from discord.ext import commands
 from bs4 import BeautifulSoup
 from dataclasses import dataclass
@@ -62,6 +63,8 @@ class PriceRunnerAPI(commands.Cog):
 
     async def run(self, ctx, product_name=None):
         try:
+            output_file = f'PriceRunner_{product_name}_{int(time.time())}.txt'
+
             if product_name is None:
                 await ctx.send("Please enter a product name")
                 return
@@ -69,17 +72,17 @@ class PriceRunnerAPI(commands.Cog):
             products = await self.search_product(product_name)
 
             if products:
-                with open(f'PriceRunner{product_name}.txt', 'w') as f:
+                with open(output_file, 'w') as f:
                     for i, product in enumerate(products[:20]):
-                        product_str = (f"Product {i + 1}: "
+                        product_str = (f"Product {i + 1}:\n"
                                        f"{product.name}\n"
                                        f"{product.info}\n"
                                        f"{product.price}\n"
                                        f"{product.link}\n")
                         f.write(f"{product_str}\n")
 
-                await ctx.send(file=discord.File(f'PriceRunner{product_name}.txt'))
-                os.remove(f'PriceRunner{product_name}.txt')
+                await ctx.send(file=discord.File(output_file))
+                os.remove(output_file)
             else:
                 await ctx.send("No results found for the provided product.")
 
