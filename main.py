@@ -30,6 +30,7 @@ class Main:
         self.setup = Setup()
         self.base_dir = "config/config.env"
         self.owner_id = os.getenv("OWNER_ID")
+        self.bot_token = os.getenv("BOT_TOKEN")
 
     async def main(self):
         bot = commands.Bot(command_prefix="!", owner_id=self.owner_id, intents=intents_instance)
@@ -43,14 +44,13 @@ class Main:
             print("_____________________________")
 
         load_dotenv(dotenv_path=self.base_dir, verbose=True)
-        bot_token = os.getenv("BOT_TOKEN")
 
         await self.setup.setup_instances(bot, "ApiQueries", "Query")
         await self.setup.setup_instances(bot, "Cogs", "Cog")
         await self.setup.setup_instances(bot, "Webscraping", "Crawler")
         await self.setup.setup_instances(bot, "Utility", "Util")
 
-        await bot.start(bot_token)
+        await bot.start(self.bot_token)
 
 
 if __name__ == "__main__":
