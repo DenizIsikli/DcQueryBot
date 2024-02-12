@@ -27,10 +27,11 @@ intents_instance = Intents().create_instance()
 
 class Main:
     def __init__(self):
-        self.setup = Setup()
         self.base_dir = "config/config.env"
+        load_dotenv(self.base_dir, verbose=True)
+        self.setup = Setup()
+        self.bot_token = os.getenv("BOT_TOKEN")
         self.owner_id = os.getenv("OWNER_ID")
-
 
     async def main(self):
         bot = commands.Bot(command_prefix="!", owner_id=self.owner_id, intents=intents_instance)
@@ -43,15 +44,12 @@ class Main:
             print(f"Logged in as {bot.user}")
             print("_____________________________")
 
-        load_dotenv(dotenv_path=self.base_dir, verbose=True)
-
         await self.setup.setup_instances(bot, "ApiQueries", "Query")
         await self.setup.setup_instances(bot, "Cogs", "Cog")
         await self.setup.setup_instances(bot, "Webscraping", "Crawler")
         await self.setup.setup_instances(bot, "Utility", "Util")
 
-        bot_token = os.getenv("BOT_TOKEN")
-        await bot.start(bot_token)
+        await bot.start(self.bot_token)
 
 
 if __name__ == "__main__":
