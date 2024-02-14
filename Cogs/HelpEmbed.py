@@ -503,6 +503,13 @@ class HelpEmbed7(commands.Cog):
                   "Example: *!pricerunner Intel Core i9*\n",
             inline=False
         )
+        embed.add_field(
+            name="**!serverinfo**",
+            value="Description: Retrieves information about the server\n"
+                  "!serverinfo\n"
+                  "Example: *!serverinfo*\n",
+            inline=False
+        )
 
         # Add & set footer with timestamp
         timestamp = datetime.datetime.utcnow()

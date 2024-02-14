@@ -11,7 +11,6 @@ Commands/Files (In use):
         - !help7
         - !commandlist
 
-
     - Command List 1 (HelpEmbed1)
         - !urban
         - !qrcode
@@ -61,6 +60,7 @@ Commands/Files (In use):
         - !callduration
         - !pdfmerge
         - !pricerunner
+        - !serverinfo
 
 Side Commands/Files:
     - !owner
