@@ -1,63 +1,8 @@
 import io
 import asyncio
 import discord
-import datetime
 from PIL import Image
-from datetime import datetime
 from discord.ext import commands
-
-
-class WhoIs(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
-
-    @staticmethod
-    async def who_is(ctx, member: discord.Member = None):
-        try:
-            if ctx.author == ctx.bot.user:
-                return
-
-            # If the member is not specified, the variable is then set to the author
-            member = member or ctx.author
-
-            embed = discord.Embed(
-                title=f"Who is {member.display_name}",
-                color=discord.Color.dark_theme()
-            )
-
-            embed.add_field(name="**ID:**", value=member.id)
-            embed.add_field(name="**Name:**", value=member.display_name)
-
-            embed.add_field(name="**Created Account On:**", value=member.created_at)
-            embed.add_field(name="**Joined Server On:**", value=member.joined_at)
-
-            roles = ', '.join(role.name for role in member.roles)
-            embed.add_field(name="**Roles:**", value=roles)
-
-            embed.add_field(name="**Highest Role:**", value=member.top_role)
-
-            # Add & set footer with timestamp
-            timestamp = datetime.utcnow()
-            embed.timestamp = timestamp
-            embed.set_footer(text=f"Requested by {ctx.author.name}")
-
-            await ctx.send(embed=embed)
-
-        except Exception as e:
-            await ctx.send(f"An error occurred: {e}")
-
-    @commands.command()
-    async def whois(self, ctx, member: discord.Member = None):
-        await self.who_is(ctx, member=member)
-
-    @whois.error
-    async def whois_error(self, ctx, error):
-        if isinstance(error, commands.UserNotFound):
-            await ctx.send("User not found. Please provide a valid user mention or ID.")
-        elif isinstance(error, commands.BadArgument):
-            await ctx.send("Bad argument. Please provide a valid user mention or ID.")
-        else:
-            await ctx.send("An error occurred while processing your request.")
 
 
 class ChangeNickname(commands.Cog):
@@ -186,7 +131,6 @@ class CommandList(commands.Cog):
 
 
 async def setup(bot):
-    await bot.add_cog(WhoIs(bot))
     await bot.add_cog(ChangeNickname(bot))
     await bot.add_cog(Reminder(bot))
     await bot.add_cog(ResizeImage(bot))
