@@ -1,13 +1,18 @@
 import io
+import os
 import asyncio
 import discord
 from PIL import Image
 from discord.ext import commands
+from dotenv import load_dotenv
 
 
 class ChangeNickname(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.base_dir = "../config/config.env"
+        load_dotenv(self.base_dir, verbose=True)
+        self.command_list_file = os.getenv("COMMAND_LIST_PATH")
 
     @staticmethod
     async def change_nickname(ctx, *, new_name: str = None):
@@ -35,47 +40,6 @@ class ChangeNickname(commands.Cog):
             await ctx.send("An error occurred while processing your request.")
         else:
             await ctx.send("An error occurred.")
-
-
-class Reminder(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
-        self.reminders = []
-
-    @staticmethod
-    async def reminder(ctx, duration: float, *, reminder: str):
-        if ctx.author == ctx.bot.user:
-            return
-
-        if duration <= 0:
-            await ctx.send("Please provide a valid duration (in minutes) for the reminder.")
-            return
-
-        await asyncio.sleep(3)
-        await ctx.message.delete()
-        await asyncio.sleep(duration * 60)
-
-        await ctx.author.send(f"**Reminder**: {reminder}")
-
-    @commands.command()
-    async def remindme(self, ctx, duration: float = 10, *, reminder: str = None):
-        if duration <= 0:
-            await ctx.send("Please provide a valid duration (in minutes) for the reminder.")
-            return
-
-        if reminder is None:
-            reminder = "No reminder was specified"
-
-        await self.reminder(ctx, duration, reminder=reminder)
-
-    @remindme.error
-    async def reminder_error(self, ctx, error):
-        if isinstance(error, commands.BadArgument):
-            await ctx.send("Invalid argument. Please provide a valid duration.")
-        elif isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send("Usage: !remindme <duration in minutes> <reminder>")
-        else:
-            await ctx.send(f"An error occurred: {error}")
 
 
 class ResizeImage(commands.Cog):
@@ -132,6 +96,5 @@ class CommandList(commands.Cog):
 
 async def setup(bot):
     await bot.add_cog(ChangeNickname(bot))
-    await bot.add_cog(Reminder(bot))
     await bot.add_cog(ResizeImage(bot))
     await bot.add_cog(CommandList(bot))
