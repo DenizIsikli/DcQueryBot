@@ -61,6 +61,7 @@ Commands/Files (In use):
         - !pdfmerge
         - !pricerunner
         - !serverinfo
+        - !summyt
 
 Side Commands/Files:
     - !owner

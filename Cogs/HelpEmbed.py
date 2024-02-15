@@ -510,6 +510,13 @@ class HelpEmbed7(commands.Cog):
                   "Example: *!serverinfo*\n",
             inline=False
         )
+        embed.add_field(
+            name="**!summyt**",
+            value="Description: Summarizes a YouTube video using Summarize.tech\n"
+                  "!summyt {attachment: youtube_url}\n"
+                  "Example: *!summyt {attachment: youtube_url}*\n",
+            inline=False
+        )
 
         # Add & set footer with timestamp
         timestamp = datetime.datetime.utcnow()
