@@ -74,8 +74,8 @@ class WhoIs(commands.Cog):
             embed.add_field(name="**ID:**", value=member.id)
             embed.add_field(name="**Name:**", value=member.display_name)
 
-            embed.add_field(name="**Created Account On:**", value=member.created_at)
-            embed.add_field(name="**Joined Server On:**", value=member.joined_at)
+            embed.add_field(name="**Created Account On:**", value=member.created_at.strftime("%Y-%m-%d | %H:%M:%S"))
+            embed.add_field(name="**Joined Server On:**", value=member.joined_at.strftime("%Y-%m-%d | %H:%M:%S"))
 
             roles = ', '.join(role.name for role in member.roles)
             embed.add_field(name="**Roles:**", value=roles)
