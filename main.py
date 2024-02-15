@@ -34,7 +34,7 @@ class Main:
         self.owner_id = os.getenv("OWNER_ID")
 
     async def main(self):
-        bot = commands.Bot(command_prefix="!", owner_id=self.owner_id, intents=intents_instance)
+        bot = commands.Bot(command_prefix="!", owner_id=int(self.owner_id), intents=intents_instance)
         bot.remove_command('help')
 
         @bot.event
