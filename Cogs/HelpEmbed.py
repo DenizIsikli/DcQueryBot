@@ -23,35 +23,44 @@ class HelpEmbedMain(commands.Cog):
         )
         embed.add_field(
             name="**!help1**",
-            value="First command list.",
+            value="First command list",
         )
         embed.add_field(
             name="**!help2**",
-            value="Second command list.",
+            value="Second command list",
         )
         embed.add_field(
             name="**!help3**",
-            value="Third command list.",
+            value="Third command list",
         )
         embed.add_field(
             name="**!help4**",
-            value="Fourth command list.",
+            value="Fourth command list",
         )
         embed.add_field(
             name="**!help5**",
-            value="Fifth command list.",
+            value="Fifth command list",
         )
         embed.add_field(
             name="**!help6**",
-            value="Sixth command list.",
+            value="Sixth command list",
         )
         embed.add_field(
             name="**!help7**",
-            value="Seventh command list.",
+            value="Seventh command list",
+        )
+        embed.add_field(
+            name="**!help8**",
+            value="Eighth command list",
+        )
+        embed.add_field(
+            name="**!admin**",
+            value="Admin command list",
+            inline=False
         )
         embed.add_field(
             name="**!commandlist**",
-            value="Description: Sends a list of all bot commands",
+            value="Command list of all bot commands",
         )
 
         # Add & set footer with timestamp
@@ -498,7 +507,7 @@ class HelpEmbed7(commands.Cog):
         )
         embed.add_field(
             name="**!pricerunner**",
-            value="Description: Retrieves a selection of 20 products from PriceRunner - Default amount is 20\n"
+            value="Description: Retrieves a selection of 20 products from PriceRunner\n"
                   "!pricerunner {str: product name}\n"
                   "Example: *!pricerunner Intel Core i9*\n",
             inline=False
@@ -534,6 +543,51 @@ class HelpEmbed7(commands.Cog):
         await ctx.send("An error occurred while processing your request.")
 
 
+class HelpEmbed8(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    @staticmethod
+    async def help_embed_8(ctx):
+        embed = discord.Embed(
+            title="__8th Command List__",
+            color=discord.Color.dark_theme()
+        )
+        embed.add_field(
+            name="**!owner**",
+            value="Description: Owner of the Bot\n"
+                  "!owner\n",
+            inline=False
+        )
+        embed.add_field(
+            name="**!botpic**",
+            value="Description: Bot profile picture\n"
+                  "!botpic\n",
+            inline=False
+        )
+        embed.add_field(
+            name="**!repo**",
+            value="Description: Bot GitHub repository\n"
+                  "!repo\n",
+            inline=False
+        )
+
+        # Add & set footer with timestamp
+        timestamp = datetime.datetime.utcnow()
+        embed.timestamp = timestamp
+        embed.set_footer(text=f"Requested by {ctx.author.name}")
+
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    async def help8(self, ctx):
+        await self.help_embed_8(ctx)
+
+    @help8.error
+    async def help8_error(self, ctx):
+        await ctx.send("An error occurred while processing your request.")
+
+
 async def setup(bot):
     await bot.add_cog(HelpEmbedMain(bot))
     await bot.add_cog(HelpEmbed1(bot))
@@ -543,3 +597,4 @@ async def setup(bot):
     await bot.add_cog(HelpEmbed5(bot))
     await bot.add_cog(HelpEmbed6(bot))
     await bot.add_cog(HelpEmbed7(bot))
+    await bot.add_cog(HelpEmbed8(bot))
