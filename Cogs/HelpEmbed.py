@@ -555,19 +555,19 @@ class HelpEmbed8(commands.Cog):
         )
         embed.add_field(
             name="**!owner**",
-            value="Description: Owner of the Bot\n"
+            value="Description: Display the owner of the bot\n"
                   "!owner\n",
             inline=False
         )
         embed.add_field(
             name="**!botpic**",
-            value="Description: Bot profile picture\n"
+            value="Description: Display the bots profile picture\n"
                   "!botpic\n",
             inline=False
         )
         embed.add_field(
             name="**!repo**",
-            value="Description: Bot GitHub repository\n"
+            value="Description: Link to the bots repository\n"
                   "!repo\n",
             inline=False
         )
