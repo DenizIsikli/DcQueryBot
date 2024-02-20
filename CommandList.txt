@@ -1,6 +1,5 @@
-Commands/Files (In use):
+Commands:
     - General Command List
-        - !help
         - !website
         - !help1
         - !help2
@@ -9,30 +8,32 @@ Commands/Files (In use):
         - !help5
         - !help6
         - !help7
+        - !help8
+        - !admin
         - !commandlist
 
-    - Command List 1 (HelpEmbed1)
+    - Command List 1 (!help1)
         - !urban
         - !qrcode
         - !imgur
         - !wiki
         - !senti
 
-    - Command List 2 (HelpEmbed2)
+    - Command List 2 (!help2)
         - !mp3
         - !mp4
         - !ascii
         - !asciicm
         - !gpt
 
-    - Command List 3 (HelpEmbed3)
+    - Command List 3 (!help3)
         - !tts
         - !reminder
         - !nickname
         - !whois
         - !resize
 
-    - Command List 4 (HelpEmbed4)
+    - Command List 4 (!help4)
         - !blur
         - !sharpen
         - !sepia
@@ -41,14 +42,14 @@ Commands/Files (In use):
         - !invert
         - !solarize
 
-    - Command List 5 (HelpEmbed5)
+    - Command List 5 (!help5)
         - !anime
         - !manga
         - !steam
         - !translate
         - !languagecode
 
-    - Command List 6 (HelpEmbed6)
+    - Command List 6 (!help6)
         - !texttopdf
         - !wordtopdf
         - !compress
@@ -56,30 +57,31 @@ Commands/Files (In use):
         - !pomodoro
         - !pomodorostop
 
-    - Command List 7 (HelpEmbed7)
+    - Command List 7 (!help7)
         - !callduration
         - !pdfmerge
         - !pricerunner
         - !serverinfo
         - !summyt
 
-Side Commands/Files:
-    - !owner
-    - !botpic
-    - !repo
+    - Command List 8 (!help8)
+        - !owner
+        - !botpic
+        - !repo
 
+    - Admin Commands List 1 (!admin1)
+        - !delete
+        - !kick
+        - !reload
+        - !mute
+        - !unmute
 
-Admin Commands/Files:
-    - !admin
-    - !delete
-    - !kick
-    - !reload
+    - Admin Commands List 2 (!admin2)
+        - !addrole
+        - !delrole
+        - !createrole
 
 
 Commands/Files - Not in use / Need to be fixed:
     - !epic (EpicGamesFree.py)
     - !nickname (Miscellaneous.py)
-
-
-Commands/Files (Need to be tested):
-
