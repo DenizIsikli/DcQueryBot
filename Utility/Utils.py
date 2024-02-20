@@ -4,31 +4,7 @@ from discord.ext import commands
 import datetime
 
 
-class AdminEmbed(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
-
-    @commands.command()
-    @commands.is_owner()
-    async def admin(self, ctx):
-        embed = discord.Embed(
-            title="Admin Command List",
-            color=discord.Color.orange()
-        )
-        embed.add_field(name="**!delete**", value="*Delete x amount of channel messages: default amount = 1*")
-        embed.add_field(name="**!kick**", value="*Kick specified member: reason[optional]*")
-        embed.add_field(name="**!reload**", value="*Reload all Cog files*")
-        embed.add_field(name="**!mute**", value="*Mute specified member*")
-
-        # Add & set footer with timestamp
-        timestamp = datetime.datetime.utcnow()
-        embed.timestamp = timestamp
-        embed.set_footer(text=f"Requested by {ctx.author.name}")
-
-        await ctx.send(embed=embed)
-
-
-class AdminDelete(commands.Cog):
+class Delete(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -169,8 +145,7 @@ class Mute(commands.Cog):
 
 
 async def setup(bot):
-    await bot.add_cog(Reload(bot))
-    await bot.add_cog(AdminDelete(bot))
+    await bot.add_cog(Delete(bot))
     await bot.add_cog(Kick(bot))
-    await bot.add_cog(AdminEmbed(bot))
+    await bot.add_cog(Reload(bot))
     await bot.add_cog(Mute(bot))
