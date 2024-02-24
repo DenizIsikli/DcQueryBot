@@ -68,6 +68,7 @@ Commands:
         - !owner
         - !botpic
         - !repo
+        - !afk
 
     - Admin Commands List 1 (!admin1)
         - !delete

@@ -571,6 +571,14 @@ class HelpEmbed8(commands.Cog):
                   "!repo\n",
             inline=False
         )
+        embed.add_field(
+            name="**!afk**",
+            value="Description: Starts an AFK automation for the specified amount of seconds\n"
+                  "(Type 'afkstop' to stop the timer) - Default = 60\n"
+                  "!afk {int: timer}\n"
+                  "Example: *!afk 60*\n",
+            inline=False
+        )
 
         # Add & set footer with timestamp
         timestamp = datetime.datetime.utcnow()
