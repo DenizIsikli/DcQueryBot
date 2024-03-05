@@ -572,6 +572,14 @@ class HelpEmbed8(commands.Cog):
             inline=False
         )
         embed.add_field(
+            name="**!codeformat**",
+            value="Description: Formats code based on the given language\n"
+                  "Aliases: *cf*\n"
+                  "!codeformat {str: language} {str: code}\n"
+                  "Example: *!codeformat python print('Hello, World!')*\n",
+            inline=False
+        )
+        embed.add_field(
             name="**!afk**",
             value="Description: Starts an AFK automation for the specified amount of seconds\n"
                   "(Type 'afkstop' to stop the timer) - Default = 60\n"

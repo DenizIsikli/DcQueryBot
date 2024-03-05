@@ -68,6 +68,7 @@ Commands:
         - !owner
         - !botpic
         - !repo
+        - !codeformat
         - !afk
 
     - Admin Commands List 1 (!admin1)

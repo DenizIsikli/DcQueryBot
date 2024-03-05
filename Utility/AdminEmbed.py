@@ -58,6 +58,7 @@ class AdminEmbed1(commands.Cog):
         embed.add_field(
             name="**!delete**",
             value="Deletes the specified amount of messages\n"
+                  "Aliases: *del*\n"
                   "!delete {int: amount} - Default = 1\n"
                   "Example: *!delete 5*",
             inline=False
