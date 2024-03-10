@@ -10,14 +10,15 @@ from dotenv import load_dotenv
 class ChangeNickname(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.base_dir = "../config/config.env"
-        load_dotenv(self.base_dir, verbose=True)
-        self.command_list_file = os.getenv("COMMAND_LIST_PATH")
 
     @staticmethod
     async def change_nickname(ctx, *, new_name: str = None):
         try:
             if ctx.author == ctx.bot.user:
+                return
+
+            if new_name is None:
+                await ctx.send("Please provide the new nickname you want to set.")
                 return
 
             new_name_without_space = new_name.replace(" ", "_")
@@ -55,6 +56,10 @@ class ResizeImage(commands.Cog):
             await ctx.send("You need to specify the dimensions you want.")
             return
 
+        if len(ctx.message.attachments) == 0:
+            await ctx.send("You need to attach an image to resize.")
+            return
+
         image_size = (width, height)
 
         image_attachment = ctx.message.attachments[0]
@@ -74,7 +79,7 @@ class ResizeImage(commands.Cog):
         except Exception as e:
             await ctx.send(f"An error occurred: {e}")
 
-    @commands.command()
+    @commands.command(aliases=["rimg"])
     async def resize(self, ctx, width: int = None, height: int = None):
         await self.resize_image(ctx, width, height)
 
@@ -82,10 +87,12 @@ class ResizeImage(commands.Cog):
 class CommandList(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.command_list_file = "C:\\Users\\deniz\\PycharmProjects\\DcQueryBot\\CommandList.txt"
+        self.base_dir = "../config/config.env"
+        load_dotenv(self.base_dir, verbose=True)
+        self.command_list_file = os.getenv("COMMAND_LIST_PATH")
 
-    @commands.command(name="commandlist")
-    async def command_list(self, ctx):
+    @commands.command(aliases=["cmdl"])
+    async def commandlist(self, ctx):
         try:
             await ctx.send(file=discord.File(self.command_list_file))
         except FileNotFoundError:

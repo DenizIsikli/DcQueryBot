@@ -60,7 +60,9 @@ class HelpEmbedMain(commands.Cog):
         )
         embed.add_field(
             name="**!commandlist**",
-            value="Command list of all bot commands",
+            value="Command list of all bot commands\n"
+                  "Aliases: *cmdl*",
+            inline=False
         )
 
         # Add & set footer with timestamp
@@ -252,6 +254,7 @@ class HelpEmbed3(commands.Cog):
         embed.add_field(
             name="**!resize**",
             value="Description: Resizes the image attachment based on the given dimensions\n"
+                  "Aliases: *rimg*\n"
                   "!resize {attachment: image} {int: width} {int: height}\n"
                   "Example: *!resize 300 150*\n",
             inline=False
