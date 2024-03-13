@@ -1,10 +1,10 @@
 import os
 import time
+import discord
 from discord.ext import commands
 from bs4 import BeautifulSoup
 from dataclasses import dataclass
 import aiohttp
-import discord
 
 
 @dataclass
@@ -15,7 +15,7 @@ class Product:
     link: str = None
 
 
-class PriceRunnerAPI(commands.Cog):
+class PriceRunner(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.url = "https://www.pricerunner.dk"
@@ -27,7 +27,6 @@ class PriceRunnerAPI(commands.Cog):
         price_element = item_div.find('span', class_='pr-yp1q6p')
         link_element = item_div.find('a')['href']
 
-        # Extract product information in text format within each product's container
         name = name_element.text if name_element else None
         info = info_element.text if info_element else None
         price = price_element.text.replace('\xa0', '') if price_element else None
@@ -42,8 +41,8 @@ class PriceRunnerAPI(commands.Cog):
             try:
                 async with session.get(search_url) as response:
                     if response.status == 200:
-                        text = await response.text()
-                        soup = BeautifulSoup(text, 'html.parser')
+                        response_data = await response.text()
+                        soup = BeautifulSoup(response_data, 'html.parser')
                         product_div = soup.find('div', class_='mIkxpLfxgo pr-1dtdlzd')
 
                         if product_div:
@@ -102,4 +101,4 @@ class PriceRunnerAPI(commands.Cog):
 
 
 async def setup(bot):
-    await bot.add_cog(PriceRunnerAPI(bot))
+    await bot.add_cog(PriceRunner(bot))
