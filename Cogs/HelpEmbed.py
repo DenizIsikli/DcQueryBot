@@ -607,6 +607,36 @@ class HelpEmbed8(commands.Cog):
         await ctx.send("An error occurred while processing your request.")
 
 
+class HelpEmbed9(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    @staticmethod
+    async def help_embed_9(ctx):
+        embed = discord.Embed(
+            title="__9th Command List__",
+            color=discord.Color.dark_theme()
+        )
+        embed.add_field(
+            name="**!ggdeals**",
+            value="Description: Retrieves a selection of 20 games from GGDeals of your choice\n"
+                  "!ggdeals {str: product name}\n"
+                  "Example: *!ggdeals Balatro*\n",
+            inline=False
+        )
+
+        # Add & set footer with timestamp
+        timestamp = datetime.datetime.utcnow()
+        embed.timestamp = timestamp
+        embed.set_footer(text=f"Requested by {ctx.author.name}")
+
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    async def help9(self, ctx):
+        await self.help_embed_9(ctx)
+
+
 async def setup(bot):
     await bot.add_cog(HelpEmbedMain(bot))
     await bot.add_cog(HelpEmbed1(bot))
@@ -617,3 +647,4 @@ async def setup(bot):
     await bot.add_cog(HelpEmbed6(bot))
     await bot.add_cog(HelpEmbed7(bot))
     await bot.add_cog(HelpEmbed8(bot))
+    await bot.add_cog(HelpEmbed9(bot))

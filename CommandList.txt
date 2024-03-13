@@ -71,6 +71,9 @@ Commands:
         - !codeformat
         - !afk
 
+    - Command List 9 (!help9)
+        - !ggdeals
+
     - Admin Commands List 1 (!admin1)
         - !delete
         - !kick
