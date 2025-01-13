@@ -4,6 +4,10 @@
 <div align="center">
 Website: https://uselessbotwebsite.netlify.app/ <br/><br/>
 
+<div align="center">
+  <img src="misc/UselessBotLogo.jpg" alt="Repository Picture" width="300">
+</div>
+
   [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://raw.githubusercontent.com/Fido2603/WatchDog/master/LICENSE)
 </div>
 
